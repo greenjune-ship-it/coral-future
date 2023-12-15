@@ -1,0 +1,10 @@
+asgiref==3.7.2
+beautifulsoup4==4.12.2
+Django==5.0
+django-bootstrap4==23.2
+postgres==4.0
+psycopg2==2.9.9
+psycopg2-binary==2.9.9
+psycopg2-pool==1.1
+soupsieve==2.5
+sqlparse==0.4.4

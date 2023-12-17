@@ -7,12 +7,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Initialise environment variables
 env = environ.Env(
     # Set casting, default value
-    # DEBUG=(bool, False)
+    DEBUG=(bool, False)
 )
 environ.Env.read_env()
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
+
+# False if not in os.environ because of casting above
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS').split(' ')
 
@@ -28,8 +31,11 @@ INSTALLED_APPS = [
 
     # Custom apps
     'bootstrap4',
-    'main'
+    'main',
+    'users'
 ]
+
+AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

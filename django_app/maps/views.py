@@ -26,6 +26,4 @@ def map_view(request):
     # Retrieve all locations from the database
     locations = Location.objects.all()
 
-    # Retrieve Earth Engine API key from Django settings
-
     return render(request, 'map.html', {'locations': locations})

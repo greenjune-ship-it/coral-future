@@ -1,0 +1,62 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+    <div class="container">
+        <a class="navbar-brand" href="/">Your App Name</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'maps' %}">Data Explorer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">App Service 2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">App Service 3</a>
+                </li>
+                <!-- Add more app-specific services as needed -->
+            </ul>
+        </div>
+        <div class="text-end" id="login-logout-container">
+            {% if user.is_authenticated %}
+                <a class="nav-link" id="logout-link" href="/user/logout">Logout</a>
+            {% else %}
+                <a class="nav-link" id="login-link" href="/user/login">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    // Use jQuery to dynamically update login/logout link
+    $(document).ready(function() {
+        // Assuming you have a global variable 'isUserAuthenticated' in your template
+        var isUserAuthenticated = {% if user.is_authenticated %} true {% else %} false {% endif %};
+
+        function updateLoginState() {
+            if (isUserAuthenticated) {
+                $('#login-logout-container').html('<a class="nav-link" id="logout-link" href="/user/logout">Logout</a>');
+            } else {
+                $('#login-logout-container').html('<a class="nav-link" id="login-link" href="/user/login">Login</a>');
+            }
+        }
+
+        // Example: Update the state if user logs in/out
+        // You may need to adjust this part based on your actual authentication mechanism
+        $('#login-link').click(function(e) {
+            e.preventDefault();
+            // Simulate user login
+            isUserAuthenticated = true;
+            updateLoginState();
+        });
+
+        $('#logout-link').click(function(e) {
+            e.preventDefault();
+            // Simulate user logout
+            isUserAuthenticated = false;
+            updateLoginState();
+        });
+    });
+</script>

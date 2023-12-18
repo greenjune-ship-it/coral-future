@@ -4,7 +4,11 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update && \
-    apt-get install libpq-dev
+    apt-get install -y \
+      # For postgresql
+      libpq-dev \
+      # For leaflet maps
+      gdal-bin
 
 WORKDIR /usr/src/app
 

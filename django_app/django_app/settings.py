@@ -29,10 +29,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Custom apps
+    # Installed pip packages
     'bootstrap4',
+    'leaflet',
+    # Custom apps
     'main',
-    'users'
+    'users',
+    'maps'
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'

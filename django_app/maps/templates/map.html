@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <h2>Map View</h2>
+
+  <div id="map" style="height: 80vh;"></div>
+
+  <!-- Include Leaflet CSS and JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- Include jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  <!-- Include Bootstrap CSS and JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/css/bootstrap.min.css" integrity="...">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/js/bootstrap.bundle.min.js" integrity="..."></script>
+
+  <script>
+    // Leaflet map initialization
+    var map = L.map('map').setView([0, 0], 2); // Centered at [0, 0] with zoom level 2
+
+    // Add a tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add markers for each location
+    {% for location in locations %}
+      L.marker([{{ location.latitude }}, {{ location.longitude }}]).addTo(map)
+        .bindPopup("{{ location.name }}");
+    {% endfor %}
+  </script>
+
+{% endblock %}

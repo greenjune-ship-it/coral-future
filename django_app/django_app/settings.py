@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     # Custom apps
     'main',
     'users',
-    'maps'
+    'maps',
+    'projects'
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<style>
+    .unique-project-list {
+        text-align: center;
+    }
+
+    table {
+        margin: 20px auto; /* Add margin to the table for better spacing */
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+        border: 1px solid #ddd; /* Add borders to cells for better visibility */
+    }
+
+    th {
+        background-color: #f2f2f2; /* Set a background color for the table header */
+    }
+</style>
+
+<div class="unique-project-list">
+    <h2 style="padding: 10px;">Project List</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Registration Date</th>
+            <th>Description</th>
+            <th>Owner</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for project in projects %}
+        <tr>
+            <td>{{ project.name }}</td>
+            <td>{{ project.registration_date }}</td>
+            <td>{{ project.description }}</td>
+            <td>{{ project.owner.username }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

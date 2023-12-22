@@ -3,8 +3,7 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-<div id="map-container" style="height: 80vh; width: 80%; margin: 5% auto;">
-</div>
+<div id="map-container" style="height: 80vh; width: 80%; margin: 5% auto;"></div>
 
 <!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -18,15 +17,15 @@
 
 <script>
     // Use a more unique ID for the map container
-    var map = L.map('map-container').setView([{{ locations.first.latitude }}, {{ locations.first.longitude }}], 10);
+    var map = L.map('map-container').setView([{{ samples.first.latitude }}, {{ samples.first.longitude }}], 10);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    {% for location in locations %}
-        L.marker([{{ location.latitude }}, {{ location.longitude }}]).addTo(map)
-            .bindPopup("{{ location.name }}");
+    {% for sample in samples %}
+        L.marker([{{ sample.latitude }}, {{ sample.longitude }}]).addTo(map)
+            .bindPopup("Sample ID: {{ sample.id }}<br>Coordinates: {{ sample.latitude }}, {{ sample.longitude }}");
     {% endfor %}
 </script>
 

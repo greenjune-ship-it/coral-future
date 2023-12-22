@@ -22,10 +22,19 @@
     th {
         background-color: #f2f2f2; /* Set a background color for the table header */
     }
+
+    a {
+        color: #3498db;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
 </style>
 
 <div class="unique-project-list">
-    <h2 style="padding: 10px;">Project List</h2>
+    <h2 style="padding: 10px;">Projects List</h2>
     <table>
         <thead>
         <tr>
@@ -38,7 +47,9 @@
         <tbody>
         {% for project in projects %}
         <tr>
-            <td>{{ project.name }}</td>
+            <td>
+                <a href="{% url 'project_detail' project.id %}">{{ project.name }}</a>
+            </td>
             <td>{{ project.registration_date }}</td>
             <td>{{ project.description }}</td>
             <td>{{ project.owner.username }}</td>

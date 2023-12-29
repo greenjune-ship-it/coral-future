@@ -1,6 +1,10 @@
+from django.conf import settings
 from django.shortcuts import render
 
 
-# Create your views here.
 def home(request):
-    return render(request, "main/home.html", {})
+    context = {
+        'CONTACT_EMAIL_ADDRESS': settings.CONTACT_EMAIL_ADDRESS,
+        # Add other variables as needed
+    }
+    return render(request, "main/home.html", context)

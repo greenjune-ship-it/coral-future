@@ -22,4 +22,5 @@ SQL_ENGINE=django.db.backends.postgresql_psycopg2
 DB_USER=''
 DB_PASSWORD=''
 DB_NAME=''
+CONTACT_EMAIL_ADDRESS=''
 ```

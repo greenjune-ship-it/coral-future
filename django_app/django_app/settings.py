@@ -19,6 +19,8 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS').split(' ')
 
+CONTACT_EMAIL_ADDRESS = env('CONTACT_EMAIL_ADDRESS')
+
 # Application definition
 
 INSTALLED_APPS = [

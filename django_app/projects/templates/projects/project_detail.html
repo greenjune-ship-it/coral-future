@@ -48,6 +48,7 @@
         <thead>
             <tr>
                 <th>Sample</th>
+                <th>Country</th>
                 <th>Date</th>
                 <th>Condition</th>
                 <th>Temperature</th>
@@ -60,6 +61,7 @@
                 {% for observation in sample.observation_set.all %}
                     <tr>
                         <td>{{ sample.id }}</td>
+                        <td>{{ sample.country }}</td>
                         <td>{{ observation.observation_date }}</td>
                         <td>{{ observation.condition }}</td>
                         <td>{{ observation.temperature }}</td>

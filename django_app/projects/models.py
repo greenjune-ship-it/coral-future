@@ -34,6 +34,7 @@ class Experiment(models.Model):
 
 class Observation(models.Model):
     sample = models.ForeignKey(Sample, on_delete=models.CASCADE)
+    genotype = models.IntegerField()
     observation_date = models.DateField()
     condition = models.CharField(max_length=255)
     temperature = models.IntegerField()

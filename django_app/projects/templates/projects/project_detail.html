@@ -1,4 +1,3 @@
-<!-- projects/templates/projects/project_detail.html -->
 {% extends 'base.html' %}
 
 {% block content %}
@@ -9,16 +8,68 @@
         text-align: center;
     }
 
-    h2, p {
-        text-align: center;
+    table {
+        margin: 20px auto; /* Add margin to the table for better spacing */
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+        border: 1px solid #ddd; /* Add borders to cells for better visibility */
+    }
+
+    th {
+        background-color: #f2f2f2; /* Set a background color for the table header */
+    }
+
+    a {
+        color: #3498db;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
     }
 </style>
 
-<h2 style="padding: 10px;">{{ project.name }} Details</h2>
-<p>Registration Date: {{ project.registration_date }}</p>
-<p>Description: {{ project.description }}</p>
-<p>Owner: {{ project.owner.username }}</p>
-<!-- Add more details or include related data as needed -->
-<p>Number of Samples: {{ sample_count }}</p>
+<div class="project-details">
+    <h2 style="padding: 10px;">{{ project.name }} Details</h2>
+    <p>Registration Date: {{ project.registration_date }}</p>
+    <p>Description: {{ project.description }}</p>
+    <p>Owner: {{ project.owner.username }}</p>
+    <!-- Add more details or include related data as needed -->
+    <p>Number of Samples: {{ sample_count }}</p>
+    <p>Number of Observations: {{ observation_count }}</p>
+
+    <!-- Display observations for each sample -->
+    <h3>Observations for each Sample:</h3>
+    <table class="observations-table">
+        <thead>
+            <tr>
+                <th>Sample</th>
+                <th>Date</th>
+                <th>Condition</th>
+                <th>Temperature</th>
+                <th>Timepoint</th>
+                <th>PAM Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sample in project.sample_set.all %}
+                {% for observation in sample.observation_set.all %}
+                    <tr>
+                        <td>{{ sample.id }}</td>
+                        <td>{{ observation.observation_date }}</td>
+                        <td>{{ observation.condition }}</td>
+                        <td>{{ observation.temperature }}</td>
+                        <td>{{ observation.timepoint }}</td>
+                        <td>{{ observation.pam_value }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

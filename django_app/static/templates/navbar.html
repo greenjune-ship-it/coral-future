@@ -18,7 +18,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://github.com/greenjune-ship-it/djangoExperiment/issues">Get Help</a>
+                    <a class="nav-link"
+                       href="https://www.biologie.uni-konstanz.de/voolstra/">About Us </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="https://github.com/greenjune-ship-it/djangoExperiment/issues">Get Help</a>
                 </li>
                 <!-- Add more app-specific services as needed -->
             </ul>
@@ -38,7 +43,8 @@
             </div>
             {% else %}
             <!-- Displayed when the user is not authenticated -->
-            <a class="nav-link" href="{% url 'login' %}?next={{ request.get_full_path }}">Login</a>
+            <a class="nav-link"
+               href="{% url 'login' %}?next={{ request.get_full_path }}">Login</a>
             {% endif %}
         </div>
     </div>

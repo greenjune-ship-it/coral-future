@@ -24,8 +24,8 @@
     }).addTo(map);
 
     {% for sample in samples %}
-        L.marker([{{ sample.latitude }}, {{ sample.longitude }}]).addTo(map)
-            .bindPopup("Sample ID: {{ sample.id }}<br>Coordinates: {{ sample.latitude }}, {{ sample.longitude }}");
+        var marker = L.marker([{{ sample.latitude }}, {{ sample.longitude }}]).addTo(map);
+        marker.bindPopup("Project ID: {{ project_id }}<br>Sample ID: {{ sample.id }}<br>Coordinates: {{ sample.latitude }}, {{ sample.longitude }}");
     {% endfor %}
 </script>
 

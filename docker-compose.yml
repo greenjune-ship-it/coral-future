@@ -15,6 +15,7 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
+      - CONTACT_EMAIL_ADDRESS=${CONTACT_EMAIL_ADDRESS}
     volumes:
       - ./django_app:/usr/src/app
     depends_on:

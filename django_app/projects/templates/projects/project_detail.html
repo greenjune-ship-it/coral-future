@@ -1,0 +1,24 @@
+<!-- projects/templates/projects/project_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<style>
+    .project-details {
+        text-align: center;
+    }
+
+    h2, p {
+        text-align: center;
+    }
+</style>
+
+<h2 style="padding: 10px;">{{ project.name }} Details</h2>
+<p>Registration Date: {{ project.registration_date }}</p>
+<p>Description: {{ project.description }}</p>
+<p>Owner: {{ project.owner.username }}</p>
+<!-- Add more details or include related data as needed -->
+<p>Number of Samples: {{ sample_count }}</p>
+
+{% endblock %}

@@ -37,3 +37,16 @@ def create_project(request):
         form = ProjectForm()
 
     return render(request, 'projects/create_project.html', {'form': form})
+
+@user_passes_test(lambda u: u.is_superuser)
+def delete_project(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+
+    if request.method == 'POST':
+        # If the form is submitted, delete the project
+        project.delete()
+        return redirect('projects_list')
+
+    # If the form is not submitted, render the confirmation template
+    return render(request, 'projects/delete_project_confirmation.html',
+                  {'project': project})

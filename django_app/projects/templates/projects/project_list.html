@@ -31,6 +31,10 @@
     a:hover {
         text-decoration: underline;
     }
+
+    .actions {
+        text-align: center;
+    }
 </style>
 
 <div class="unique-project-list">
@@ -42,6 +46,9 @@
             <th>Registration Date</th>
             <th>Description</th>
             <th>Owner</th>
+            {% if user.is_superuser %}
+                <th>Actions</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -53,6 +60,11 @@
             <td>{{ project.registration_date }}</td>
             <td>{{ project.description }}</td>
             <td>{{ project.owner.username }}</td>
+            {% if user.is_superuser %}
+                <td class="actions">
+                    <a href="{% url 'delete_project' project.id %}">Delete</a>
+                </td>
+            {% endif %}
         </tr>
         {% endfor %}
         </tbody>

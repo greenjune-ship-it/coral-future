@@ -1,0 +1,95 @@
+<style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .confirmation-container {
+      max-width: 600px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-top: 50px;
+    }
+
+    .confirmation-container h2 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .confirmation-container p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    .confirmation-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .delete-button,
+    .cancel-button {
+      padding: 10px;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background-color 0.3s;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .delete-button {
+      background-color: #e74c3c;
+    }
+
+    .cancel-button {
+      background-color: #3498db;
+      margin-left: 10px; /* Added margin between buttons */
+    }
+
+    .delete-button:hover,
+    .cancel-button:hover {
+      background-color: #555;
+    }
+</style>
+</head>
+<body>
+
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<div class="confirmation-container">
+    <h2>Delete Confirmation</h2>
+    <p>Are you sure you want to delete the project "{{ project.name }}"?</p>
+
+    <form method="post" action="{% url 'delete_project' project.id %}"
+          class="confirmation-form">
+        {% csrf_token %}
+
+        <div class="button-container">
+            <button type="submit" class="delete-button">Yes, delete</button>
+            <a href="{% url 'projects_list' %}"
+               class="cancel-button">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+</body>
+</html>

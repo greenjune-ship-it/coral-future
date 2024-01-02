@@ -45,7 +45,7 @@
                             dropdownItem.addEventListener('click', function (e) {
                                 // Redirect when main link is clicked
                                 if (!e.target.closest('.dropdown-menu')) {
-                                    window.location.href = "{% url 'projects' %}";
+                                    window.location.href = "{% url 'projects_list' %}";
                                 }
                             });
                         });

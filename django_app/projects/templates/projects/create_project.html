@@ -1,28 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% include 'navbar.html' %}
+    {% include 'navbar.html' %}
 
-<div class="container">
-    <h2>Create New Project</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+    <div class="container">
+        <h2 class="mb-4">Create New Project</h2>
 
-        {% if form.errors %}
-        <div class="alert alert-danger" role="alert">
-            There were errors in the form:
-            <ul>
-                {% for field, errors in form.errors.items %}
-                <li>{{ field }}: {{ errors|join:", " }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
+        <form method="post">
+            {% csrf_token %}
 
-        <button type="submit">Submit</button>
-    </form>
+            {{ form.as_p }}
 
-    <a href="{% url 'projects' %}">Back to Project List</a>
-</div>
+            {% if form.errors %}
+                <div class="alert alert-danger mt-3" role="alert">
+                    <strong>Errors in the form:</strong>
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            <li>{{ field }}: {{ errors|join:", " }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </form>
+
+    </div>
 {% endblock %}

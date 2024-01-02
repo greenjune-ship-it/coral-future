@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Installed pip packages
-    'bootstrap4',
+    'bootstrap5',
     'leaflet',
     # Custom apps
     'main',

@@ -43,5 +43,5 @@ Restore a database backup:
 
 ```commandline
 docker compose exec database \
-    pg_restore --clean --dbname $DB_NAME -U DB_USER backup.pgdump
+    pg_restore --clean --dbname $DB_NAME -U $DB_USER backup.pgdump
 ```

@@ -1,18 +1,18 @@
+#!/bin/bash
+
+source .env
+
 docker compose up -d
 
 docker compose pause django-app
 
-echo "Drop the database and restore from backup"
-docker compose exec database \
-    psql -U postgres \
-     -c "DROP SCHEMA public CASCADE; \
-         CREATE SCHEMA public; \
-         GRANT ALL ON SCHEMA public TO postgres; \
-         GRANT ALL ON SCHEMA public TO public; \
-         DROP DATABASE postgres;"
+docker compose cp backup.pgdump database:backup.pgdump
 
-docker compose exec -T database psql \
-    -U postgres -d postgres < pg_dump.sql
+echo "Drop the database and restore from backup"
+
+docker compose exec database \
+  pg_restore --clean --dbname $DB_NAME -U DB_USER backup.pgdump
+
 echo "Done!"
 
 docker compose unpause django-app

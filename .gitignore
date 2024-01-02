@@ -4,3 +4,4 @@
 __pycache__/
 
 pg_dump.sql
+backup.pgdump

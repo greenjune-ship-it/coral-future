@@ -62,7 +62,7 @@
             <td>{{ project.owner.username }}</td>
             {% if user.is_superuser %}
                 <td class="actions">
-                    <a href="{% url 'delete_project' project.id %}">Delete</a>
+                    <a href="{% url 'admin:projects_project_change' project.id %}">Administrate</a>
                 </td>
             {% endif %}
         </tr>

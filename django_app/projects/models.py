@@ -29,7 +29,7 @@ class Experiment(models.Model):
     samples = models.ManyToManyField(Sample)
 
     def __str__(self):
-        return f"Experiment in {self.country} for project {self.project.name}"
+        return f"Experiment in {self.id} for project {self.project.name}"
 
 
 class Observation(models.Model):

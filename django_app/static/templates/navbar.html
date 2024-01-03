@@ -19,45 +19,11 @@
                     <a class="nav-link" href="{% url 'maps' %}">Map</a>
                 </li>
 
-                {% if user.is_superuser %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Projects
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'project_create' %}">New Project</a>
-                        <!-- Add more project-related options as needed -->
-                    </div>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function () {
-                            var dropdownItem = document.querySelector('.nav-item.dropdown');
-
-                            dropdownItem.addEventListener('mouseover', function () {
-                                // Show dropdown on hover
-                                this.querySelector('.dropdown-menu').classList.add('show');
-                            });
-
-                            dropdownItem.addEventListener('mouseout', function () {
-                                // Hide dropdown on mouseout
-                                this.querySelector('.dropdown-menu').classList.remove('show');
-                            });
-
-                            dropdownItem.addEventListener('click', function (e) {
-                                // Redirect when main link is clicked
-                                if (!e.target.closest('.dropdown-menu')) {
-                                    window.location.href = "{% url 'projects_list' %}";
-                                }
-                            });
-                        });
-                    </script>
-                </li>
-                {% else %}
                 <li class="nav-item">
                     <a class="nav-link"
                        href="{% url 'projects_list' %}">Projects
                     </a>
                 </li>
-                {% endif %}
 
                 <li class="nav-item">
                     <a class="nav-link"

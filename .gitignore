@@ -2,6 +2,7 @@
 .venv/
 .idea/
 __pycache__/
+django_app/staticfiles/
 
 pg_dump.sql
 backup.pgdump

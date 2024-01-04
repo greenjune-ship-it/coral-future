@@ -131,11 +131,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Add these new lines
+# Additional directories for static files during development
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+# Directory where 'collectstatic' will gather static files for production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type

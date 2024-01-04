@@ -16,8 +16,8 @@ services:
     build:
       context: ./django_app
     restart: unless-stopped
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
     environment:
       - DEBUG=${DEBUG}
       - SECRET_KEY=${SECRET_KEY}
@@ -27,6 +27,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
       - CONTACT_EMAIL_ADDRESS=${CONTACT_EMAIL_ADDRESS}
+      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
     volumes:
       - ./django_app:/usr/src/app
     depends_on:

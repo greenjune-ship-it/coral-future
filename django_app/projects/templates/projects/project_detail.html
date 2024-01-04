@@ -39,17 +39,62 @@
     <p>Description: {{ project.description }}</p>
     <p>Owner: {{ project.owner.username }}</p>
     <!-- Add more details or include related data as needed -->
-    <p>Number of Experiments: {{ experiments.count }}</p>
-    <p>Number of Samples: {{ samples.count }}</p>
-    <p>Number of Observations: {{ observations.count }}</p>
 
-    <!-- Display observations for each sample -->
-    <h3>Observations for each Sample:</h3>
+    <!-- Experiments Table -->
+    <h3>Experiments</h3>
+    <table class="experiments-table">
+        <thead>
+        <tr>
+            <th>Experiment ID</th>
+            <th>Experiment Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for experiment in experiments %}
+            <tr>
+                <td>{{ experiment.id }}</td>
+                <td>{{ experiment.experiment_date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Samples Table -->
+    <h3>Samples</h3>
+    <table class="samples-table">
+        <thead>
+        <tr>
+            <th>Sample ID</th>
+            <th>Country</th>
+            <th>Species</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Collection Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for experiment in experiments %}
+            {% for sample in experiment.samples.all %}
+                <tr>
+                    <td>{{ sample.id }}</td>
+                    <td>{{ sample.country }}</td>
+                    <td>{{ sample.species }}</td>
+                    <td>{{ sample.latitude }}</td>
+                    <td>{{ sample.longitude }}</td>
+                    <td>{{ sample.collection_date }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Observations Table -->
+    <h3>Observations</h3>
     <table class="observations-table">
         <thead>
         <tr>
-            <th>Experiment</th>
-            <th>Sample</th>
+            <th>Experiment ID</th>
+            <th>Sample ID</th>
             <th>Country</th>
             <th>Species</th>
             <th>Genotype</th>

@@ -6,7 +6,7 @@ def map_view(request):
     # Retrieve all samples from the database
     samples = Sample.objects.all()
 
-    # Create a dictionary to store sample data with project_id
+    # Create a list to store sample data with project_id
     sample_data = []
 
     # Fetch project_id for each sample and create a list of dictionaries
@@ -20,4 +20,4 @@ def map_view(request):
         })
 
     # Pass sample data to the template
-    return render(request, 'map.html', {'samples': samples})
+    return render(request, 'map.html', {'sample_data': sample_data})

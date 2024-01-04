@@ -19,13 +19,15 @@ class Sample(models.Model):
     species = models.CharField(max_length=255)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    collection_date = models.DateField()
 
     def __str__(self):
-        return f"{self.species} Sample at ({self.latitude}, {self.longitude})"
+        return f"{self.project.id}_{self.country}_{self.species}_{self.collection_date}_{self.latitude}_{self.longitude}"
 
 
 class Experiment(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    experiment_date = models.DateField()
     samples = models.ManyToManyField(Sample)
 
     def __str__(self):
@@ -35,14 +37,13 @@ class Experiment(models.Model):
 class Observation(models.Model):
     sample = models.ForeignKey(Sample, on_delete=models.CASCADE)
     genotype = models.IntegerField()
-    observation_date = models.DateField()
     condition = models.CharField(max_length=255)
     temperature = models.IntegerField()
     timepoint = models.IntegerField()
     pam_value = models.FloatField()  # Assuming a single PAM value for simplicity
 
     def __str__(self):
-        return f"Observation for {self.sample.species} at {self.observation_date}"
+        return f"Observation for {self.sample.species}, genotype {self.genotype}"
 
     def save(self, *args, **kwargs):
         # Round PAM value to three digits before saving

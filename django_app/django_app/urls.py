@@ -7,4 +7,5 @@ urlpatterns = [
     path('user/', include('users.urls')),
     path('maps/', include('maps.urls')),
     path('projects/', include('projects.urls')),
+    path('api/',include('api.urls'))
 ]

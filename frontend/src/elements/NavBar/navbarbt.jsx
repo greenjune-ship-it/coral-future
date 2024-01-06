@@ -4,7 +4,11 @@ import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import './navbar.css'
-function NavBarbt() {
+function NavBarbt(isAuth) {
+  let [user, setUser] = useState(null)
+  let logoutUser = (e) => {
+    e.preventDefault()
+  }
     return (
       <>
         <Navbar bg="light" data-bs-theme="light">
@@ -18,11 +22,19 @@ function NavBarbt() {
               <Nav.Link href="#aboutus">About Us</Nav.Link>
               <Nav.Link href="#gethelp">Get Help</Nav.Link>
               </Nav>
+              {user ? (
               <Nav className="mr-auto">
               <Link to='/signin' className="link-class">
                   <Button variant="primary">Log In</Button>{' '}
               </Link>
+            </Nav> ):
+            (
+              <Nav className="mr-auto">
+              <Link to='/profile' className="link-class">
+                  {user && <Button variant="success">{user.username}!</Button>{' '}
+              </Link>
             </Nav>
+            )}
           </Container>
         </Navbar>
       </>

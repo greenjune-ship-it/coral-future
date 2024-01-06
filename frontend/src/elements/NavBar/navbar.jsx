@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
 
-const NavigationBar = () => {
+const NavigationBar = (isAuth) => {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" style={{ backgroundColor: 'white'}}>
@@ -18,8 +18,12 @@ const NavigationBar = () => {
                         <Button color="secondary" sx={{ marginLeft: '10px', borderRadius: '125px', color: 'blue',  fontSize: '20px', fontWeight: 'bold' }} >Projects</Button>
                         <Button color="secondary" sx={{ marginLeft: '10px', borderRadius: '125px', color: 'blue',  fontSize: '20px', fontWeight: 'bold' }} >About Us</Button>
                     </Box>
+                    isAuth ? (
                         <Button variant="contained" sx={{ marginLeft: '10px' }} color="inherit">Login</Button>
-                    
+                    ):
+                    (
+                        <Button variant="success" sx={{ marginLeft: '10px' }} color="inherit">Profile</Button> 
+                    )
                 </Toolbar>
             </AppBar>
         </Box>

@@ -4,7 +4,7 @@ from django.db import models
 from django.db import models
 from django.utils import timezone
 import datetime
-
+"""
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -27,33 +27,15 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
     
-
+"""
 class CustomUser(AbstractUser):
+    username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(unique=True)
     firstname = models.CharField(max_length=30, blank=False, null=False)
     lastname = models.CharField(max_length=30, blank=False, null=False)
     city = models.CharField(max_length=100,blank=True, null=True)
     phoneNumber = models.CharField(max_length=20,blank=True, null=True)
     registrationDate = models.DateTimeField(default=timezone.now, editable=False)
-    """
-    groups = models.ManyToManyField(
-        'auth.Group',
-        verbose_name='groups',
-        blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-        related_name="%(app_label)s_%(class)s_user_set",   # Add this line
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        verbose_name='user permissions',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        related_name="%(app_label)s_%(class)s_user_set",   
-    )
-    """
-    
-    USERNAME_FIELD = 'email' #by default username is unique string
-    REQUIRED_FIELDS = []
     
 
     def __str__(self):

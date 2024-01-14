@@ -3,12 +3,12 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
+import {useState, useContext  } from "react";
+import AuthContext from '../../context/AuthProvider';
 import './navbar.css'
-function NavBarbt(isAuth) {
-  let [user, setUser] = useState(null)
-  let logoutUser = (e) => {
-    e.preventDefault()
-  }
+function NavBarbt() {
+  let { user, logoutUser } = useContext(AuthContext)
+  
     return (
       <>
         <Navbar bg="light" data-bs-theme="light">
@@ -23,17 +23,19 @@ function NavBarbt(isAuth) {
               <Nav.Link href="#gethelp">Get Help</Nav.Link>
               </Nav>
               {user ? (
-              <Nav className="mr-auto">
+                <Nav className="mr-auto" onClick={logoutUser}>
+                <Link to='/profile' className="link-class">
+                    
+                </Link>
+              </Nav>
+              
+              ):
+            (
+              <Nav className="mr-auto" >
               <Link to='/signin' className="link-class">
                   <Button variant="primary">Log In</Button>{' '}
               </Link>
-            </Nav> ):
-            (
-              <Nav className="mr-auto">
-              <Link to='/profile' className="link-class">
-                  {user && <Button variant="success">{user.username}!</Button>{' '}
-              </Link>
-            </Nav>
+            </Nav> 
             )}
           </Container>
         </Navbar>

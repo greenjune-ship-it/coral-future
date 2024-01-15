@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect  } from 'react'
+import { createContext, useState, useEffect } from 'react'
 import {jwtDecode} from 'jwt-decode';
 import { useNavigate } from 'react-router-dom'
 
@@ -13,7 +13,6 @@ export const AuthProvider = ({children}) => {
     let [loading, setLoading] = useState(true)
 
     const navigate = useNavigate()
-
 
     let loginUser = async (e) => {
         e.preventDefault()
@@ -33,9 +32,18 @@ export const AuthProvider = ({children}) => {
             setUser(jwtDecode(data.access))
             navigate('/')
         } else {
-            alert('Something went wrong while loggin in the user!')
+            alert('Something went wrong while logging in the user!')
         }
     }
+
+    let logoutUser = () => {
+        // e.preventDefault()
+        localStorage.removeItem('authTokens')
+        setAuthTokens(null)
+        setUser(null)
+        navigate('/login')
+    }
+
     const updateToken = async () => {
         const response = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
             method: 'POST',
@@ -44,7 +52,7 @@ export const AuthProvider = ({children}) => {
             },
             body:JSON.stringify({refresh:authTokens?.refresh})
         })
-
+       
         const data = await response.json()
         if (response.status === 200) {
             setAuthTokens(data)
@@ -58,21 +66,19 @@ export const AuthProvider = ({children}) => {
             setLoading(false)
         }
     }
-    let logoutUser = (e) => {
-        e.preventDefault()
-        localStorage.removeItem('authTokens')
-        setAuthTokens(null)
-        setUser(null)
-        navigate('/')
-    }
 
     let contextData = {
-        user: user,
-        authTokens: authTokens,
-        loginUser: loginUser,
-        logoutUser: logoutUser,
+        user:user,
+        authTokens:authTokens,
+        loginUser:loginUser,
+        logoutUser:logoutUser,
     }
+
     useEffect(()=>{
+        if(loading){
+            updateToken()
+        }
+
         const REFRESH_INTERVAL = 1000 * 60 * 4 // 4 minutes
         let interval = setInterval(()=>{
             if(authTokens){
@@ -81,9 +87,8 @@ export const AuthProvider = ({children}) => {
         }, REFRESH_INTERVAL)
         return () => clearInterval(interval)
 
-    },[authTokens])
+    },[authTokens, loading])
 
-    
     return(
         <AuthContext.Provider value={contextData}>
             {children}

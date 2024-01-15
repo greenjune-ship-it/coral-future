@@ -9,6 +9,17 @@ import { AuthProvider } from './context/AuthProvider.js';
 function App() {
  return (
  <BrowserRouter>
+ <Routes>
+
+    <Route exact path="/" element={<Home/>} />
+    <Route exact path="/signin" element={<Login/>} />
+    
+ </Routes>
+</BrowserRouter>
+ );
+}
+
+/*  <BrowserRouter>
  <AuthProvider>
  <Routes>
 
@@ -20,5 +31,6 @@ function App() {
 </BrowserRouter>
  );
 }
+*/
 
 export default App;

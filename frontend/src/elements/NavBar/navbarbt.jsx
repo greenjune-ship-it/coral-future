@@ -1,14 +1,15 @@
+import React,  { useContext, useState } from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
-import {useState, useContext  } from "react";
-import AuthContext from '../../context/AuthProvider';
+import AuthContext from '../../context/AuthContext';
+import {jwtDecode} from 'jwt-decode';
 import './navbar.css'
 function NavBarbt() {
-  /* let { user, logoutUser } = useContext(AuthContext) */
-  
+   let {logoutUser } = useContext(AuthContext) 
+   let [user] = useState(() => (localStorage.getItem('authTokens') ? jwtDecode(localStorage.getItem('authTokens')) : null))
     return (
       <>
         <Navbar bg="light" data-bs-theme="light">
@@ -22,11 +23,15 @@ function NavBarbt() {
               <Nav.Link href="#aboutus">About Us</Nav.Link>
               <Nav.Link href="#gethelp">Get Help</Nav.Link>
               </Nav>
-              <Nav className="mr-auto" >
+              { user ? (<Nav className="mr-auto" onClick={logoutUser}>
+                <Button variant="primary">Log Out</Button>{' '}
+              </Nav>)
+              :
+              (<Nav className="mr-auto" >
               <Link to='/signin' className="link-class">
                   <Button variant="primary">Log In</Button>{' '}
               </Link>
-            </Nav> 
+            </Nav> )}
           </Container>
         </Navbar>
       </>

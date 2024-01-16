@@ -7,11 +7,11 @@ const AuthContext = createContext()
 export default AuthContext;
 
 export const AuthProvider = ({children}) => {
-
-    let [user, setUser] = useState(() => (localStorage.getItem('authTokens') ? jwtDecode(localStorage.getItem('authTokens')) : null))
+    let [user, setUser] = useState(null)
     let [authTokens, setAuthTokens] = useState(() => (localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null))
     let [loading, setLoading] = useState(true)
-
+    console.log(authTokens)
+    console.log(user)
     const navigate = useNavigate()
 
     let loginUser = async (e) => {
@@ -36,12 +36,12 @@ export const AuthProvider = ({children}) => {
         }
     }
 
-    let logoutUser = () => {
-        // e.preventDefault()
+    let logoutUser = (e) => {
+        e.preventDefault()
         localStorage.removeItem('authTokens')
         setAuthTokens(null)
         setUser(null)
-        navigate('/login')
+        navigate('/')
     }
 
     const updateToken = async () => {
@@ -52,7 +52,7 @@ export const AuthProvider = ({children}) => {
             },
             body:JSON.stringify({refresh:authTokens?.refresh})
         })
-       
+
         const data = await response.json()
         if (response.status === 200) {
             setAuthTokens(data)
@@ -75,10 +75,6 @@ export const AuthProvider = ({children}) => {
     }
 
     useEffect(()=>{
-        if(loading){
-            updateToken()
-        }
-
         const REFRESH_INTERVAL = 1000 * 60 * 4 // 4 minutes
         let interval = setInterval(()=>{
             if(authTokens){
@@ -87,7 +83,7 @@ export const AuthProvider = ({children}) => {
         }, REFRESH_INTERVAL)
         return () => clearInterval(interval)
 
-    },[authTokens, loading])
+    },[authTokens])
 
     return(
         <AuthContext.Provider value={contextData}>

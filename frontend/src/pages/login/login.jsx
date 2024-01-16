@@ -1,12 +1,10 @@
 import Button from 'react-bootstrap/Button';
-import React, {useContext, useState} from 'react'
-import AuthContext from '../../context/AuthProvider.js';
+import React, {createContext, useContext, useState} from 'react'
 import Form from 'react-bootstrap/Form';
 import NavBarbt from '../../elements/NavBar/navbarbt.jsx'
-import axios from 'axios'
-import Cookies from 'js-cookie';
+import AuthContext from '../../context/AuthContext.js'
 const Login = () => {
-  
+/*  
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -36,7 +34,12 @@ const Login = () => {
     console.log('End of Submition');
 
     /* window.location.href = "https://www.google.com"; */
-  }
+  
+  
+    let {loginUser} = useContext(AuthContext)
+  
+  
+
 
 
   return (
@@ -45,10 +48,10 @@ const Login = () => {
         <NavBarbt />
     </div>
     <div style={{paddingLeft: '10%',paddingRight: '10%', marginRight: '10%', marignTop:'10%', paddingTop:'5%'}}>
-        <Form onSubmit={submit}>
+        <Form onSubmit={loginUser}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
-            <Form.Control type="text" name="username"  onChange={e => setUsername(e.target.value)} placeholder="Enter email or username" />
+            <Form.Control type="text" name="username"  /* onChange={e => setUsername(e.target.value)} */ placeholder="Enter email or username" />
             <Form.Text className="text-muted">
             We'll never share your email with anyone else.
             </Form.Text>
@@ -56,7 +59,7 @@ const Login = () => {
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
-            <Form.Control type="password" name="password" onChange={e => setPassword(e.target.value)}  placeholder="Password" />
+            <Form.Control type="password" name="password" /* onChange={e => setPassword(e.target.value)} */  placeholder="Password" />
         </Form.Group>
         <Button variant="primary" type="submit">
             Submit

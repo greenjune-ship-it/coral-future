@@ -5,15 +5,12 @@ services:
     build: ./frontend
     volumes:
       - ./frontend:/app
-      # One-way volume to use node_modules from inside image
-      - /app/frontend/node_modules
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=development
     depends_on:
       - django-app
-    command: npm start
 
   database:
     image: postgres:15.3

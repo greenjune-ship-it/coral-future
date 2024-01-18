@@ -18,7 +18,8 @@ function NavBarbt() {
               <Navbar.Brand >Navbar</Navbar.Brand>
             </Link>
             <Nav className="me-auto">
-              <Nav.Link href="#map">Map</Nav.Link>
+
+              <Nav.Link href="/map">Map</Nav.Link>
               <Nav.Link href="#projects">Projects</Nav.Link>
               <Nav.Link href="#aboutus">About Us</Nav.Link>
               <Nav.Link href="#gethelp">Get Help</Nav.Link>

@@ -8,3 +8,8 @@ def home(request):
         # Add other variables as needed
     }
     return render(request, "main/home.html", context)
+
+
+def redirect_to_react(request):
+    return render(request, 'main/redirect_to_react.html',
+                  {'react_host': 'http://localhost:3000'})

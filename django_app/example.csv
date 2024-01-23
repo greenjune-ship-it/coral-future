@@ -1,4 +1,4 @@
-Experiment,Experiment Date,Sample,Country,Species,Collection Date,Latitude,Longitude,Genotype,Temperature,Timepoint,PAM,Condition
+Experiment,Experiment Date,Sample,Country,Species,Collection Date,Latitude,Longitude,Replicate,Temperature,Timepoint,PAM,Condition
 1,2024-04-04,1,DEU,Acropora germania,2024-01-04,47.6619,9.171,1,29,420,0.636,Nursery
 1,2024-04-04,1,DEU,Acropora germania,2024-01-04,47.6619,9.171,2,29,420,0.615,Nursery
 1,2024-04-04,1,DEU,Acropora germania,2024-01-04,47.6619,9.171,3,29,420,0.64,Nursery

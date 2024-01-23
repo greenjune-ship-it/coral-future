@@ -36,14 +36,14 @@ class Experiment(models.Model):
 
 class Observation(models.Model):
     sample = models.ForeignKey(Sample, on_delete=models.CASCADE)
-    genotype = models.IntegerField()
+    replicate = models.IntegerField()
     condition = models.CharField(max_length=255)
     temperature = models.IntegerField()
     timepoint = models.IntegerField()
     pam_value = models.FloatField()  # Assuming a single PAM value for simplicity
 
     def __str__(self):
-        return f"Observation for {self.sample.species}, genotype {self.genotype}"
+        return f"Observation for {self.sample.species}, replicate {self.replicate}"
 
     def save(self, *args, **kwargs):
         # Round PAM value to three digits before saving

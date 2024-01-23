@@ -50,7 +50,7 @@ def parse_and_create_instances(csv_path):
         # Create the observation within the sample
         observation = Observation.objects.create(
             sample=sample,
-            genotype=row['Genotype'],
+            replicate=row['Replicate'],
             condition=row['Condition'],
             temperature=row['Temperature'],
             timepoint=row['Timepoint'],

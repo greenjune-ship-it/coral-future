@@ -8,7 +8,6 @@ const App = () => {
     useEffect(() => {
         const checkAuthentication = async () => {
             try {
-                const sessionId = Cookies.get('sessionid');
                 const response = await axios.get('http://localhost:8000/api/check-authentication/', {
                     withCredentials: true,
                 });

@@ -1,4 +1,4 @@
-# Django Pet Project
+# Coral Future App
 
 ## Get Started
 

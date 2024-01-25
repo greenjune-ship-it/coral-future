@@ -35,15 +35,32 @@ From backup:
 bash deploy.sh
 ```
 
-From scratch:
+Up the project from scratch:
 
 ```commandline
 docker compose up -d
-docker compose exec django-app python manage.py collectstatic
-docker compose exec django-app python manage.py createsuperuser
-docker compose exec django-app python populate_db.py
+
 ```
 
+Collect static files:
+
+```commandline
+docker compose exec django-app python manage.py collectstatic --noinput
+```
+
+Create superuser:
+
+```commandline
+docker compose exec django-app python manage.py createsuperuser
+```
+
+Populate the database:
+
+```commandline
+docker compose exec django-app python populate_db.py \
+    --owner your_username \
+    --csv_path static/datasheets/example.csv
+```
 
 ## Database Backups
 

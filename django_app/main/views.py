@@ -12,4 +12,4 @@ def home(request):
 
 def redirect_to_react(request):
     return render(request, 'main/redirect_to_react.html',
-                  {'react_host': 'http://localhost:3000'})
+                  {'react_host': f'http://{settings.ALLOWED_HOSTS[0]}:3000'})

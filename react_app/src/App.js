@@ -17,15 +17,15 @@ const App = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/auth/status/`, {
+        const response = await axios.get(`${backendUrl}/api/auth/status`, {
           withCredentials: true,
         });
 
-        const { username, is_authenticated } = response.data;
+        const { username, authenticated } = response.data;
 
         setAuthStatus({
           username: username,
-          is_authenticated: is_authenticated,
+          authenticated: authenticated,
         });
       } catch (error) {
         console.error('Error checking authentication:', error);
@@ -46,7 +46,7 @@ const App = () => {
 
         {loading ? (
           <Spinner animation="border" variant="primary" />
-        ) : authStatus.is_authenticated ? (
+        ) : authStatus.authenticated ? (
           <p>Welcome, {authStatus.username}!</p>
         ) : (
           <p>You are not authenticated. Please set the session ID.</p>

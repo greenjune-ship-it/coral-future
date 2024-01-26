@@ -28,7 +28,7 @@ class BioSample(models.Model):
 class Experiment(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     experiment_date = models.DateField()
-    samples = models.ManyToManyField(BioSample)
+    biosamples = models.ManyToManyField(BioSample)
 
     def __str__(self):
         return f"Experiment in {self.id} for project {self.project.name}"

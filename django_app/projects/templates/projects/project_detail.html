@@ -59,8 +59,8 @@
         </tbody>
     </table>
 
-    <!-- Samples Table -->
-    <h3>Samples</h3>
+    <!-- BioSamples Table -->
+    <h3>BioSamples</h3>
     <table class="biosamples-table">
         <thead>
         <tr>
@@ -104,6 +104,7 @@
             <th>PAM</th>
         </tr>
         </thead>
+
         <tbody>
         {% for experiment in experiments %}
             {% for biosample in experiment.biosamples.all %}

@@ -45,8 +45,6 @@ def parse_and_create_instances(csv_path, owner_username):
                 collection_date=datetime.strptime(biosample_group['Collection Date'].iloc[0], '%Y-%m-%d').date(),
             )
             # Associate the biosample with the experiment
-            experiment.samples.add(biosample)
-            # Associate the biosample with the experiment
             experiment.biosamples.add(biosample)
 
             # Iterate over observations within the biosample

@@ -54,11 +54,11 @@ Create superuser:
 docker compose exec django-app python manage.py createsuperuser
 ```
 
-Populate the database:
+Populate the database (let's say my superuser is `adm_iakovyu1`:
 
 ```commandline
 docker compose exec django-app python populate_db.py \
-    --owner your_username \
+    --owner adm_iakovyu1 \
     --csv_path static/datasheets/example.csv
 ```
 

@@ -35,12 +35,8 @@ const AppMap = ({ backendUrl }) => {
     return <p>{error}</p>;
   }
 
-  // Calculate the average coordinates for centering the map
-  const avgLat = markers.reduce((sum, marker) => sum + marker.latitude, 0) / markers.length;
-  const avgLng = markers.reduce((sum, marker) => sum + marker.longitude, 0) / markers.length;
-
   return (
-    <MapContainer center={[avgLat, avgLng]} zoom={3} style={{ height: '800px', width: '100%' }}>
+    <MapContainer zoom={3} style={{ height: '800px', width: '100%' }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

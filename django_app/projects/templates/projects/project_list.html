@@ -67,7 +67,7 @@
                             <li>
                                 {{ publication.title }}
                                 <br>
-                                <a href="https://doi.org/{{ publication.doi }}" target="_blank">
+                                <a href="{{ publication.doi }}" target="_blank">
                                     {{ publication.doi }}
                                 </a>
                             </li>
@@ -77,7 +77,7 @@
                     {% for publication in project.publication_set.all %}
                         {{ publication.title }}
                         <br>
-                        <a href="https://doi.org/{{ publication.doi }}" target="_blank">
+                        <a href="{{ publication.doi }}" target="_blank">
                             {{ publication.doi }}
                         </a>
                     {% endfor %}

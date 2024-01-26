@@ -67,12 +67,17 @@ docker compose exec django-app python populate_db.py \
 Create a database backup:
 
 ```commandline
-docker compose exec database pg_dump --format=custom > backup.pgdump
+docker compose exec database pg_dump -U $DB_USER --format=custom > backup.pgdump
 ```
 
 Restore a database backup:
 
 ```commandline
-docker compose exec database \
-    pg_restore --clean --dbname $DB_NAME -U $DB_USER backup.pgdump
+# Copy backup file first
+docker cp backup.pgdump coral-future-database-1:/tmp
+# Enter container
+docker compose exec database bash
+cd /tmp
+# Restore
+pg_restore --clean --dbname $DB_NAME -U $DB_USER backup.pgdump
 ```

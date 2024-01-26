@@ -13,7 +13,7 @@ class Project(models.Model):
         return self.name
 
 
-class Sample(models.Model):
+class BioSample(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     country = models.CharField(max_length=3)
     species = models.CharField(max_length=255)
@@ -28,24 +28,33 @@ class Sample(models.Model):
 class Experiment(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     experiment_date = models.DateField()
-    samples = models.ManyToManyField(Sample)
+    biosamples = models.ManyToManyField(BioSample)
 
     def __str__(self):
         return f"Experiment in {self.id} for project {self.project.name}"
 
 
 class Observation(models.Model):
-    sample = models.ForeignKey(Sample, on_delete=models.CASCADE)
-    replicate = models.IntegerField()
+    biosample = models.ForeignKey(BioSample, on_delete=models.CASCADE)
+    fragment = models.IntegerField()
     condition = models.CharField(max_length=255)
     temperature = models.IntegerField()
     timepoint = models.IntegerField()
     pam_value = models.FloatField()  # Assuming a single PAM value for simplicity
 
     def __str__(self):
-        return f"Observation for {self.sample.species}, replicate {self.replicate}"
+        return f"Observation for {self.biosample.species}, fragment {self.fragment}"
 
     def save(self, *args, **kwargs):
         # Round PAM value to three digits before saving
         self.pam_value = round(self.pam_value, 3)
         super().save(*args, **kwargs)
+
+class Publication(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    title = models.TextField()
+    year = models.IntegerField()
+    doi = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"Publication '{self.title}' for project {self.project.name} ({self.year})"

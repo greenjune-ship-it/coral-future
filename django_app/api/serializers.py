@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from projects.models import Sample
+from projects.models import BioSample
 
 
-class SampleSerializer(serializers.ModelSerializer):
+class BioSampleSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Sample
+        model = BioSample
         fields = [
             'id',
             'project_id',

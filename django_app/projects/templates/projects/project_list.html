@@ -45,6 +45,7 @@
             <th>Name</th>
             <th>Registration Date</th>
             <th>Description</th>
+            <th>Publications</th>
             <th>Owner</th>
             {% if user.is_superuser %}
                 <th>Actions</th>
@@ -59,6 +60,31 @@
             </td>
             <td>{{ project.registration_date }}</td>
             <td>{{ project.description }}</td>
+            <td>
+                {% if project.publication_set.all|length > 1 %}
+                    <ul>
+                        {% for publication in project.publication_set.all %}
+                            <li>
+                                {{ publication.title }}
+                                <br>
+                                <a href="{{ publication.doi }}" target="_blank">
+                                    {{ publication.doi }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% elif project.publication_set.all|length == 1 %}
+                    {% for publication in project.publication_set.all %}
+                        {{ publication.title }}
+                        <br>
+                        <a href="{{ publication.doi }}" target="_blank">
+                            {{ publication.doi }}
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    No publications available
+                {% endif %}
+            </td>
             <td>{{ project.owner.username }}</td>
             {% if user.is_superuser %}
                 <td class="actions">

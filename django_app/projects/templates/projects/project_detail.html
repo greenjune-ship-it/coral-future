@@ -59,12 +59,12 @@
         </tbody>
     </table>
 
-    <!-- Samples Table -->
-    <h3>Samples</h3>
-    <table class="samples-table">
+    <!-- BioSamples Table -->
+    <h3>BioSamples</h3>
+    <table class="biosamples-table">
         <thead>
         <tr>
-            <th>Sample ID</th>
+            <th>BioSample ID</th>
             <th>Country</th>
             <th>Species</th>
             <th>Latitude</th>
@@ -74,14 +74,14 @@
         </thead>
         <tbody>
         {% for experiment in experiments %}
-            {% for sample in experiment.samples.all %}
+            {% for biosample in experiment.biosamples.all %}
                 <tr>
-                    <td>{{ sample.id }}</td>
-                    <td>{{ sample.country }}</td>
-                    <td>{{ sample.species }}</td>
-                    <td>{{ sample.latitude }}</td>
-                    <td>{{ sample.longitude }}</td>
-                    <td>{{ sample.collection_date }}</td>
+                    <td>{{ biosample.id }}</td>
+                    <td>{{ biosample.country }}</td>
+                    <td>{{ biosample.species }}</td>
+                    <td>{{ biosample.latitude }}</td>
+                    <td>{{ biosample.longitude }}</td>
+                    <td>{{ biosample.collection_date }}</td>
                 </tr>
             {% endfor %}
         {% endfor %}
@@ -94,26 +94,27 @@
         <thead>
         <tr>
             <th>Experiment ID</th>
-            <th>Sample ID</th>
+            <th>BioSample ID</th>
             <th>Country</th>
             <th>Species</th>
-            <th>Replicate</th>
+            <th>Fragment</th>
             <th>Condition</th>
             <th>Temperature</th>
             <th>Timepoint</th>
             <th>PAM</th>
         </tr>
         </thead>
+
         <tbody>
         {% for experiment in experiments %}
-            {% for sample in experiment.samples.all %}
-                {% for observation in sample.observation_set.all %}
+            {% for biosample in experiment.biosamples.all %}
+                {% for observation in biosample.observation_set.all %}
                     <tr>
                         <td>{{ experiment.id }}</td>
-                        <td>{{ sample.id }}</td>
-                        <td>{{ sample.country }}</td>
-                        <td>{{ sample.species }}</td>
-                        <td>{{ observation.replicate }}</td>
+                        <td>{{ biosample.id }}</td>
+                        <td>{{ biosample.country }}</td>
+                        <td>{{ biosample.species }}</td>
+                        <td>{{ observation.fragment }}</td>
                         <td>{{ observation.condition }}</td>
                         <td>{{ observation.temperature }}</td>
                         <td>{{ observation.timepoint }}</td>

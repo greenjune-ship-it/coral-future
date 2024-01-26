@@ -1,3 +1,4 @@
+// App.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Spinner } from 'react-bootstrap';
@@ -9,10 +10,9 @@ import AppMap from './AppMap';
 const App = () => {
   const [authStatus, setAuthStatus] = useState({});
   const [loading, setLoading] = useState(true);
-  const [mapCenter, setMapCenter] = useState([51.505, -0.09]);
 
   // Access the backend URL from the environment variable
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -52,7 +52,8 @@ const App = () => {
           <p>You are not authenticated. Please set the session ID.</p>
         )}
 
-        <AppMap center={mapCenter} />
+        {/* Pass backendUrl as a prop to AppMap */}
+        <AppMap backendUrl={backendUrl} />
 
         {/* Your other React components */}
       </Container>

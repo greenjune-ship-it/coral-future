@@ -38,26 +38,26 @@ bash deploy.sh
 Up the project from scratch:
 
 ```commandline
-docker compose up -d
+sudo docker compose up -d
 
 ```
 
 Collect static files:
 
 ```commandline
-docker compose exec django-app python manage.py collectstatic --noinput
+sudo docker compose exec django-app python manage.py collectstatic --noinput
 ```
 
 Create superuser:
 
 ```commandline
-docker compose exec django-app python manage.py createsuperuser
+sudo docker compose exec django-app python manage.py createsuperuser
 ```
 
 Populate the database (let's say my superuser is `adm_iakovyu1`:
 
 ```commandline
-docker compose exec django-app python populate_db.py \
+sudo docker compose exec django-app python populate_db.py \
     --owner adm_iakovyu1 \
     --csv_path static/datasheets/example.csv
 ```
@@ -67,16 +67,16 @@ docker compose exec django-app python populate_db.py \
 Create a database backup:
 
 ```commandline
-docker compose exec database pg_dump -U $DB_USER --format=custom > backup.pgdump
+sudo docker compose exec database pg_dump -U $DB_USER --format=custom > backup.pgdump
 ```
 
 Restore a database backup:
 
 ```commandline
 # Copy backup file first
-docker cp backup.pgdump coral-future-database-1:/tmp
+sudo docker cp backup.pgdump coral-future-database-1:/tmp
 # Enter container
-docker compose exec database bash
+sudo docker compose exec database bash
 cd /tmp
 # Restore
 pg_restore --clean --dbname $DB_NAME -U $DB_USER backup.pgdump

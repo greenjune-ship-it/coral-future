@@ -37,6 +37,9 @@ def parse_and_create_instances(csv_path, owner_username):
         # Iterate over unique biosamples within the experiment
         for biosample_key, biosample_group in experiment_group.groupby(['BioSample', 'Country', 'Species', 'Latitude', 'Longitude', 'Collection Date']):
             biosample = BioSample.objects.create(
+        # Iterate over unique biosamples within the experiment
+        for biosample_key, biosample_group in experiment_group.groupby(['BioSample', 'Country', 'Species', 'Latitude', 'Longitude', 'Collection Date']):
+            biosample = BioSample.objects.create(
                 project=project,
                 country=biosample_key[1],
                 species=biosample_key[2],
@@ -44,6 +47,8 @@ def parse_and_create_instances(csv_path, owner_username):
                 longitude=biosample_key[4],
                 collection_date=datetime.strptime(biosample_group['Collection Date'].iloc[0], '%Y-%m-%d').date(),
             )
+            # Associate the biosample with the experiment
+            experiment.samples.add(biosample)
             # Associate the biosample with the experiment
             experiment.biosamples.add(biosample)
 

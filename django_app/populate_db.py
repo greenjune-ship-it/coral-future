@@ -9,7 +9,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_app.settings')
 django.setup()
 
 # Import your models after setting up Django
-from projects.models import Project, Sample, Experiment, Observation
+from projects.models import Project, BioSample, Experiment, Observation
 from users.models import CustomUser
 
 def parse_and_create_instances(csv_path, owner_username):
@@ -35,24 +35,24 @@ def parse_and_create_instances(csv_path, owner_username):
         )
 
         # Iterate over unique samples within the experiment
-        for sample_key, sample_group in experiment_group.groupby(['Sample', 'Country', 'Species', 'Latitude', 'Longitude', 'Collection Date']):
-            sample = Sample.objects.create(
+        for biosample_key, biosample_group in experiment_group.groupby(['BioSample', 'Country', 'Species', 'Latitude', 'Longitude', 'Collection Date']):
+            biosample = BioSample.objects.create(
                 project=project,
-                country=sample_key[1],
-                species=sample_key[2],
-                latitude=sample_key[3],
-                longitude=sample_key[4],
-                collection_date=datetime.strptime(sample_group['Collection Date'].iloc[0], '%Y-%m-%d').date(),
+                country=biosample_key[1],
+                species=biosample_key[2],
+                latitude=biosample_key[3],
+                longitude=biosample_key[4],
+                collection_date=datetime.strptime(biosample_group['Collection Date'].iloc[0], '%Y-%m-%d').date(),
             )
             # Associate the sample with the experiment
-            experiment.samples.add(sample)
+            experiment.samples.add(biosample)
 
             # Iterate over observations within the sample
-            for _, row in sample_group.iterrows():
+            for _, row in biosample_group.iterrows():
                 pass
                 observation = Observation.objects.create(
-                    sample=sample,
-                    replicate=row['Replicate'],
+                    biosample=biosample,
+                    fragment=row['Fragment'],
                     condition=row['Condition'],
                     temperature=row['Temperature'],
                     timepoint=row['Timepoint'],

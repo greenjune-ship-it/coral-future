@@ -1,19 +1,28 @@
 # api/views.py
-from django.http import JsonResponse
-from django.views import View
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
+from rest_framework import permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
 
-class CustomApiView(View):
-    @method_decorator(csrf_exempt)
-    @method_decorator(login_required)
+from projects.models import Sample
+from api.serializers import SampleSerializer
+
+
+@api_view(['GET'])
+def check_authentication(request):
+    user = request.user
+    return Response({'authenticated': True, 'username': user.username})
+
+
+class SamplesApiView(APIView):
+    """
+    This endpoint allows authenticated users to retrieve a list of samples.
+    """
+    # add permission to check if user is authenticated
+    permission_classes = [permissions.IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
-        # If the code reaches here, the user is authenticated
-        user = request.user
-        # Your logic for handling the authenticated user goes here
-        response_data = {
-            'username': user.username,
-            'is_authenticated': True,
-        }
-        return JsonResponse(response_data)
+        samples = Sample.objects.all()
+        serializer = SampleSerializer(samples, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

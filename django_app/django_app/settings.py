@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'bootstrap5',
     'corsheaders',
     'leaflet',
+    'rest_framework',
     # Custom apps
     'api',
     'main',

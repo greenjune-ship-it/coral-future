@@ -1,6 +1,8 @@
+# api/urls.py
 from django.urls import path
-from api.views import CustomApiView
+from api.views import check_authentication, SamplesApiView
 
 urlpatterns = [
-    path('check-authentication/', CustomApiView.as_view(), name='api-view'),
+    path('auth/status', check_authentication, name='status-view'),
+    path('samples/', SamplesApiView.as_view(), name='samples-view')
 ]

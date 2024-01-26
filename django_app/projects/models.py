@@ -49,3 +49,12 @@ class Observation(models.Model):
         # Round PAM value to three digits before saving
         self.pam_value = round(self.pam_value, 3)
         super().save(*args, **kwargs)
+
+class Publication(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    title = models.TextField()
+    year = models.IntegerField()
+    doi = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"Publication '{self.title}' for project {self.project.name} ({self.year})"

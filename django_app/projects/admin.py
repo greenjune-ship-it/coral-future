@@ -1,9 +1,9 @@
 from django.contrib import admin
-from projects.models import Project, Sample, Experiment, Observation, Publication
+from projects.models import Project, BioSample, Experiment, Observation, Publication
 
 
-class SampleInline(admin.TabularInline):
-    model = Sample
+class BioSampleInline(admin.TabularInline):
+    model = BioSample
     extra = 1
 
 
@@ -23,15 +23,15 @@ class PublicationInline(admin.TabularInline):
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    inlines = [SampleInline, ExperimentInline, PublicationInline]
+    inlines = [BioSampleInline, ExperimentInline, PublicationInline]
 
 
-class SampleAdmin(admin.ModelAdmin):
+class BioSampleAdmin(admin.ModelAdmin):
     inlines = [ObservationInline]
 
 
 admin.site.register(Project, ProjectAdmin)
-admin.site.register(Sample, SampleAdmin)
+admin.site.register(BioSample, BioSampleAdmin)
 admin.site.register(Experiment)
 admin.site.register(Observation)
 admin.site.register(Publication)

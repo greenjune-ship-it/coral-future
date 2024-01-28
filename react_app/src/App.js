@@ -4,8 +4,8 @@ import axios from 'axios';
 import { Container, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import AppNavbar from './AppNavbar';
-import AppMap from './AppMap';
+import AppNavbar from './elements/NavBar/AppNavbar';
+import AppMap from './pages/Map/AppMap';
 
 const App = () => {
   const [authStatus, setAuthStatus] = useState({});

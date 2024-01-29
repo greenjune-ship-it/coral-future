@@ -1,35 +1,33 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster'
+import { MapContainer, TileLayer, Marker, Popup, useMap, LayersControl, LayerGroup } from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 
-import Markers from './Markers';
-import filterBioSamples from './utils/filterBioSamples';
+import Markers from './Markers'
 
 const Map = ({ backendUrl, filters }) => {
+  const { minTemperature, maxTemperature } = filters; // Destructure minTemperature and maxTemperature from filters
+
   const [biosamples, setBiosamples] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filteredMarkers, setFilteredMarkers] = useState([]);
+
   const [uniqueSpecies, setUniqueSpecies] = useState([]);
 
   const biosamplesapiUrl = `${backendUrl}/api/biosamples`;
-  const observationsapiUrl = `${backendUrl}/api/observations`;
-
-  // Add a state to track whether initial data loading is complete
-  const [initialDataLoaded, setInitialDataLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const biosampledata = await axios.get(biosamplesapiUrl);
-        console.log('Initial biosamples data:', biosampledata.data); // Log initial biosamples data
+
         setBiosamples(biosampledata.data);
         setLoading(false);
-        setInitialDataLoaded(true); // Mark initial data loading as complete
       } catch (error) {
         setError(error.message);
         setLoading(false);
@@ -40,21 +38,23 @@ const Map = ({ backendUrl, filters }) => {
   }, [biosamplesapiUrl]);
 
   useEffect(() => {
-    console.log('Filters updated:', filters);
-    if (initialDataLoaded) { // Only apply filters after initial data loading is complete
-      handleFilter();
-    }
-  }, [filters, initialDataLoaded]);
+    const speciesSet = new Set(biosamples.map(marker => marker.species));
+    setUniqueSpecies([...speciesSet]);
+  }, [biosamples]);
 
   const handleFilter = () => {
-    if (Object.keys(filters).length === 0) {
-      setFilteredMarkers(biosamples);
-    } else {
-      const filteredData = filterBioSamples(biosamples, filters);
-      setFilteredMarkers(filteredData);
-      console.log('Filtered markers:', filteredData);
-    }
+    const filteredData = biosamples.filter(biosample => {
+      // Check if the biosample's species matches the selected species
+      return filters.species.includes(biosample.species);
+    });
+    setFilteredMarkers(filteredData);
+    console.log('Filtered markers:', filteredData); // Log filtered markers
   };
+
+  useEffect(() => {
+    console.log('Filters updated:', filters); // Log when filters are updated
+    handleFilter(); // Update filteredMarkers when filters change
+  }, [filters]); // Update filter whenever filters change
 
   if (loading) {
     return <p>Loading...</p>;
@@ -75,7 +75,10 @@ const Map = ({ backendUrl, filters }) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
+
+
         <Markers markers={filteredMarkers} />
+
       </MapContainer>
     </div>
   );

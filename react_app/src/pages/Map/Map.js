@@ -8,9 +8,9 @@ import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 
 import Markers from './Markers'
-import TemperatureFilter from './TemperatureFilter';
 
-const Map = ({ backendUrl, minTemperature, maxTemperature }) => {
+const Map = ({ backendUrl, filters }) => {
+  const { minTemperature, maxTemperature } = filters; // Destructure minTemperature and maxTemperature from filters
 
   const [biosamples, setBiosamples] = useState([]);
   const [observations, setObservations] = useState([]);
@@ -46,17 +46,18 @@ const Map = ({ backendUrl, minTemperature, maxTemperature }) => {
     setUniqueSpecies([...speciesSet]);
   }, [biosamples]);
 
-  useEffect(() => {
-    handleFilter();
-  }, [minTemperature, maxTemperature]);
-
   const handleFilter = () => {
     const filteredData = observations.filter(observation => {
       return observation.temperature >= minTemperature && observation.temperature <= maxTemperature;
     });
     setFilteredMarkers(filteredData);
-    console.log('Selected Markers:', filteredData); // Log filtered markers
+    console.log('Filtered markers:', filteredData); // Log filtered markers
   };
+
+  useEffect(() => {
+    console.log('Filters updated:', filters); // Log when filters are updated
+    handleFilter(); // Update filteredMarkers when filters change
+  }, [filters]); // Update filter whenever filters change
 
   if (loading) {
     return <p>Loading...</p>;
@@ -71,9 +72,7 @@ const Map = ({ backendUrl, minTemperature, maxTemperature }) => {
   const avgLng = biosamples.reduce((sum, marker) => sum + marker.longitude, 0) / biosamples.length;
 
   return (
-
     <div>
-
       <MapContainer center={[avgLat, avgLng]} zoom={3} style={{ height: '600px', width: '100%' }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

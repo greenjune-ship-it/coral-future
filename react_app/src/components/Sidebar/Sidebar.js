@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, FormControl, Button, Row, Col } from 'react-bootstrap';
 
-const InputSidebar = ({ onApplyChanges }) => {
+const InputSidebar = ({ onApplyFilters }) => {
   const [selectedSpecies, setSelectedSpecies] = useState('');
   const [selectedTemperature, setSelectedTemperature] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
@@ -13,8 +13,8 @@ const InputSidebar = ({ onApplyChanges }) => {
       year: selectedYear
     };
     console.log('Filters:', filters); // Log filters before applying changes
-    if (onApplyChanges) {
-      onApplyChanges(filters);
+    if (onApplyFilters) {
+      onApplyFilters(filters);
     }
   };
 
@@ -43,9 +43,9 @@ const InputSidebar = ({ onApplyChanges }) => {
               <Form.Label>Species:</Form.Label>
               <Form.Control as="select" value={selectedSpecies} onChange={handleSpeciesChange}>
                 <option value="">Select species</option>
-                <option value="a">Acropora germania</option>
-                <option value="b">Species B</option>
-                <option value="c">Species C</option>
+                <option value="Acropora germania">Acropora germania</option>
+                <option value="Porites germania">Porites germania</option>
+                <option value="Stylophora pistillata">Stylophora pistillata</option>
               </Form.Control>
             </FormGroup>
           </Col>

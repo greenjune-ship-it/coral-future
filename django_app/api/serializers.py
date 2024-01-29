@@ -8,7 +8,6 @@ class BioSampleSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'project_id',
-            # Use 'project_id' to get the ID of the related Project
             'country',
             'species',
             'latitude',
@@ -16,7 +15,6 @@ class BioSampleSerializer(serializers.ModelSerializer):
             'collection_date']
         
 class ObservationSerializer(serializers.ModelSerializer):
-    #biosamples = BioSampleSerializer(many=True, read_only=True)
     class Meta:
         model = Observation
         fields = [
@@ -25,5 +23,4 @@ class ObservationSerializer(serializers.ModelSerializer):
             'temperature',
             'timepoint',
             'pam_value',
-            'biosample'
-            ]
+            'biosample']

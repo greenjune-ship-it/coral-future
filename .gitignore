@@ -2,6 +2,8 @@
 .venv/
 .idea/
 __pycache__/
+
+database/
 django_app/staticfiles/
 
 pg_dump.sql

@@ -1,18 +1,24 @@
 // App.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Spinner } from 'react-bootstrap';
+import { Container, Spinner, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import NavigationBar from './components/Navbar/Navbar';
+import InputSidebar from './components/Sidebar/Sidebar';
 import Map from './pages/Map/Map';
 
 const App = () => {
   const [authStatus, setAuthStatus] = useState({});
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({}); // State to hold data from Sidebar
 
   // Access the backend URL from the environment variable
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
+  const handleApplyFilters = (newFilters) => {
+    setFilters(newFilters); // Update state with data from Sidebar
+  };
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -52,10 +58,16 @@ const App = () => {
           <p>You are not authenticated. Please set the session ID.</p>
         )}
 
-        {/* Pass backendUrl as a prop to AppMap */}
-        <Map backendUrl={backendUrl} />
-
-        {/* Your other React components */}
+        <Row>
+          <Col md={3}>
+            {/* Pass handleApplyFilters function as a prop */}
+            <InputSidebar onApplyFilters={handleApplyFilters} />
+          </Col>
+          <Col md={9}>
+            {/* Pass filters state as a prop */}
+            <Map filters={filters} backendUrl={backendUrl} />
+          </Col>
+        </Row>
       </Container>
     </div>
   );

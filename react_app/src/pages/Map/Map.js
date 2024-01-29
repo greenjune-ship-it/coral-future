@@ -10,35 +10,53 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import Markers from './Markers'
 import TemperatureFilter from './TemperatureFilter';
 
-
-const Map = ({ backendUrl }) => {
+const Map = ({ backendUrl, minTemperature, maxTemperature }) => {
 
   const [biosamples, setBiosamples] = useState([]);
   const [observations, setObservations] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [filteredMarkers, setFilteredMarkers] = useState([]);
 
-  const [minTemperature, setMinTemperature] = useState('');
-  const [maxTemperature, setMaxTemperature] = useState('');
+  const [uniqueSpecies, setUniqueSpecies] = useState([]);
 
   const biosamplesapiUrl = `${backendUrl}/api/biosamples`;
   const observationsapiUrl = `${backendUrl}/api/observations`;
 
   useEffect(() => {
     const fetchData = async () => {
-      const biosampledata = await fetch(biosamplesapiUrl);
-      const observationsdata = await fetch(observationsapiUrl);
+      try {
+        const biosampledata = await axios.get(biosamplesapiUrl);
+        const observationsdata = await axios.get(observationsapiUrl);
 
-      setBiosamples(await biosampledata.json());
-      setObservations(await observationsdata.json());
-      setLoading(false);
+        setBiosamples(biosampledata.data);
+        setObservations(observationsdata.data);
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
     };
 
     fetchData();
   }, [biosamplesapiUrl, observationsapiUrl]);
+
+  useEffect(() => {
+    const speciesSet = new Set(biosamples.map(marker => marker.species));
+    setUniqueSpecies([...speciesSet]);
+  }, [biosamples]);
+
+  useEffect(() => {
+    handleFilter();
+  }, [minTemperature, maxTemperature]);
+
+  const handleFilter = () => {
+    const filteredData = observations.filter(observation => {
+      return observation.temperature >= minTemperature && observation.temperature <= maxTemperature;
+    });
+    setFilteredMarkers(filteredData);
+    console.log('Selected Markers:', filteredData); // Log filtered markers
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -52,28 +70,9 @@ const Map = ({ backendUrl }) => {
   const avgLat = biosamples.reduce((sum, marker) => sum + marker.latitude, 0) / biosamples.length;
   const avgLng = biosamples.reduce((sum, marker) => sum + marker.longitude, 0) / biosamples.length;
 
-  const uniqueSpecies = [...new Set(biosamples.map(marker => marker.species))];
-
-  const handleFilter = () => {
-    /**   const filteredData = observations.filter(observation => ((observation.temperature >= minTemperature) && (observation.temperature <= maxTemperature)) ) */
-    const filteredData = observations.filter(observation => observation.temperature === 28)
-    setFilteredMarkers(filteredData);
-    console.log(filteredData)
-    console.log(minTemperature)
-  };
-
-
-
   return (
 
     <div>
-      <TemperatureFilter
-        minTemperature={minTemperature}
-        maxTemperature={maxTemperature}
-        onFilter={handleFilter}
-        setMinTemperature={setMinTemperature}
-        setMaxTemperature={setMaxTemperature}
-      />
 
       <MapContainer center={[avgLat, avgLng]} zoom={3} style={{ height: '600px', width: '100%' }}>
         <TileLayer
@@ -81,23 +80,18 @@ const Map = ({ backendUrl }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-
         <LayersControl position="topright">
-
           {uniqueSpecies.map(species => (
-            <LayersControl.Overlay checked name={species}>
+            <LayersControl.Overlay key={species} checked name={species}>
               <Markers markers={biosamples.filter(marker => marker.species === species)} />
             </LayersControl.Overlay>
-          ))
-          }
+          ))}
+          <LayersControl.Overlay checked name="Filtered">
+            <Markers markers={filteredMarkers} />
+          </LayersControl.Overlay>
         </LayersControl>
-
-
-
-
       </MapContainer>
     </div>
-
   );
 };
 

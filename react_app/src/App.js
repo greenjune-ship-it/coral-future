@@ -4,8 +4,8 @@ import axios from 'axios';
 import { Container, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import AppNavbar from './elements/NavBar/AppNavbar';
-import AppMap from './pages/Map/AppMap';
+import NavigationBar from './components/Navbar/Navbar';
+import Map from './pages/Map/Map';
 
 const App = () => {
   const [authStatus, setAuthStatus] = useState({});
@@ -40,7 +40,7 @@ const App = () => {
 
   return (
     <div>
-      <AppNavbar authStatus={authStatus} />
+      <NavigationBar authStatus={authStatus} />
       <Container className="text-center mt-4">
         <h1>Authentication Status:</h1>
 
@@ -53,7 +53,7 @@ const App = () => {
         )}
 
         {/* Pass backendUrl as a prop to AppMap */}
-        <AppMap backendUrl={backendUrl} />
+        <Map backendUrl={backendUrl} />
 
         {/* Your other React components */}
       </Container>

@@ -1,7 +1,7 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const AppNavbar = ({ authStatus }) => {
+const NavigationBar = ({ authStatus }) => {
   return (
     <Navbar expand="lg" bg="light">
       <Container>
@@ -67,4 +67,4 @@ const AppNavbar = ({ authStatus }) => {
   );
 };
 
-export default AppNavbar;
+export default NavigationBar;

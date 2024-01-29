@@ -1,19 +1,17 @@
-// AppMap.js
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import { MapContainer, TileLayer, Marker, Popup, useMap, LayersControl, LayerGroup  } from 'react-leaflet';
-import axios from 'axios';
-
-
-import TemperatureFilter from './TemperatureFilter';
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 
+import Markers from './Markers'
+import TemperatureFilter from './TemperatureFilter';
 
 
-const AppMap = ({ backendUrl }) => {
+const Map = ({ backendUrl }) => {
   
   const [biosamples, setBiosamples] = useState([]);
   const [observations, setObservations] = useState([]);
@@ -53,6 +51,7 @@ const AppMap = ({ backendUrl }) => {
   // Calculate the average coordinates for centering the map
   const avgLat = biosamples.reduce((sum, marker) => sum + marker.latitude, 0) / biosamples.length;
   const avgLng = biosamples.reduce((sum, marker) => sum + marker.longitude, 0) / biosamples.length;
+
   const uniqueSpecies = [...new Set(biosamples.map(marker => marker.species))];
 
   const handleFilter = () => {
@@ -76,7 +75,7 @@ const filteredData = observations.filter(observation => observation.temperature 
       setMaxTemperature={setMaxTemperature}
     />
     
-        <MapContainer center={[avgLat, avgLng]} zoom={3} style={{ height: '800px', width: '100%' }}>
+        <MapContainer center={[avgLat, avgLng]} zoom={3} style={{ height: '600px', width: '100%' }}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -87,23 +86,7 @@ const filteredData = observations.filter(observation => observation.temperature 
 
           {uniqueSpecies.map(species => (
           <LayersControl.Overlay checked name={species}>
-            <LayerGroup>
-            <MarkerClusterGroup>
-                {biosamples.filter(marker => marker.species === species).map((marker) => (
-                  
-                    <Marker key={marker.id} position={[marker.latitude, marker.longitude]}>
-                      <Popup>
-                            <div>
-                                <p>ID: {marker.id}</p>
-                                <p>Species: {marker.species}</p>
-                                <p>Collection Date: {marker.collection_date}</p>
-                                <p>Temperature: {marker.temperature}</p>
-                            </div>
-                      </Popup>
-                    </Marker>
-                ))}
-                </MarkerClusterGroup>
-            </LayerGroup>
+            <Markers markers={biosamples.filter(marker => marker.species === species)} />
           </LayersControl.Overlay>
           ))
       }
@@ -118,4 +101,4 @@ const filteredData = observations.filter(observation => observation.temperature 
   );
 };
 
-export default AppMap;
+export default Map;

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import MarkerClusterGroup from 'react-leaflet-cluster'
-import { MapContainer, TileLayer, Marker, Popup, useMap, LayersControl, LayerGroup  } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, LayersControl, LayerGroup } from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
@@ -12,7 +12,7 @@ import TemperatureFilter from './TemperatureFilter';
 
 
 const Map = ({ backendUrl }) => {
-  
+
   const [biosamples, setBiosamples] = useState([]);
   const [observations, setObservations] = useState([]);
 
@@ -38,7 +38,7 @@ const Map = ({ backendUrl }) => {
     };
 
     fetchData();
-  },[biosamplesapiUrl, observationsapiUrl]);
+  }, [biosamplesapiUrl, observationsapiUrl]);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -55,8 +55,8 @@ const Map = ({ backendUrl }) => {
   const uniqueSpecies = [...new Set(biosamples.map(marker => marker.species))];
 
   const handleFilter = () => {
-/**   const filteredData = observations.filter(observation => ((observation.temperature >= minTemperature) && (observation.temperature <= maxTemperature)) ) */
-const filteredData = observations.filter(observation => observation.temperature === 28) 
+    /**   const filteredData = observations.filter(observation => ((observation.temperature >= minTemperature) && (observation.temperature <= maxTemperature)) ) */
+    const filteredData = observations.filter(observation => observation.temperature === 28)
     setFilteredMarkers(filteredData);
     console.log(filteredData)
     console.log(minTemperature)
@@ -67,37 +67,37 @@ const filteredData = observations.filter(observation => observation.temperature 
   return (
 
     <div>
-    <TemperatureFilter
-      minTemperature={minTemperature}
-      maxTemperature={maxTemperature}
-      onFilter={handleFilter}
-      setMinTemperature={setMinTemperature}
-      setMaxTemperature={setMaxTemperature}
-    />
-    
-        <MapContainer center={[avgLat, avgLng]} zoom={3} style={{ height: '600px', width: '100%' }}>
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
+      <TemperatureFilter
+        minTemperature={minTemperature}
+        maxTemperature={maxTemperature}
+        onFilter={handleFilter}
+        setMinTemperature={setMinTemperature}
+        setMaxTemperature={setMaxTemperature}
+      />
+
+      <MapContainer center={[avgLat, avgLng]} zoom={3} style={{ height: '600px', width: '100%' }}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
 
 
-          <LayersControl position="topright">
+        <LayersControl position="topright">
 
           {uniqueSpecies.map(species => (
-          <LayersControl.Overlay checked name={species}>
-            <Markers markers={biosamples.filter(marker => marker.species === species)} />
-          </LayersControl.Overlay>
+            <LayersControl.Overlay checked name={species}>
+              <Markers markers={biosamples.filter(marker => marker.species === species)} />
+            </LayersControl.Overlay>
           ))
-      }
+          }
         </LayersControl>
 
-      
 
 
-        </MapContainer>
-  </div>
-    
+
+      </MapContainer>
+    </div>
+
   );
 };
 

@@ -1,37 +1,35 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import MarkerClusterGroup from 'react-leaflet-cluster'
-import { MapContainer, TileLayer, Marker, Popup, useMap, LayersControl, LayerGroup } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 
-import Markers from './Markers'
+import Markers from './Markers';
+import filterBioSamples from './utils/filterBioSamples';
 
 const Map = ({ backendUrl, filters }) => {
-  const { minTemperature, maxTemperature } = filters; // Destructure minTemperature and maxTemperature from filters
-
   const [biosamples, setBiosamples] = useState([]);
-  const [observations, setObservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filteredMarkers, setFilteredMarkers] = useState([]);
-
   const [uniqueSpecies, setUniqueSpecies] = useState([]);
 
   const biosamplesapiUrl = `${backendUrl}/api/biosamples`;
   const observationsapiUrl = `${backendUrl}/api/observations`;
 
+  // Add a state to track whether initial data loading is complete
+  const [initialDataLoaded, setInitialDataLoaded] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const biosampledata = await axios.get(biosamplesapiUrl);
-        const observationsdata = await axios.get(observationsapiUrl);
-
+        console.log('Initial biosamples data:', biosampledata.data); // Log initial biosamples data
         setBiosamples(biosampledata.data);
-        setObservations(observationsdata.data);
         setLoading(false);
+        setInitialDataLoaded(true); // Mark initial data loading as complete
       } catch (error) {
         setError(error.message);
         setLoading(false);
@@ -39,25 +37,24 @@ const Map = ({ backendUrl, filters }) => {
     };
 
     fetchData();
-  }, [biosamplesapiUrl, observationsapiUrl]);
+  }, [biosamplesapiUrl]);
 
   useEffect(() => {
-    const speciesSet = new Set(biosamples.map(marker => marker.species));
-    setUniqueSpecies([...speciesSet]);
-  }, [biosamples]);
+    console.log('Filters updated:', filters);
+    if (initialDataLoaded) { // Only apply filters after initial data loading is complete
+      handleFilter();
+    }
+  }, [filters, initialDataLoaded]);
 
   const handleFilter = () => {
-    const filteredData = observations.filter(observation => {
-      return observation.temperature >= minTemperature && observation.temperature <= maxTemperature;
-    });
-    setFilteredMarkers(filteredData);
-    console.log('Filtered markers:', filteredData); // Log filtered markers
+    if (Object.keys(filters).length === 0) {
+      setFilteredMarkers(biosamples);
+    } else {
+      const filteredData = filterBioSamples(biosamples, filters);
+      setFilteredMarkers(filteredData);
+      console.log('Filtered markers:', filteredData);
+    }
   };
-
-  useEffect(() => {
-    console.log('Filters updated:', filters); // Log when filters are updated
-    handleFilter(); // Update filteredMarkers when filters change
-  }, [filters]); // Update filter whenever filters change
 
   if (loading) {
     return <p>Loading...</p>;
@@ -78,17 +75,7 @@ const Map = ({ backendUrl, filters }) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-
-        <LayersControl position="topright">
-          {uniqueSpecies.map(species => (
-            <LayersControl.Overlay key={species} checked name={species}>
-              <Markers markers={biosamples.filter(marker => marker.species === species)} />
-            </LayersControl.Overlay>
-          ))}
-          <LayersControl.Overlay checked name="Filtered">
-            <Markers markers={filteredMarkers} />
-          </LayersControl.Overlay>
-        </LayersControl>
+        <Markers markers={filteredMarkers} />
       </MapContainer>
     </div>
   );

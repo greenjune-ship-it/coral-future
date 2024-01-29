@@ -12,7 +12,6 @@ const Markers = ({ markers }) => (
               <p>ID: {marker.id}</p>
               <p>Species: {marker.species}</p>
               <p>Collection Date: {marker.collection_date}</p>
-              <p>Temperature: {marker.temperature}</p>
             </div>
           </Popup>
         </Marker>

@@ -7,13 +7,13 @@ import "react-range-slider-input/dist/style.css";
 
 const InputSidebar = ({ onApplyFilters }) => {
   const [selectedSpecies, setSelectedSpecies] = useState('');
-  const [selectedTemperature, setSelectedTemperature] = useState('');
+  const [selectedTemperatures, setSelectedTemperatures] = useState([30, 39]);
   const [selectedYears, setSelectedYears] = useState([2005, 2015]);
 
   const handleApplyChanges = () => {
     const filters = {
       species: selectedSpecies,
-      temperature: selectedTemperature,
+      temperature: selectedTemperatures,
       years: selectedYears
     };
     console.log('Filters:', filters); // Log filters before applying changes
@@ -24,12 +24,12 @@ const InputSidebar = ({ onApplyFilters }) => {
 
   const handleSpeciesChange = (e) => {
     setSelectedSpecies(e.target.value);
-    console.log('Selected species:', e.target.value); // Log selected species
+    console.log('Selected species:', e.target.value);
   };
 
-  const handleTemperatureChange = (e) => {
-    setSelectedTemperature(e.target.value);
-    console.log('Selected temperature:', e.target.value); // Log selected temperature
+  const handleTemperatureChange = (values) => {
+    setSelectedTemperatures({ start: values[0], end: values[1] });
+    console.log('Selected temperatures:', values);
   };
 
   const handleYearChange = (values) => {
@@ -62,7 +62,7 @@ const InputSidebar = ({ onApplyFilters }) => {
               <RangeSlider
                 min={0}
                 max={100}
-                defaultValue={[25, 75]}
+                defaultValue={selectedTemperatures}
                 onInput={handleTemperatureChange}
               />
             </FormGroup>
@@ -73,12 +73,12 @@ const InputSidebar = ({ onApplyFilters }) => {
           <Col>
             <FormGroup className="mb-2">
               <Form.Label>Year:</Form.Label>
-                <RangeSlider
-                  min={2000}
-                  max={2022}
-                  defaultValue={selectedYears}
-                  onInput={handleYearChange}
-                />
+              <RangeSlider
+                min={2000}
+                max={2022}
+                defaultValue={selectedYears}
+                onInput={handleYearChange}
+              />
             </FormGroup>
           </Col>
         </Row>

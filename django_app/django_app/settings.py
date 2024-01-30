@@ -57,8 +57,18 @@ LOGOUT_REDIRECT_URL = 'home'
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'http://localhost:3000',
+    'https://coralfuture.org',
+    'https://coralfuture.org:3000',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost',
+    'http://localhost:3000',
+    'https://coralfuture.org',
+    'https://coralfuture.org:3000',
 ]
 
 MIDDLEWARE = [

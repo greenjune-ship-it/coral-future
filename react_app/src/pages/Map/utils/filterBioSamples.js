@@ -1,5 +1,4 @@
 const filterBioSamples = (biosamples, filters) => {
-  console.log('Initial biosamples:', biosamples);
 
   const { species, temperature, year } = filters;
   let filteredData = biosamples;

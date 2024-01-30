@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useState, useMemo } from 'react';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { MapContainer, TileLayer } from 'react-leaflet';
@@ -7,8 +6,10 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 
+import { fetchBiosamples } from 'apis/api';
 import Markers from './Markers';
 import filterBioSamples from './utils/filterBioSamples';
+
 
 const Map = ({ backendUrl, filters }) => {
   const { minTemperature, maxTemperature } = filters;
@@ -25,9 +26,9 @@ const Map = ({ backendUrl, filters }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(biosamplesapiUrl);
-        setBiosamples(response.data);
-        setFilteredMarkers(response.data); // Set filteredMarkers to biosamples data
+        const biosamplesData = await fetchBiosamples(biosamplesapiUrl);
+        setBiosamples(biosamplesData);
+        setFilteredMarkers(biosamplesData); // Set filteredMarkers to biosamples data
         setLoading(false);
       } catch (error) {
         setError(error.message);

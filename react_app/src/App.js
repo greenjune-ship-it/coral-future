@@ -1,32 +1,30 @@
+// App.js
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Container, Spinner } from 'react-bootstrap';
+import { Container, Spinner, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import AppNavbar from './AppNavbar';
-import AppMap from './AppMap';
+import { checkAuthentication } from './apis/auth';
+import Map from './pages/Map/Map';
+import NavigationBar from './components/Navbar/Navbar';
+import InputSidebar from './components/Sidebar/Sidebar';
 
 const App = () => {
   const [authStatus, setAuthStatus] = useState({});
   const [loading, setLoading] = useState(true);
-  const [mapCenter, setMapCenter] = useState([51.505, -0.09]);
+  const [filters, setFilters] = useState({}); // State to hold data from Sidebar
 
   // Access the backend URL from the environment variable
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
+  const handleApplyFilters = (newFilters) => {
+    setFilters(newFilters); // Update state with data from Sidebar
+  };
 
   useEffect(() => {
-    const checkAuthentication = async () => {
+    const fetchAuthentication = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/auth/status`, {
-          withCredentials: true,
-        });
-
-        const { username, authenticated } = response.data;
-
-        setAuthStatus({
-          username: username,
-          authenticated: authenticated,
-        });
+        const authData = await checkAuthentication(backendUrl); // Call the checkAuthentication function
+        setAuthStatus(authData);
       } catch (error) {
         console.error('Error checking authentication:', error);
         // Optionally, you can set an error state or display an error message to the user.
@@ -35,26 +33,24 @@ const App = () => {
       }
     };
 
-    checkAuthentication();
+    fetchAuthentication();
   }, []);
 
   return (
     <div>
-      <AppNavbar authStatus={authStatus} />
+      <NavigationBar authStatus={authStatus} />
       <Container className="text-center mt-4">
-        <h1>Authentication Status:</h1>
-
-        {loading ? (
-          <Spinner animation="border" variant="primary" />
-        ) : authStatus.authenticated ? (
-          <p>Welcome, {authStatus.username}!</p>
-        ) : (
-          <p>You are not authenticated. Please set the session ID.</p>
-        )}
-
-        <AppMap center={mapCenter} />
-
-        {/* Your other React components */}
+        <h1>BioSamples Explorer</h1>
+        <Row>
+          <Col md={3}>
+            {/* Pass handleApplyFilters function as a prop */}
+            <InputSidebar onApplyFilters={handleApplyFilters} />
+          </Col>
+          <Col md={9}>
+            {/* Pass filters state as a prop */}
+            <Map filters={filters} backendUrl={backendUrl} />
+          </Col>
+        </Row>
       </Container>
     </div>
   );

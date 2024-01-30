@@ -6,7 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 
-import { fetchBiosamples } from 'apis/api';
+import { fetchBiosamples } from 'apis/biosamples';
 import Markers from './Markers';
 import filterBioSamples from './utils/filterBioSamples';
 

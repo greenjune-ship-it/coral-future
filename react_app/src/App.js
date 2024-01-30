@@ -5,9 +5,10 @@ import axios from 'axios';
 import { Container, Spinner, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { checkAuthentication } from './apis/auth';
+import Map from './pages/Map/Map';
 import NavigationBar from './components/Navbar/Navbar';
 import InputSidebar from './components/Sidebar/Sidebar';
-import Map from './pages/Map/Map';
 
 const App = () => {
   const [authStatus, setAuthStatus] = useState({});
@@ -22,18 +23,10 @@ const App = () => {
   };
 
   useEffect(() => {
-    const checkAuthentication = async () => {
+    const fetchAuthentication = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/auth/status`, {
-          withCredentials: true,
-        });
-
-        const { username, authenticated } = response.data;
-
-        setAuthStatus({
-          username: username,
-          authenticated: authenticated,
-        });
+        const authData = await checkAuthentication(backendUrl); // Call the checkAuthentication function
+        setAuthStatus(authData);
       } catch (error) {
         console.error('Error checking authentication:', error);
         // Optionally, you can set an error state or display an error message to the user.
@@ -42,7 +35,7 @@ const App = () => {
       }
     };
 
-    checkAuthentication();
+    fetchAuthentication();
   }, []);
 
   return (

@@ -59,10 +59,12 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     'https://coralfuture.org'
+    'https://coralfuture.org:3000',
 ]
 
 CORS_ORIGIN_WHITELIST = [
     'https://coralfuture.org',
+    'https://coralfuture.org:3000',
 ]
 
 MIDDLEWARE = [

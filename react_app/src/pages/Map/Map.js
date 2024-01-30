@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useState, useMemo } from 'react';
-import MarkerClusterGroup from 'react-leaflet-cluster';
 import { MapContainer, TileLayer } from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
@@ -11,7 +10,6 @@ import Markers from './Markers';
 import filterBioSamples from './utils/filterBioSamples';
 
 const Map = ({ backendUrl, filters }) => {
-  const { minTemperature, maxTemperature } = filters;
 
   const [biosamples, setBiosamples] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
+import RangeSlider from 'react-range-slider-input';
 import { Form, FormGroup, FormControl, Button, Row, Col } from 'react-bootstrap';
+
+import "react-range-slider-input/dist/style.css";
+
 
 const InputSidebar = ({ onApplyFilters }) => {
   const [selectedSpecies, setSelectedSpecies] = useState('');
   const [selectedTemperature, setSelectedTemperature] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedYears, setSelectedYears] = useState([2005, 2015]);
 
   const handleApplyChanges = () => {
     const filters = {
       species: selectedSpecies,
       temperature: selectedTemperature,
-      year: selectedYear
+      years: selectedYears
     };
     console.log('Filters:', filters); // Log filters before applying changes
     if (onApplyFilters) {
@@ -28,9 +32,9 @@ const InputSidebar = ({ onApplyFilters }) => {
     console.log('Selected temperature:', e.target.value); // Log selected temperature
   };
 
-  const handleYearChange = (e) => {
-    setSelectedYear(e.target.value);
-    console.log('Selected year:', e.target.value); // Log selected year
+  const handleYearChange = (values) => {
+    setSelectedYears({ start: values[0], end: values[1] });
+    console.log('Selected years:', values);
   };
 
   return (
@@ -54,13 +58,13 @@ const InputSidebar = ({ onApplyFilters }) => {
         <Row className="mb-3">
           <Col>
             <FormGroup className="mb-2">
-              <Form.Label>Temperature Range:</Form.Label>
-              <Form.Control as="select" value={selectedTemperature} onChange={handleTemperatureChange}>
-                <option value="">Select temperature range</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-              </Form.Control>
+              <Form.Label>Temperature:</Form.Label>
+              <RangeSlider
+                min={0}
+                max={100}
+                defaultValue={[25, 75]}
+                onInput={handleTemperatureChange}
+              />
             </FormGroup>
           </Col>
         </Row>
@@ -69,16 +73,19 @@ const InputSidebar = ({ onApplyFilters }) => {
           <Col>
             <FormGroup className="mb-2">
               <Form.Label>Year:</Form.Label>
-              <Form.Control type="text" value={selectedYear} onChange={handleYearChange} />
+                <RangeSlider
+                  min={2000}
+                  max={2022}
+                  defaultValue={selectedYears}
+                  onInput={handleYearChange}
+                />
             </FormGroup>
           </Col>
         </Row>
 
-        <Row>
-          <Col>
-            <Button onClick={handleApplyChanges} variant="primary">Apply Changes</Button>
-          </Col>
-        </Row>
+        <Button variant="primary" onClick={handleApplyChanges}>
+          Apply Filters
+        </Button>
       </Form>
     </div>
   );

@@ -21,6 +21,7 @@
     "react-leaflet": "^4.2.1",
     "react-leaflet-cluster": "^2.1.0",
     "react-leaflet-sidebarv2": "^0.6.0",
+    "react-range-slider-input": "^3.0.7",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },

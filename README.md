@@ -1,5 +1,7 @@
 # Coral Future App
 
+The website is available at [coralfuture.org](https://coralfuture.org/).
+
 ## Get Started
 
 ### Generate Django secrete jey

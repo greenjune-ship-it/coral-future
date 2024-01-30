@@ -4,7 +4,6 @@ import { Form, FormGroup, FormControl, Button, Row, Col } from 'react-bootstrap'
 
 import "react-range-slider-input/dist/style.css";
 
-
 const InputSidebar = ({ onApplyFilters }) => {
   const [selectedSpecies, setSelectedSpecies] = useState('');
   const [selectedTemperatures, setSelectedTemperatures] = useState([30, 39]);
@@ -28,18 +27,18 @@ const InputSidebar = ({ onApplyFilters }) => {
   };
 
   const handleTemperatureChange = (values) => {
-    setSelectedTemperatures({ start: values[0], end: values[1] });
+    setSelectedTemperatures(values);
     console.log('Selected temperatures:', values);
   };
 
   const handleYearChange = (values) => {
-    setSelectedYears({ start: values[0], end: values[1] });
+    setSelectedYears(values);
     console.log('Selected years:', values);
   };
 
   return (
-    <div className="sidebar">
-      <h2>Filters</h2>
+    <div className="sidebar" style={{ backgroundColor: '#f4f4f4', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
+      <h2 style={{ marginBottom: '20px' }}>Filters</h2>
       <Form>
         <Row className="mb-3">
           <Col>
@@ -73,17 +72,17 @@ const InputSidebar = ({ onApplyFilters }) => {
           <Col>
             <FormGroup className="mb-2">
               <Form.Label>Year:</Form.Label>
-              <RangeSlider
-                min={2000}
-                max={2022}
-                defaultValue={selectedYears}
-                onInput={handleYearChange}
-              />
+                <RangeSlider
+                  min={2000}
+                  max={2022}
+                  defaultValue={selectedYears}
+                  onInput={handleYearChange}
+                />
             </FormGroup>
           </Col>
         </Row>
 
-        <Button variant="primary" onClick={handleApplyChanges}>
+        <Button variant="primary" onClick={handleApplyChanges} style={{ width: '100%' }}>
           Apply Filters
         </Button>
       </Form>

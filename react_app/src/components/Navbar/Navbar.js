@@ -45,7 +45,7 @@ const NavigationBar = ({ authStatus }) => {
         </Navbar.Collapse>
 
         <div className="ms-lg-4">
-          {authStatus.is_authenticated ? (
+          {authStatus.authenticated ? (
             <div className="d-flex align-items-center">
               <span className="me-2 text-dark">Welcome, {authStatus.username}!</span>
               <form action="/logout" method="post">

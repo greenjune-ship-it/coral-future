@@ -49,16 +49,7 @@ const App = () => {
     <div>
       <NavigationBar authStatus={authStatus} />
       <Container className="text-center mt-4">
-        <h1>Authentication Status:</h1>
-
-        {loading ? (
-          <Spinner animation="border" variant="primary" />
-        ) : authStatus.authenticated ? (
-          <p>Welcome, {authStatus.username}!</p>
-        ) : (
-          <p>You are not authenticated. Please set the session ID.</p>
-        )}
-
+        <h1>BioSamples Explorer</h1>
         <Row>
           <Col md={3}>
             {/* Pass handleApplyFilters function as a prop */}

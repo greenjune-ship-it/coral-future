@@ -1,6 +1,6 @@
 // External imports
 import React, { useEffect, useState } from 'react';
-import { Container, Spinner, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
 import Map from './pages/Map/Map';

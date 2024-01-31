@@ -1,10 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
-
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-defaulticon-compatibility';
-import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
-
 import { fetchBiosamples } from 'apis/biosamples';
 import Markers from './Markers';
 

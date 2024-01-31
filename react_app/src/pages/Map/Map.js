@@ -8,7 +8,6 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 
 import { fetchBiosamples } from 'apis/biosamples';
 import Markers from './Markers';
-import filterBioSamples from './utils/filterBioSamples';
 
 
 const Map = ({ backendUrl, filters }) => {

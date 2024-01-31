@@ -6,9 +6,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Map from './pages/Map/Map';
 import NavigationBar from './components/Navbar/Navbar';
 import InputSidebar from './components/Sidebar/Sidebar';
-// API calls
-import { checkAuthentication } from './apis/auth';
-import { fetchBiosamples } from 'apis/biosamples';
+import useFetchAuthentication from './hooks/useFetchAuthentication';
+import useFetchBiosamples from './hooks/useFetchBiosamples';
+
 
 const App = () => {
   const [authStatus, setAuthStatus] = useState({});
@@ -17,32 +17,9 @@ const App = () => {
   // Access the backend URL from the environment variable
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-  useEffect(() => {
-    const fetchAuthentication = async () => {
-      try {
-        const authData = await checkAuthentication(backendUrl);
-        setAuthStatus(authData);
-      } catch (error) {
-        console.error('Error checking authentication:', error);
-      }
-    };
+  useFetchAuthentication(backendUrl, setAuthStatus);
 
-    fetchAuthentication();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const biosamplesData = await fetchBiosamples(backendUrl);
-        setBiosamples(biosamplesData);
-        console.log('Fetched BioSamples', biosamplesData)
-      } catch (error) {
-        console.error('Error fetching BioSamples:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  useFetchBiosamples(backendUrl, setBiosamples)
 
   // Update state with data from Sidebar
   const handleApplyFilters = (newFilters) => {

@@ -45,7 +45,7 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
             <FormGroup className="mb-2">
               <Form.Label>Species:</Form.Label>
               <Form.Control as="select" value={selectedSpecies} onChange={handleSpeciesChange}>
-                <option value="">Select species</option>
+                <option value="">Selected all species</option>
                 {speciesList.map((species, index) => (
                   <option key={index} value={species}>{species}</option>
                 ))}

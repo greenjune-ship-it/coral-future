@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     # Custom apps
     'api',
     'main',
-    'maps',
+    # 'maps',
     'users',
     'projects'
 ]

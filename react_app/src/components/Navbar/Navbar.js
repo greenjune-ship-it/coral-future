@@ -15,14 +15,8 @@ const NavigationBar = ({ authStatus }) => {
         <Navbar.Collapse id="navbarNav">
           <Nav className="navbar-nav">
             <Nav.Item>
-              <Nav.Link href={`${backendUrl}/maps`}>
-                <i className="bi bi-map"></i> Map
-              </Nav.Link>
-            </Nav.Item>
-
-            <Nav.Item>
               <Nav.Link href="https://coralfuture.org:3000">
-                <i className="bi bi-file-code"></i> React
+                <i className="bi bi-map"></i> Map
               </Nav.Link>
             </Nav.Item>
 

@@ -1,40 +1,53 @@
-// App.js
+// External imports
 import React, { useEffect, useState } from 'react';
 import { Container, Spinner, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-import { checkAuthentication } from './apis/auth';
+// Internal imports
 import Map from './pages/Map/Map';
 import NavigationBar from './components/Navbar/Navbar';
 import InputSidebar from './components/Sidebar/Sidebar';
+// API calls
+import { checkAuthentication } from './apis/auth';
+import { fetchBiosamples } from 'apis/biosamples';
 
 const App = () => {
   const [authStatus, setAuthStatus] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({}); // State to hold data from Sidebar
-
+  const [biosamples, setBiosamples] = useState([]);
+  const [filters, setFilters] = useState({});
   // Access the backend URL from the environment variable
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-
-  const handleApplyFilters = (newFilters) => {
-    setFilters(newFilters); // Update state with data from Sidebar
-  };
 
   useEffect(() => {
     const fetchAuthentication = async () => {
       try {
-        const authData = await checkAuthentication(backendUrl); // Call the checkAuthentication function
+        const authData = await checkAuthentication(backendUrl);
         setAuthStatus(authData);
       } catch (error) {
         console.error('Error checking authentication:', error);
-        // Optionally, you can set an error state or display an error message to the user.
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchAuthentication();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const biosamplesData = await fetchBiosamples(backendUrl);
+        setBiosamples(biosamplesData);
+        console.log('Fetched BioSamples', biosamplesData)
+      } catch (error) {
+        console.error('Error fetching BioSamples:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Update state with data from Sidebar
+  const handleApplyFilters = (newFilters) => {
+    setFilters(newFilters);
+  };
 
   return (
     <div>
@@ -44,11 +57,11 @@ const App = () => {
         <Row>
           <Col md={3}>
             {/* Pass handleApplyFilters function as a prop */}
-            <InputSidebar onApplyFilters={handleApplyFilters} />
+            <InputSidebar onApplyFilters={handleApplyFilters} speciesList={ [...new Set(biosamples.map(biosample => biosample.species))].sort()} />
           </Col>
           <Col md={9}>
             {/* Pass filters state as a prop */}
-            <Map filters={filters} backendUrl={backendUrl} />
+            <Map filters={filters} biosamples={biosamples} />
           </Col>
         </Row>
       </Container>

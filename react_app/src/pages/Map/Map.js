@@ -1,83 +1,60 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
-import { fetchBiosamples } from 'apis/biosamples';
-import Markers from './Markers';
+// External importa
+import React, { useEffect, useState } from 'react';
+import L from 'leaflet';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { Spinner } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+// Internal imports
+import Markers from './components/Markers';
+import filterBioSamples from './utils/filterBioSamples';
 
 
-const Map = ({ backendUrl, filters }) => {
-  const { minTemperature, maxTemperature } = filters;
-
-  const [biosamples, setBiosamples] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [filteredMarkers, setFilteredMarkers] = useState([]);
-
-  const [uniqueSpecies, setUniqueSpecies] = useState([]);
-
-  const biosamplesapiUrl = `${backendUrl}/api/biosamples`;
-
+const ChangeView = ({ markers }) => {
+  const map = useMap();
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const biosamplesData = await fetchBiosamples(biosamplesapiUrl);
-        setBiosamples(biosamplesData);
-        setFilteredMarkers(biosamplesData); // Set filteredMarkers to biosamples data
-        setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [biosamplesapiUrl]);
-
-  useEffect(() => {
-    const speciesSet = new Set(biosamples.map(marker => marker.species));
-    setUniqueSpecies([...speciesSet]);
-  }, [biosamples]);
-
-  const handleFilter = () => {
-    let filteredData;
-  
-    if (filters.species === '') {
-      // If species filter is empty, display all biosamples
-      filteredData = biosamples;
-    } else {
-      // Filter biosamples based on selected species
-      filteredData = biosamples.filter(biosample => {
-        return filters.species.includes(biosample.species);
-      });
+    if (markers.length > 0) {
+      const bounds = new L.LatLngBounds(markers.map(marker => [marker.latitude, marker.longitude]));
+      map.fitBounds(bounds);
     }
-  
-    setFilteredMarkers(filteredData);
-    console.log('Filtered markers:', filteredData); // Log filtered markers
-  };
+  }, [markers, map]);
+  return null;
+}
+
+const Map = ({ biosamples, filters }) => {
+  const [filteredBioSamples, setFilteredBioSamples] = useState([]);
+  const [mapCenter, setMapCenter] = useState(null);
 
   useEffect(() => {
-    console.log('Filters updated:', filters); // Log when filters are updated
-    handleFilter(); // Update filteredMarkers when filters change
-  }, [filters]); // Update filter whenever filters change
+    if (biosamples && biosamples.length > 0) {
+      let dataToSet = biosamples;
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+      // Only apply the filter if filters are set
+      if (filters && Object.keys(filters).length > 0) {
+        dataToSet = filterBioSamples(filters, biosamples);
+      }
+      // Recalculate map center based on selection
+      const avgLat = dataToSet.reduce((sum, marker) => sum + marker.latitude, 0) / dataToSet.length;
+      const avgLng = dataToSet.reduce((sum, marker) => sum + marker.longitude, 0) / dataToSet.length;
 
-  if (error) {
-    return <p>{error}</p>;
-  }
-
-  const avgLat = biosamples.reduce((sum, marker) => sum + marker.latitude, 0) / biosamples.length;
-  const avgLng = biosamples.reduce((sum, marker) => sum + marker.longitude, 0) / biosamples.length;
+      setMapCenter([avgLat, avgLng]);
+      setFilteredBioSamples(dataToSet);
+    }
+  }, [filters, biosamples]);
 
   return (
-    <MapContainer center={[avgLat, avgLng]} zoom={3} style={{ height: '600px', width: '100%' }}>
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <Markers markers={filteredMarkers} />
-    </MapContainer>
+    mapCenter ?
+      <MapContainer center={mapCenter} zoom={3} style={{ height: '600px', width: '100%' }}>
+        <ChangeView markers={filteredBioSamples} />
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <Markers biosamples={filteredBioSamples} />
+      </MapContainer>
+      :
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '600px', width: '100%' }}>
+        <Spinner />
+      </div>
   );
 };
 

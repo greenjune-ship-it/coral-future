@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import RangeSlider from 'react-range-slider-input';
-import { Form, FormGroup, FormControl, Button, Row, Col } from 'react-bootstrap';
-
+import { Form, FormGroup, Button, Row, Col } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-range-slider-input/dist/style.css";
 
-const InputSidebar = ({ onApplyFilters }) => {
+const InputSidebar = ({ onApplyFilters, speciesList }) => {
   const [selectedSpecies, setSelectedSpecies] = useState('');
   const [selectedTemperatures, setSelectedTemperatures] = useState([30, 39]);
   const [selectedYears, setSelectedYears] = useState([2005, 2015]);
 
-  const handleApplyChanges = () => {
+  const handleApplyFilters = () => {
     const filters = {
       species: selectedSpecies,
       temperature: selectedTemperatures,
@@ -46,9 +46,9 @@ const InputSidebar = ({ onApplyFilters }) => {
               <Form.Label>Species:</Form.Label>
               <Form.Control as="select" value={selectedSpecies} onChange={handleSpeciesChange}>
                 <option value="">Select species</option>
-                <option value="Acropora germania">Acropora germania</option>
-                <option value="Porites germania">Porites germania</option>
-                <option value="Stylophora pistillata">Stylophora pistillata</option>
+                {speciesList.map((species, index) => (
+                  <option key={index} value={species}>{species}</option>
+                ))}
               </Form.Control>
             </FormGroup>
           </Col>
@@ -72,17 +72,17 @@ const InputSidebar = ({ onApplyFilters }) => {
           <Col>
             <FormGroup className="mb-2">
               <Form.Label>Year:</Form.Label>
-                <RangeSlider
-                  min={2000}
-                  max={2022}
-                  defaultValue={selectedYears}
-                  onInput={handleYearChange}
-                />
+              <RangeSlider
+                min={2000}
+                max={2022}
+                defaultValue={selectedYears}
+                onInput={handleYearChange}
+              />
             </FormGroup>
           </Col>
         </Row>
 
-        <Button variant="primary" onClick={handleApplyChanges} style={{ width: '100%' }}>
+        <Button variant="primary" onClick={handleApplyFilters} style={{ width: '100%' }}>
           Apply Filters
         </Button>
       </Form>

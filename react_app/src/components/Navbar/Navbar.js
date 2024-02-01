@@ -44,7 +44,7 @@ const NavigationBar = ({ authStatus }) => {
           {authStatus.authenticated && authStatus.username ? (
             <div className="d-flex align-items-center">
               <span className="me-2 text-dark">Welcome, {authStatus.username}!</span>
-              <form action={`${backendUrl}/user/logout`} method="post">
+              <form action={`${backendUrl}/user/logout/`} method="post">
                 <Button type="submit" variant="link" className="nav-link default-link" style={{ color: '#0a58ca' }}>
                   <i className="bi bi-box-arrow-right"></i> Logout
                 </Button>
@@ -52,7 +52,7 @@ const NavigationBar = ({ authStatus }) => {
             </div>
           ) : (
             <Nav.Item>
-              <Nav.Link href={`${backendUrl}/user/login`} className="default-link" style={{ color: '#0a58ca' }}>
+              <Nav.Link href={`${backendUrl}/user/login/`} className="default-link" style={{ color: '#0a58ca' }}>
                 <i className="bi bi-box-arrow-in-right"></i> Login
               </Nav.Link>
             </Nav.Item>

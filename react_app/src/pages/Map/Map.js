@@ -1,15 +1,12 @@
-// External importa
+// External imports
 import React, { useEffect, useState } from 'react';
 import L from 'leaflet';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
-import Markers from './components/Markers';
-import filterBioSamples from './utils/filterBioSamples';
-
-
-
+import Markers from 'components/Markers/Markers';
+import filterBioSamples from 'utils/filterBioSamples';
 
 
 const ChangeView = ({ markers }) => {

@@ -1,11 +1,12 @@
+// External imports
 import React, { useState } from 'react';
 import RangeSlider from 'react-range-slider-input';
 import { Form, FormGroup, Button, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-range-slider-input/dist/style.css";
-import useFetchAuthentication from '../../hooks/useFetchAuthentication'
-
-import Cart from '../../pages/Map/components/Cart'
+// Internal imports
+import AddToCartButton from 'components/Button/AddToCart'
+import useFetchAuthentication from 'hooks/useFetchAuthentication'
 
 const InputSidebar = ({ onApplyFilters, speciesList }) => {
 
@@ -14,8 +15,8 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
   const [selectedTemperatures, setSelectedTemperatures] = useState([30, 39]);
   const [selectedYears, setSelectedYears] = useState([2005, 2015]);
 
-
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
   useFetchAuthentication(backendUrl, setAuthStatus);
 
   const handleApplyFilters = () => {
@@ -45,7 +46,6 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
     console.log('Selected years:', values);
   };
 
-  var filteredBioSamples = sessionStorage.getItem("FilteredBioSamples");
   return (
     <div className="sidebar" style={{ backgroundColor: '#f4f4f4', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
       <h2 style={{ marginBottom: '20px' }}>Filters</h2>
@@ -92,13 +92,25 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
           </Col>
         </Row>
 
-        <Button variant="primary" onClick={handleApplyFilters} style={{ width: '100%' }}>
-          Apply Filters
-        </Button>
+        <Row className="mb-3">
+          <Col>
+            <FormGroup className="mb-2">
+              <Button variant="primary" onClick={handleApplyFilters} style={{ width: '100%' }} >
+                Apply Filters
+              </Button>
+            </FormGroup>
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Col>
+            <FormGroup className="mb-2">
+              <AddToCartButton authStatus={authStatus} />
+            </FormGroup>
+          </Col>
+        </Row>
+
       </Form>
-
-      <Cart authStatus={authStatus} filteredBioSamples={filteredBioSamples}/>
-
     </div>
   );
 };

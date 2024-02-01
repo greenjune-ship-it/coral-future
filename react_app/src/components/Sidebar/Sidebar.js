@@ -5,19 +5,16 @@ import { Form, FormGroup, Button, Row, Col, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-range-slider-input/dist/style.css";
 // Internal imports
+// Components
 import AddToCartButton from 'components/Button/AddToCart'
-import useFetchAuthentication from 'hooks/useFetchAuthentication'
 
 const InputSidebar = ({ onApplyFilters, speciesList }) => {
 
-  const [authStatus, setAuthStatus] = useState({});
   const [selectedSpecies, setSelectedSpecies] = useState('');
   const [selectedTemperatures, setSelectedTemperatures] = useState([30, 39]);
   const [selectedYears, setSelectedYears] = useState([2005, 2015]);
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-
-  useFetchAuthentication(backendUrl, setAuthStatus);
 
   const handleApplyFilters = () => {
     const filters = {
@@ -102,19 +99,14 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
           </Col>
         </Row>
 
-        {Object.keys(authStatus).length === 0 ? (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Spinner />
-          </div>
-        ) : (
-          <Row className="mb-3">
-            <Col>
-              <FormGroup className="mb-2">
-                <AddToCartButton authStatus={authStatus} />
-              </FormGroup>
-            </Col>
-          </Row>
-        )}
+
+        <Row className="mb-3">
+          <Col>
+            <FormGroup className="mb-2">
+              <AddToCartButton />
+            </FormGroup>
+          </Col>
+        </Row>
 
       </Form>
     </div>

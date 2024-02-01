@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Button, FormGroup, Alert, Row, Col } from 'react-bootstrap';
+// Contexts
+import { AuthContext } from 'contexts/AuthContext'
 
-const AddToCartButton = ({ authStatus }) => {
+const AddToCartButton = () => {
+
+  const { authData } = useContext(AuthContext);
 
   const [alertShow, setAlertShow] = useState(false);
   const [alertShowTime, setAlertShowTime] = useState(0);
@@ -11,7 +15,7 @@ const AddToCartButton = ({ authStatus }) => {
     if (alertShow) {
       const timer = setTimeout(() => {
         setAlertShow(false);
-      }, 1000);
+      }, 3000);
 
       const opacity = (3 - Date.now() + alertShowTime) / alertShowTime;
       setAlertStyle({
@@ -24,36 +28,39 @@ const AddToCartButton = ({ authStatus }) => {
 
   }, [alertShow, alertShowTime]);
 
+  const handleClick = () => {
+    setAlertShow(true);
+    setAlertStyle({ opacity: 1 })
+    setAlertShowTime(Date.now());
+  }
+
   return (
     <div>
       <Row className="mb-3">
         <Col>
-          {authStatus.authenticated && authStatus.username ? (
-            <FormGroup className="mb-2">
-              <Button
-                type="button"
-                variant="primary"
-                onClick={() => {
-                  setAlertShow(true);
-                  setAlertStyle({opacity: 1})
-                  setAlertShowTime(Date.now());
-                }}
-                style={{ width: '100%' }}
-              >
-                <i className="bi bi-cart4"></i> Add to cart
-              </Button>
-            </FormGroup>
-          ) : (
-            <Alert variant="warning">Login to add data to cart</Alert>
-          )}
+          <FormGroup className="mb-2">
+            <Button
+              type="button"
+              variant="primary"
+              onClick={handleClick}
+              style={{ width: '100%' }}
+            >
+              <i className="bi bi-cart4"></i> Add to cart
+            </Button>
+          </FormGroup>
         </Col>
       </Row>
       <Row className="mb-3">
         <Col>
-          {alertShow && (
+          {authData.authenticated && authData.username !== '' && alertShow && (
             <Alert variant="success" style={alertStyle}>
               Item added to cart!
             </Alert>
+          )}
+          {(!authData.authenticated || authData.username === '') && alertShow && (
+            <Alert variant="warning" style={alertStyle}>
+              Login to add data to cart
+              </Alert>
           )}
         </Col>
       </Row>

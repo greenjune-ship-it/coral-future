@@ -3,11 +3,20 @@ import RangeSlider from 'react-range-slider-input';
 import { Form, FormGroup, Button, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-range-slider-input/dist/style.css";
+import useFetchAuthentication from '../../hooks/useFetchAuthentication'
+
+import Cart from '../../pages/Map/components/Cart'
 
 const InputSidebar = ({ onApplyFilters, speciesList }) => {
+
+  const [authStatus, setAuthStatus] = useState({});
   const [selectedSpecies, setSelectedSpecies] = useState('');
   const [selectedTemperatures, setSelectedTemperatures] = useState([30, 39]);
   const [selectedYears, setSelectedYears] = useState([2005, 2015]);
+
+
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  useFetchAuthentication(backendUrl, setAuthStatus);
 
   const handleApplyFilters = () => {
     const filters = {
@@ -36,6 +45,7 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
     console.log('Selected years:', values);
   };
 
+  var filteredBioSamples = sessionStorage.getItem("FilteredBioSamples");
   return (
     <div className="sidebar" style={{ backgroundColor: '#f4f4f4', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
       <h2 style={{ marginBottom: '20px' }}>Filters</h2>
@@ -86,6 +96,9 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
           Apply Filters
         </Button>
       </Form>
+
+      <Cart authStatus={authStatus} filteredBioSamples={filteredBioSamples}/>
+
     </div>
   );
 };

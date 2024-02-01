@@ -9,6 +9,9 @@ import Markers from './components/Markers';
 import filterBioSamples from './utils/filterBioSamples';
 
 
+
+
+
 const ChangeView = ({ markers }) => {
   const map = useMap();
   useEffect(() => {
@@ -24,6 +27,7 @@ const Map = ({ biosamples, filters }) => {
   const [filteredBioSamples, setFilteredBioSamples] = useState([]);
   const [mapCenter, setMapCenter] = useState(null);
 
+
   useEffect(() => {
     if (biosamples && biosamples.length > 0) {
       let dataToSet = biosamples;
@@ -38,8 +42,12 @@ const Map = ({ biosamples, filters }) => {
 
       setMapCenter([avgLat, avgLng]);
       setFilteredBioSamples(dataToSet);
+      console.log('TypeOf:', typeof dataToSet);
+      console.log('DataToSet:',dataToSet);
+      sessionStorage.setItem("FilteredBioSamples", JSON.stringify(dataToSet));
     }
   }, [filters, biosamples]);
+
 
   return (
     mapCenter ?
@@ -54,6 +62,7 @@ const Map = ({ biosamples, filters }) => {
       :
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '600px', width: '100%' }}>
         <Spinner />
+
       </div>
   );
 };

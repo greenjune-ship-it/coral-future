@@ -36,7 +36,7 @@ const App = () => {
             {/* Pass handleApplyFilters function as a prop */}
             <InputSidebar onApplyFilters={handleApplyFilters} speciesList={ [...new Set(biosamples.map(biosample => biosample.species))].sort()} />
           </Col>
-          <Col md={9}>
+          <Col md={9} style={{height: '600px'}}>
             {/* Pass filters state as a prop */}
             <Map filters={filters} biosamples={biosamples} />
           </Col>

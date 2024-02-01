@@ -48,7 +48,7 @@ const Map = ({ biosamples, filters }) => {
 
   return (
     mapCenter ?
-      <MapContainer center={mapCenter} zoom={3} style={{ height: '600px', width: '100%' }}>
+      <MapContainer center={mapCenter} zoom={3} style={{ height: '100%', minHeight: '100%', width: '100%' }}>
         <ChangeView markers={filteredBioSamples} />
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -57,7 +57,7 @@ const Map = ({ biosamples, filters }) => {
         <Markers biosamples={filteredBioSamples} />
       </MapContainer>
       :
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '600px', width: '100%' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Spinner />
 
       </div>

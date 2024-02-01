@@ -1,7 +1,7 @@
 // External imports
 import React, { useState } from 'react';
 import RangeSlider from 'react-range-slider-input';
-import { Form, FormGroup, Button, Row, Col } from 'react-bootstrap';
+import { Form, FormGroup, Button, Row, Col, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-range-slider-input/dist/style.css";
 // Internal imports
@@ -47,7 +47,7 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
   };
 
   return (
-    <div className="sidebar" style={{ backgroundColor: '#f4f4f4', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
+    <div className="sidebar" style={{ backgroundColor: '#f4f4f4', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', borderRadius: '8px', height: '600px' }}>
       <h2 style={{ marginBottom: '20px' }}>Filters</h2>
       <Form>
         <Row className="mb-3">
@@ -102,13 +102,19 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
           </Col>
         </Row>
 
-        <Row className="mb-3">
-          <Col>
-            <FormGroup className="mb-2">
-              <AddToCartButton authStatus={authStatus} />
-            </FormGroup>
-          </Col>
-        </Row>
+        {Object.keys(authStatus).length === 0 ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Spinner />
+          </div>
+        ) : (
+          <Row className="mb-3">
+            <Col>
+              <FormGroup className="mb-2">
+                <AddToCartButton authStatus={authStatus} />
+              </FormGroup>
+            </Col>
+          </Row>
+        )}
 
       </Form>
     </div>

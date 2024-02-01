@@ -53,7 +53,7 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
         <Row className="mb-3">
           <Col>
             <FormGroup className="mb-2">
-              <Form.Label>Species:</Form.Label>
+              <Form.Label>Species</Form.Label>
               <Form.Control as="select" value={selectedSpecies} onChange={handleSpeciesChange}>
                 <option value="">Selected all species</option>
                 {speciesList.map((species, index) => (
@@ -67,7 +67,7 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
         <Row className="mb-3">
           <Col>
             <FormGroup className="mb-2">
-              <Form.Label>Temperature:</Form.Label>
+              <Form.Label>Temperature</Form.Label>
               <RangeSlider
                 min={0}
                 max={100}
@@ -81,7 +81,7 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
         <Row className="mb-3">
           <Col>
             <FormGroup className="mb-2">
-              <Form.Label>Year:</Form.Label>
+              <Form.Label>Year</Form.Label>
               <RangeSlider
                 min={2000}
                 max={2022}

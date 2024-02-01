@@ -11,5 +11,10 @@ def home(request):
 
 
 def redirect_to_react(request):
+    hostname = settings.ALLOWED_HOSTS[0]
+    if hostname == 'localhost':
+        react_host = f'http://{hostname}:3000'
+    else:
+        react_host = f'https://{hostname}:3000'
     return render(request, 'main/redirect_to_react.html',
-                  {'react_host': f'http://{settings.ALLOWED_HOSTS[0]}:3000'})
+                  {'react_host': react_host})

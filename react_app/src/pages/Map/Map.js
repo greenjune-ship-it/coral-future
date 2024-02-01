@@ -24,7 +24,7 @@ const Map = ({ biosamples, filters }) => {
   const [filteredBioSamples, setFilteredBioSamples] = useState([]);
   const [mapCenter, setMapCenter] = useState(null);
 
-
+  
   useEffect(() => {
     if (biosamples && biosamples.length > 0) {
       let dataToSet = biosamples;
@@ -39,9 +39,6 @@ const Map = ({ biosamples, filters }) => {
 
       setMapCenter([avgLat, avgLng]);
       setFilteredBioSamples(dataToSet);
-      console.log('TypeOf:', typeof dataToSet);
-      console.log('DataToSet:',dataToSet);
-      sessionStorage.setItem("FilteredBioSamples", JSON.stringify(dataToSet));
     }
   }, [filters, biosamples]);
 

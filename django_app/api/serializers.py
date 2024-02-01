@@ -13,7 +13,8 @@ class BioSampleSerializer(serializers.ModelSerializer):
             'latitude',
             'longitude',
             'collection_date']
-        
+
+
 class ObservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Observation

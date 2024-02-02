@@ -8,7 +8,7 @@ import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext';
 const AddToCartButton = () => {
 
   const { authData } = useContext(AuthContext);
-  const { allBioSamples, filters, filteredBioSamples, setFilteredBioSamples } = useContext(BioSamplesFilterContext);
+  const { isAddedToCart, setIsAddedToCart } = useContext(BioSamplesFilterContext);
 
   const [alertShow, setAlertShow] = useState(false);
   const [alertShowTime, setAlertShowTime] = useState(0);
@@ -33,8 +33,10 @@ const AddToCartButton = () => {
 
   const handleClick = () => {
     setAlertShow(true);
-    setAlertStyle({ opacity: 1 })
+    setAlertStyle({ opacity: 1 });
     setAlertShowTime(Date.now());
+    setIsAddedToCart(true);
+    console.log('sfsfs', isAddedToCart);
   }
 
   return (

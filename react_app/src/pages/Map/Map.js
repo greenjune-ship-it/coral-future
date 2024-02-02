@@ -50,15 +50,14 @@ const Map = () => {
       <MapContainer center={mapCenter} zoom={3} style={{ height: '100%', minHeight: '100%', width: '100%' }}>
         <ChangeView markers={filteredBioSamples} />
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+          attribution='Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
         />
         <Markers biosamples={filteredBioSamples} />
       </MapContainer>
       :
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Spinner />
-
       </div>
   );
 };

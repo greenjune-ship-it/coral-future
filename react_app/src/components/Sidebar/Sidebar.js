@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import RangeSlider from 'react-range-slider-input';
 import { Form, FormGroup, Button, Row, Col, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "react-range-slider-input/dist/style.css";
+import 'react-range-slider-input/dist/style.css';
 // Internal imports
 // Components
 import AddToCartButton from 'components/Button/AddToCart'

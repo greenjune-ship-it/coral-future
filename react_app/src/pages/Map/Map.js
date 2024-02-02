@@ -22,9 +22,8 @@ const ChangeView = ({ markers }) => {
   return null;
 }
 
-const Map = ({ filters }) => {
-  const { allBioSamples } = useContext(BioSamplesFilterContext);
-  const [filteredBioSamples, setFilteredBioSamples] = useState([]);
+const Map = () => {
+  const { allBioSamples, filters, filteredBioSamples, setFilteredBioSamples } = useContext(BioSamplesFilterContext);
   const [mapCenter, setMapCenter] = useState(null);
 
   

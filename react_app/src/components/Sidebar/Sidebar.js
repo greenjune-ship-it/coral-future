@@ -6,30 +6,28 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-range-slider-input/dist/style.css';
 // Internal imports
 // Contexts
-import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext'
+import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext';
 // Components
-import AddToCartButton from 'components/Button/AddToCart'
+import AddToCartButton from 'components/Button/AddToCart';
 
-const InputSidebar = ({ onApplyFilters }) => {
+const InputSidebar = () => {
 
   const [selectedSpecies, setSelectedSpecies] = useState('');
   const [selectedTemperatures, setSelectedTemperatures] = useState([30, 39]);
   const [selectedYears, setSelectedYears] = useState([2005, 2015]);
   // Get all BioSamples from Context and define list of species
-  const { allBioSamples } = useContext(BioSamplesFilterContext);
+  const { allBioSamples, setFilters } = useContext(BioSamplesFilterContext);
   const speciesList = [...new Set(allBioSamples.map(allBioSamples => allBioSamples.species))].sort()
-
+  
   const handleApplyFilters = () => {
-    const filters = {
+    const newFilters = {
       species: selectedSpecies,
-      temperature: selectedTemperatures,
+      temperatures: selectedTemperatures,
       years: selectedYears
     };
     // Log filters before applying changes
-    console.log('Selected filters:', filters);
-    if (onApplyFilters) {
-      onApplyFilters(filters);
-    }
+    console.log('Selected filters:', newFilters);
+    setFilters(newFilters);
   };
 
   const handleSpeciesChange = (e) => {
@@ -56,7 +54,7 @@ const InputSidebar = ({ onApplyFilters }) => {
             <FormGroup className="mb-2">
               <Form.Label>Species</Form.Label>
               <Form.Control as="select" value={selectedSpecies} onChange={handleSpeciesChange}>
-                <option value="">Selected all species</option>
+                <option value="">All species</option>
                 {speciesList.map((species, index) => (
                   <option key={index} value={species}>{species}</option>
                 ))}

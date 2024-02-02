@@ -8,25 +8,12 @@ import AuthContextProvider from 'contexts/AuthContext'
 import BioSamplesFilterProvider from 'contexts/BioSamplesFilterContext';
 // Pages
 import Map from 'pages/Map/Map';
-// Hooks
-import useFetchBiosamples from './hooks/useFetchBiosamples';
 // Components
 import NavigationBar from 'components/Navbar/Navbar';
 import InputSidebar from 'components/Sidebar/Sidebar';
 import CustomerCart from 'components/Cart/Cart';
 
 const App = () => {
-  const [biosamples, setBiosamples] = useState([]);
-  const [filters, setFilters] = useState({});
-  // Access the backend URL from the environment variable
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
-
-  useFetchBiosamples(backendUrl, setBiosamples)
-
-  // Update state with data from Sidebar
-  const handleApplyFilters = (newFilters) => {
-    setFilters(newFilters);
-  };
 
   return (
     <AuthContextProvider>
@@ -38,15 +25,15 @@ const App = () => {
             <Row>
               <Col md={3}>
                 {/* Pass handleApplyFilters function as a prop */}
-                <InputSidebar onApplyFilters={handleApplyFilters}/>
+                <InputSidebar/>
               </Col>
               <Col md={9} style={{ height: '600px' }}>
                 {/* Pass filters state as a prop */}
-                <Map filters={filters} />
+                <Map />
               </Col>
             </Row>
             <Row>
-              {/* <CustomerCart filteredBioSamples={{}} /> */}
+              <CustomerCart />
             </Row>
           </Container>
         </div>

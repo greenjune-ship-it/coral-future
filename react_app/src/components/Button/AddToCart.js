@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Button, FormGroup, Alert, Row, Col } from 'react-bootstrap';
+// Internal imports
 // Contexts
 import { AuthContext } from 'contexts/AuthContext'
+import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext';
 
 const AddToCartButton = () => {
 
   const { authData } = useContext(AuthContext);
+  const { allBioSamples, filters, filteredBioSamples, setFilteredBioSamples } = useContext(BioSamplesFilterContext);
 
   const [alertShow, setAlertShow] = useState(false);
   const [alertShowTime, setAlertShowTime] = useState(0);

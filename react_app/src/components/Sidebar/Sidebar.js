@@ -1,20 +1,23 @@
 // External imports
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import RangeSlider from 'react-range-slider-input';
 import { Form, FormGroup, Button, Row, Col, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-range-slider-input/dist/style.css';
 // Internal imports
+// Contexts
+import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext'
 // Components
 import AddToCartButton from 'components/Button/AddToCart'
 
-const InputSidebar = ({ onApplyFilters, speciesList }) => {
+const InputSidebar = ({ onApplyFilters }) => {
 
   const [selectedSpecies, setSelectedSpecies] = useState('');
   const [selectedTemperatures, setSelectedTemperatures] = useState([30, 39]);
   const [selectedYears, setSelectedYears] = useState([2005, 2015]);
-
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  // Get all BioSamples from Context and define list of species
+  const { allBioSamples } = useContext(BioSamplesFilterContext);
+  const speciesList = [...new Set(allBioSamples.map(allBioSamples => allBioSamples.species))].sort()
 
   const handleApplyFilters = () => {
     const filters = {
@@ -22,7 +25,8 @@ const InputSidebar = ({ onApplyFilters, speciesList }) => {
       temperature: selectedTemperatures,
       years: selectedYears
     };
-    console.log('Filters:', filters); // Log filters before applying changes
+    // Log filters before applying changes
+    console.log('Selected filters:', filters);
     if (onApplyFilters) {
       onApplyFilters(filters);
     }

@@ -1,14 +1,16 @@
 // External imports
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import L from 'leaflet';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
+import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext'
 import Markers from 'components/Markers/Markers';
 import filterBioSamples from 'utils/filterBioSamples';
 
 
+// To adjust map center and zoom to selection
 const ChangeView = ({ markers }) => {
   const map = useMap();
   useEffect(() => {
@@ -20,18 +22,19 @@ const ChangeView = ({ markers }) => {
   return null;
 }
 
-const Map = ({ biosamples, filters }) => {
+const Map = ({ filters }) => {
+  const { allBioSamples } = useContext(BioSamplesFilterContext);
   const [filteredBioSamples, setFilteredBioSamples] = useState([]);
   const [mapCenter, setMapCenter] = useState(null);
 
   
   useEffect(() => {
-    if (biosamples && biosamples.length > 0) {
-      let dataToSet = biosamples;
+    if (allBioSamples && allBioSamples.length > 0) {
+      let dataToSet = allBioSamples;
 
       // Only apply the filter if filters are set
       if (filters && Object.keys(filters).length > 0) {
-        dataToSet = filterBioSamples(filters, biosamples);
+        dataToSet = filterBioSamples(filters, allBioSamples);
       }
       // Recalculate map center based on selection
       const avgLat = dataToSet.reduce((sum, marker) => sum + marker.latitude, 0) / dataToSet.length;
@@ -40,7 +43,7 @@ const Map = ({ biosamples, filters }) => {
       setMapCenter([avgLat, avgLng]);
       setFilteredBioSamples(dataToSet);
     }
-  }, [filters, biosamples]);
+  }, [filters, allBioSamples]);
 
 
   return (

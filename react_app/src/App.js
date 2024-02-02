@@ -4,7 +4,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
 // Contexts
-import AuthContextProvider, { AuthContext } from 'contexts/AuthContext'
+import AuthContextProvider from 'contexts/AuthContext'
+import BioSamplesFilterProvider from 'contexts/BioSamplesFilterContext';
 // Pages
 import Map from 'pages/Map/Map';
 // Hooks
@@ -29,25 +30,27 @@ const App = () => {
 
   return (
     <AuthContextProvider>
-      <div>
-        <NavigationBar />
-        <Container className="text-center mt-4">
-          <h1>BioSamples Explorer</h1>
-          <Row>
-            <Col md={3}>
-              {/* Pass handleApplyFilters function as a prop */}
-              <InputSidebar onApplyFilters={handleApplyFilters} speciesList={[...new Set(biosamples.map(biosample => biosample.species))].sort()} />
-            </Col>
-            <Col md={9} style={{ height: '600px' }}>
-              {/* Pass filters state as a prop */}
-              <Map filters={filters} biosamples={biosamples} />
-            </Col>
-          </Row>
-          <Row>
-            {/* <CustomerCart filteredBioSamples={{}} /> */}
-          </Row>
-        </Container>
-      </div>
+      <BioSamplesFilterProvider>
+        <div>
+          <NavigationBar />
+          <Container className="text-center mt-4">
+            <h1>BioSamples Explorer</h1>
+            <Row>
+              <Col md={3}>
+                {/* Pass handleApplyFilters function as a prop */}
+                <InputSidebar onApplyFilters={handleApplyFilters}/>
+              </Col>
+              <Col md={9} style={{ height: '600px' }}>
+                {/* Pass filters state as a prop */}
+                <Map filters={filters} />
+              </Col>
+            </Row>
+            <Row>
+              {/* <CustomerCart filteredBioSamples={{}} /> */}
+            </Row>
+          </Container>
+        </div>
+      </BioSamplesFilterProvider>
     </AuthContextProvider>
   );
 };

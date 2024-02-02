@@ -22,7 +22,7 @@ class BioSamplesApiView(APIView):
     This endpoint allows authenticated users to retrieve a list of samples.
     """
 
-    def get(self):
+    def get(self, *args, **kwargs):
         biosamples = BioSample.objects.all()
         serializer = BioSampleSerializer(biosamples, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -33,7 +33,7 @@ class ObservationApiView(APIView):
     This endpoint allows authenticated users to retrieve a list of samples.
     """
 
-    def get(self):
+    def get(self, *args, **kwargs):
         observations = Observation.objects.all()
         serializer = ObservationSerializer(observations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -12,7 +12,7 @@ const AuthContextProvider = (props) => {
 
   const checkAuthentication = async (backendUrl) => {
     try {
-      const response = await axios.get(`${backendUrl}/api/auth/status`, {
+      const response = await axios.get(`${backendUrl}/api/auth/status/`, {
         withCredentials: true,
       });
 

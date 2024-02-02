@@ -12,7 +12,7 @@ const BioSamplesFilterProvider = (props) => {
   useEffect(() => {
     const fetchData = async (backendUrl) => {
       try {
-        const response = await axios.get(`${backendUrl}/api/biosamples`);
+        const response = await axios.get(`${backendUrl}/api/public/biosamples/`);
         setAllBioSamples(response.data);
         console.log('Fetch', response.data)
       } catch (error) {

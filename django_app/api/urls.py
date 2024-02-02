@@ -1,9 +1,15 @@
 # api/urls.py
-from django.urls import path
-from api.views import check_authentication, BioSamplesApiView, ObservationApiView
+from django.urls import path, include
+from api.views import CheckAuthenticationApiView, BioSamplesApiView, \
+    ObservationApiView
 
 urlpatterns = [
-    path('auth/status', check_authentication, name='status-view'),
-    path('biosamples/', BioSamplesApiView.as_view(), name='biosamples-view'),
-    path('observations/', ObservationApiView.as_view(), name='observations-view')
+    path('auth/', include([
+        path('', include('rest_framework.urls')),
+        path('status/', CheckAuthenticationApiView.as_view()),
+    ])),
+    path('public/', include([
+        path('biosamples/', BioSamplesApiView.as_view()),
+        path('observations/', ObservationApiView.as_view())
+    ]))
 ]

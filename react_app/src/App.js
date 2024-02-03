@@ -1,5 +1,6 @@
 // External imports
-import React, { useState, useContext } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
@@ -12,31 +13,25 @@ import Map from 'pages/Map/Map';
 import NavigationBar from 'components/Navbar/Navbar';
 import InputSidebar from 'components/Sidebar/Sidebar';
 import CustomerCart from 'components/Cart/Cart';
+import CustomerMap from 'pages/Map/CustomerMap';
 
 const App = () => {
 
   return (
     <AuthContextProvider>
       <BioSamplesFilterProvider>
-        <div>
-          <NavigationBar />
-          <Container className="text-center mt-4">
-            <h1>BioSamples Explorer</h1>
-            <Row>
-              <Col md={3}>
-                {/* Pass handleApplyFilters function as a prop */}
-                <InputSidebar/>
-              </Col>
-              <Col md={9} style={{ height: '600px' }}>
-                {/* Pass filters state as a prop */}
-                <Map />
-              </Col>
-            </Row>
-            <Row>
-              <CustomerCart />
-            </Row>
-          </Container>
-        </div>
+        <Router>
+          <div>
+            {/* NavigationBar can be rendered on all routes */}
+            <NavigationBar />
+          </div>
+          <Routes>
+            <Route path='/' element={<CustomerMap />} />
+          </Routes>
+          <Routes>
+            <Route path="/cart" element={<CustomerCart />} />
+          </Routes>
+        </Router>
       </BioSamplesFilterProvider>
     </AuthContextProvider>
   );

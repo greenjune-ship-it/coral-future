@@ -50,13 +50,13 @@ const Map = () => {
       <MapContainer center={mapCenter} zoom={3} style={{ height: '100%', minHeight: '100%', width: '100%' }}>
         <ChangeView markers={filteredBioSamples} />
         <LayersControl position="topright">
-        <BaseLayer name="OpenStreetMap">
+        <BaseLayer checked name="OpenStreetMap">
             <TileLayer
               url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
               attribution='© OpenStreetMap contributors'
             />
           </BaseLayer>
-          <BaseLayer checked name="World Imagery">
+          <BaseLayer name="World Imagery">
             <TileLayer
               url='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
               attribution='Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'

@@ -1,7 +1,7 @@
 // External imports
 import React, { useEffect, useState, useContext } from 'react';
 import L from 'leaflet';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, LayersControl, useMap } from 'react-leaflet';
 import { Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
@@ -23,9 +23,9 @@ const ChangeView = ({ markers }) => {
 }
 
 const Map = () => {
+  const { BaseLayer } = LayersControl;
   const { allBioSamples, filters, filteredBioSamples, setFilteredBioSamples } = useContext(BioSamplesFilterContext);
   const [mapCenter, setMapCenter] = useState(null);
-
   
   useEffect(() => {
     if (allBioSamples && allBioSamples.length > 0) {
@@ -46,20 +46,38 @@ const Map = () => {
 
 
   return (
-    mapCenter ?
+    mapCenter ? (
       <MapContainer center={mapCenter} zoom={3} style={{ height: '100%', minHeight: '100%', width: '100%' }}>
         <ChangeView markers={filteredBioSamples} />
-        <TileLayer
-          url='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-          attribution='Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-        />
+        <LayersControl position="topright">
+        <BaseLayer name="OpenStreetMap">
+            <TileLayer
+              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+              attribution='© OpenStreetMap contributors'
+            />
+          </BaseLayer>
+          <BaseLayer checked name="World Imagery">
+            <TileLayer
+              url='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+              attribution='Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            />
+          </BaseLayer>
+        </LayersControl>
         <Markers biosamples={filteredBioSamples} />
+        <style>
+          {`
+            .leaflet-control-layers-base label {
+              text-align: left;
+            }
+          `}
+        </style>
       </MapContainer>
-      :
+    ) : (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Spinner />
       </div>
-  );
+    )
+  );  
 };
 
 export default Map;

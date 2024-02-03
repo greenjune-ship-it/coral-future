@@ -57,12 +57,12 @@ const AddToCartButton = () => {
       </Row>
       <Row className="mb-3">
         <Col>
-          {authData.authenticated && authData.username !== '' && alertShow && (
+          {authData.authenticated && alertShow && (
             <Alert variant="success" style={alertStyle}>
               Item added to cart!
             </Alert>
           )}
-          {(!authData.authenticated || authData.username === '') && alertShow && (
+          {!authData.authenticated && alertShow && (
             <Alert variant="warning" style={alertStyle}>
               Login to add data to cart
               </Alert>

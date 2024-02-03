@@ -1,6 +1,6 @@
 // External imports
 import React, { useContext } from 'react';
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 // Internal imports
 // Contexts
@@ -49,26 +49,24 @@ const NavigationBar = () => {
         </Navbar.Collapse>
 
         <div className="ms-lg-4">
-          {authData.authenticated && authData.username ? (
-            <div className="d-flex align-items-center">
-              <span className="me-2 text-dark">Welcome, {authData.username}!</span>
-              <form action={`${backendUrl}/api-auth/login/`} method="post">
-                <Button type="submit" variant="link" className="nav-link default-link" style={{ color: '#0a58ca' }}>
-                  <i className="bi bi-box-arrow-right"></i> Logout
-                </Button>
-              </form>
-            </div>
+          {authData.authenticated ? (
+            <NavDropdown title={<>{authData.username} <i className="bi bi-person-circle"></i></>} id="basic-nav-dropdown">
+              <NavDropdown.Item href="/cart">
+                <i className="bi bi-cart"></i> Cart
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href={`${backendUrl}/api/auth/logout/`}>
+                <i className="bi bi-box-arrow-right"></i> Logout
+              </NavDropdown.Item>
+            </NavDropdown>
           ) : (
             <Nav.Item>
-              <Nav.Link href={`${backendUrl}/api-auth/logout/`} className="default-link" style={{ color: '#0a58ca' }}>
+              <Nav.Link href={`${backendUrl}/api/auth/login/`} className="default-link" style={{ color: '#0a58ca' }}>
                 <i className="bi bi-box-arrow-in-right"></i> Login
               </Nav.Link>
             </Nav.Item>
           )}
         </div>
-
-
-
       </Container>
     </Navbar>
   );

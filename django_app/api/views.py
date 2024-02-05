@@ -57,6 +57,9 @@ class UserCartApiView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        """
+        Example: {"biosample_ids": [1,2]}
+        """
         # Extract sample IDs from request data (assuming they are provided as a list)
         biosample_ids = request.data.get('biosample_ids', [])
 

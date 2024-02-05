@@ -42,14 +42,6 @@ services:
     environment:
       - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
 
-  # cbassed50-plumber:
-  #   build:
-  #     context: ./
-  #   command: /app/plumber.R
-  #   restart: unless-stopped
-  #   ports:
-  #    - "7001:8000"
-
   nginx:
     image: nginx:latest
     volumes:

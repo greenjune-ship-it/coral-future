@@ -41,7 +41,7 @@ const AddToCartButton = () => {
       const backendUrl = process.env.REACT_APP_BACKEND_URL;
       const biosampleIds = filteredBioSamples.map(sample => sample.id);
       // Put data in Django DB
-      const response = await addToUserCart(biosampleIds, backendUrl);
+      await addToUserCart(biosampleIds, backendUrl);
       setErrorOccurred(false);
     } catch (error) {
       console.error('Error adding samples to cart:', error);

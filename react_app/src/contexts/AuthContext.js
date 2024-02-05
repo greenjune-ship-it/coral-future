@@ -6,10 +6,6 @@ export const AuthContext = createContext();
 const AuthContextProvider = (props) => {
   const [authData, setAuthData] = useState({ username: '', authenticated: false });
 
-  const setAuth = (username, authenticated) => {
-    setAuthData({ username: username, authenticated: authenticated });
-  };
-
   const checkAuthentication = async (backendUrl) => {
     try {
       const response = await axios.get(`${backendUrl}/api/auth/status/`, {
@@ -17,8 +13,10 @@ const AuthContextProvider = (props) => {
       });
 
       const { username, authenticated } = response.data;
-      setAuth(username, authenticated);
-      console.log('Retrieved authentication context')
+      setAuthData({
+        username: username, authenticated: authenticated
+      });
+      console.log('Get authentication context')
 
     } catch (error) {
       console.log(error);
@@ -30,7 +28,7 @@ const AuthContextProvider = (props) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ authData, setAuth }}>
+    <AuthContext.Provider value={{ authData }}>
       {props.children}
     </AuthContext.Provider>
   );

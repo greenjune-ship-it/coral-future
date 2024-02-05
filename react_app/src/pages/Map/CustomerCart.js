@@ -5,7 +5,7 @@ const CustomerCart = () => {
   const { userCart } = useContext(UserCartContext);
 
   return (
-    
+    <UserCartContextProvider>
       <div>
         <h1>Customer Cart</h1>
         {userCart.length > 0 ? (

@@ -16,7 +16,7 @@ const InputSidebar = () => {
   const [selectedTemperatures, setSelectedTemperatures] = useState([30, 39]);
   const [selectedYears, setSelectedYears] = useState([2005, 2015]);
   // Get all BioSamples from Context and define list of species
-  const { allBioSamples, setFilters, setIsAddedToCart } = useContext(BioSamplesFilterContext);
+  const { allBioSamples, setFilters } = useContext(BioSamplesFilterContext);
   const speciesList = [...new Set(allBioSamples.map(allBioSamples => allBioSamples.species))].sort()
   
   const handleApplyFilters = () => {
@@ -28,7 +28,6 @@ const InputSidebar = () => {
     // Log filters before applying changes
     console.log('Selected filters:', newFilters);
     setFilters(newFilters);
-    setIsAddedToCart(false);
   };
 
   const handleSpeciesChange = (e) => {

@@ -7,7 +7,6 @@ const BioSamplesFilterProvider = (props) => {
   const [allBioSamples, setAllBioSamples] = useState([]);
   const [filters, setFilters] = useState({});
   const [filteredBioSamples, setFilteredBioSamples] = useState([]);
-  const [isAddedToCart, setIsAddedToCart] = useState(false);
   
   useEffect(() => {
     const fetchData = async (backendUrl) => {
@@ -25,7 +24,7 @@ const BioSamplesFilterProvider = (props) => {
 
   return (
     <BioSamplesFilterContext.Provider
-      value={{ allBioSamples, setAllBioSamples, filters, setFilters, filteredBioSamples, setFilteredBioSamples, isAddedToCart, setIsAddedToCart }}
+      value={{ allBioSamples, setAllBioSamples, filters, setFilters, filteredBioSamples, setFilteredBioSamples }}
     >
       {props.children}
     </BioSamplesFilterContext.Provider>

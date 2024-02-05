@@ -6,11 +6,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
 // Contexts
 import AuthContextProvider from 'contexts/AuthContext'
+import UserCartContextProvider from 'contexts/UserCartContext';
 // Pages
 import Map from 'components/Map/Map';
 // Components
 import NavigationBar from 'components/Navbar/Navbar';
-import InputSidebar from 'components/Sidebar/Sidebar';
 import CustomerCart from 'pages/Map/CustomerCart';
 import CustomerMap from 'pages/Map/CustomerMap';
 

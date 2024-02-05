@@ -47,7 +47,7 @@ class UserCartApiView(APIView):
     This endpoint allows to operate with user cart.
     """
 
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

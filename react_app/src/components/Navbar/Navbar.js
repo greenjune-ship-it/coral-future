@@ -6,6 +6,12 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 // Contexts
 import { AuthContext } from 'contexts/AuthContext'
 
+// Temporary helper function, need to find more elegant solution
+function extractDomain(url) {
+  const elem = document.createElement('a');
+  elem.href = url;
+  return elem.hostname;
+}
 
 const NavigationBar = () => {
 
@@ -23,7 +29,7 @@ const NavigationBar = () => {
         <Navbar.Collapse id="navbarNav">
           <Nav className="navbar-nav">
             <Nav.Item>
-              <Nav.Link href={`${backendUrl}:3000/map`}>
+              <Nav.Link href={`${extractDomain(backendUrl)}:3000/map`}>
                 <i className="bi bi-map"></i> Map
               </Nav.Link>
             </Nav.Item>

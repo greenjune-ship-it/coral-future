@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from projects.models import BioSample, Observation, UserCart
+from projects.models import BioSample, Observation
 
 
 class BioSampleSerializer(serializers.ModelSerializer):

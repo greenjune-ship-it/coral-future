@@ -14,42 +14,32 @@ const AddToCartButton = () => {
 
   const [alertShow, setAlertShow] = useState(false);
   const [alertShowTime, setAlertShowTime] = useState(0);
-  const [alertStyle, setAlertStyle] = useState({ opacity: 1 });
   const [errorOccurred, setErrorOccurred] = useState(false);
 
   useEffect(() => {
-    // Gradually disappearing alert only for success
+    // Disappearing alert only for success
     if (authData.authenticated && !errorOccurred && alertShow) {
       const timer = setTimeout(() => {
         setAlertShow(false);
       }, 1000);
-
-      const opacity = (1 - Date.now() + alertShowTime) / alertShowTime;
-      setAlertStyle({
-        opacity: opacity > 0 ? opacity : 0,
-        transition: 'opacity 1s ease-in-out'
-      });
-
       return () => clearTimeout(timer);
     }
-
   }, [alertShow, alertShowTime]);
 
 
   const handleAddToCart = async () => {
+    setAlertShow(true);
     try {
       const backendUrl = process.env.REACT_APP_BACKEND_URL;
       const biosampleIds = filteredBioSamples.map(sample => sample.id);
       // Put data in Django DB
       await addToUserCart(biosampleIds, backendUrl);
       setErrorOccurred(false);
+      setAlertShowTime(Date.now());
     } catch (error) {
       console.error('Error adding samples to cart:', error);
       setErrorOccurred(true);
     }
-    setAlertShow(true);
-    setAlertStyle({ opacity: 1 });
-    setAlertShowTime(Date.now());
   };
 
   return (
@@ -72,17 +62,17 @@ const AddToCartButton = () => {
         <Col>
           {authData.authenticated && !errorOccurred && alertShow && (
             // If respond to add data is good send success if bad, display variant error
-            <Alert variant='success' style={alertStyle}>
+            <Alert variant='success'>
               Item added to cart!
             </Alert>
           )}
           {authData.authenticated && errorOccurred && alertShow && (
-            <Alert variant='danger' style={alertStyle}>
+            <Alert variant='danger'>
               An error occurred while adding to cart
             </Alert>
           )}
           {!authData.authenticated && errorOccurred && alertShow && (
-            <Alert variant='warning' style={alertStyle}>
+            <Alert variant='warning'>
               Login to add data to cart
             </Alert>
           )}

@@ -1,23 +1,25 @@
 import React, { useContext } from 'react';
-// Internal imports
-import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext';
+import UserCartContextProvider, { UserCartContext } from 'contexts/UserCartContext';
 
 const CustomerCart = () => {
-  const { filteredBioSamples, isAddedToCart } = useContext(BioSamplesFilterContext);
+  const { userCart } = useContext(UserCartContext);
 
   return (
-    <div>
-      <h1>Customer Cart</h1>
-      {filteredBioSamples.map((sample) => (
-        isAddedToCart && (
-          <div key={sample.id}>
-            <h4>Sample ID: {sample.id}</h4>
-            <p>Country: {sample.country}, {sample.species} {sample.collection_date}</p>
-          </div>
-        )
-      ))}
-      {!isAddedToCart && <p>No BioSamples in Cart</p>}
-    </div>
+    
+      <div>
+        <h1>Customer Cart</h1>
+        {userCart.length > 0 ? (
+          userCart.map((sample) => (
+            <div key={sample.id}>
+              <h4>Sample ID: {sample.id}</h4>
+              <p>Country: {sample.country}, {sample.species} ({sample.collection_date})</p>
+            </div>
+          ))
+        ) : (
+          <p>No BioSamples in Cart</p>
+        )}
+      </div>
+    </UserCartContextProvider>
   );
 };
 

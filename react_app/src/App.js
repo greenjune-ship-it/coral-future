@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
 // Contexts
 import AuthContextProvider from 'contexts/AuthContext'
-import BioSamplesFilterProvider from 'contexts/BioSamplesFilterContext';
 // Pages
 import Map from 'components/Map/Map';
 // Components
@@ -19,7 +18,7 @@ const App = () => {
 
   return (
     <AuthContextProvider>
-      <BioSamplesFilterProvider>
+      <UserCartContextProvider>
         <Router>
           <div>
             {/* NavigationBar can be rendered on all routes */}
@@ -32,7 +31,7 @@ const App = () => {
             <Route path="/cart" element={<CustomerCart />} />
           </Routes>
         </Router>
-      </BioSamplesFilterProvider>
+      </UserCartContextProvider>
     </AuthContextProvider>
   );
 };

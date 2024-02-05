@@ -2,10 +2,10 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
-import Map from './Map'
+import Map from '../../components/Map/Map'
 // Components
 import InputSidebar from 'components/Sidebar/Sidebar';
-import CustomerCart from 'components/Cart/Cart';
+import CustomerCart from 'pages/Map/CustomerCart';
 
 
 const CustomerMap = () => {

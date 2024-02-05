@@ -14,7 +14,7 @@ const BioSamplesFilterProvider = (props) => {
       try {
         const response = await axios.get(`${backendUrl}/api/public/biosamples/`);
         setAllBioSamples(response.data);
-        console.log('Fetch', response.data)
+        console.log('Retrieved BioSamples from database');
       } catch (error) {
         console.error(error);
       }

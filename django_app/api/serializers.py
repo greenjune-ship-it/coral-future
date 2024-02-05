@@ -1,26 +1,14 @@
 from rest_framework import serializers
-from projects.models import BioSample, Observation
+from projects.models import BioSample, Observation, UserCart
 
 
 class BioSampleSerializer(serializers.ModelSerializer):
     class Meta:
         model = BioSample
-        fields = [
-            'id',
-            'project_id',
-            'country',
-            'species',
-            'latitude',
-            'longitude',
-            'collection_date']
-        
+        fields = '__all__'
+
+
 class ObservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Observation
-        fields = [
-            'fragment',
-            'condition',
-            'temperature',
-            'timepoint',
-            'pam_value',
-            'biosample']
+        fields = '__all__'

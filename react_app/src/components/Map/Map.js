@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import L from 'leaflet';
 import { MapContainer, TileLayer, LayersControl, useMap } from 'react-leaflet';
-import { Spinner } from 'react-bootstrap';
+import { Container, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
 import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext'
@@ -73,9 +73,7 @@ const Map = () => {
         </style>
       </MapContainer>
     ) : (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Spinner />
-      </div>
     )
   );  
 };

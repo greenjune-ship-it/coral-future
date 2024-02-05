@@ -17,8 +17,9 @@ const AuthContextProvider = (props) => {
       });
 
       const { username, authenticated } = response.data;
-
       setAuth(username, authenticated);
+      console.log('Retrieved authentication context')
+
     } catch (error) {
       console.log(error);
     }

@@ -8,11 +8,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import AuthContextProvider from 'contexts/AuthContext'
 import BioSamplesFilterProvider from 'contexts/BioSamplesFilterContext';
 // Pages
-import Map from 'pages/Map/Map';
+import Map from 'components/Map/Map';
 // Components
 import NavigationBar from 'components/Navbar/Navbar';
 import InputSidebar from 'components/Sidebar/Sidebar';
-import CustomerCart from 'components/Cart/Cart';
+import CustomerCart from 'pages/Map/CustomerCart';
 import CustomerMap from 'pages/Map/CustomerMap';
 
 const App = () => {
@@ -26,7 +26,7 @@ const App = () => {
             <NavigationBar />
           </div>
           <Routes>
-            <Route path='/' element={<CustomerMap />} />
+            <Route path='/map' element={<CustomerMap />} />
           </Routes>
           <Routes>
             <Route path="/cart" element={<CustomerCart />} />

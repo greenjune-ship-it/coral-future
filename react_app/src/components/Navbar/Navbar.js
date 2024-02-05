@@ -23,7 +23,7 @@ const NavigationBar = () => {
         <Navbar.Collapse id="navbarNav">
           <Nav className="navbar-nav">
             <Nav.Item>
-              <Nav.Link href={`${backendUrl}:3000`}>
+              <Nav.Link href={`${backendUrl}:3000/map`}>
                 <i className="bi bi-map"></i> Map
               </Nav.Link>
             </Nav.Item>

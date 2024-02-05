@@ -1,48 +1,37 @@
 // External imports
-import React, { useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
-import Map from './pages/Map/Map';
-import NavigationBar from './components/Navbar/Navbar';
-import InputSidebar from './components/Sidebar/Sidebar';
-import useFetchAuthentication from './hooks/useFetchAuthentication';
-import useFetchBiosamples from './hooks/useFetchBiosamples';
-
+// Contexts
+import AuthContextProvider from 'contexts/AuthContext'
+import UserCartContextProvider from 'contexts/UserCartContext';
+// Pages
+import Map from 'components/Map/Map';
+// Components
+import NavigationBar from 'components/Navbar/Navbar';
+import CustomerCart from 'pages/Map/CustomerCart';
+import CustomerMap from 'pages/Map/CustomerMap';
 
 const App = () => {
-  const [authStatus, setAuthStatus] = useState({});
-  const [biosamples, setBiosamples] = useState([]);
-  const [filters, setFilters] = useState({});
-  // Access the backend URL from the environment variable
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
-
-  useFetchAuthentication(backendUrl, setAuthStatus);
-
-  useFetchBiosamples(backendUrl, setBiosamples)
-
-  // Update state with data from Sidebar
-  const handleApplyFilters = (newFilters) => {
-    setFilters(newFilters);
-  };
 
   return (
-    <div>
-      <NavigationBar authStatus={authStatus} />
-      <Container className="text-center mt-4">
-        <h1>BioSamples Explorer</h1>
-        <Row>
-          <Col md={3}>
-            {/* Pass handleApplyFilters function as a prop */}
-            <InputSidebar onApplyFilters={handleApplyFilters} speciesList={ [...new Set(biosamples.map(biosample => biosample.species))].sort()} />
-          </Col>
-          <Col md={9}>
-            {/* Pass filters state as a prop */}
-            <Map filters={filters} biosamples={biosamples} />
-          </Col>
-        </Row>
-      </Container>
-    </div>
+    <AuthContextProvider>
+      <UserCartContextProvider>
+        <Router>
+          <div>
+            {/* NavigationBar can be rendered on all routes */}
+            <NavigationBar />
+          </div>
+          <Routes>
+            <Route path='/map' element={<CustomerMap />} />
+          </Routes>
+          <Routes>
+            <Route path="/cart" element={<CustomerCart />} />
+          </Routes>
+        </Router>
+      </UserCartContextProvider>
+    </AuthContextProvider>
   );
 };
 

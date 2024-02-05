@@ -50,6 +50,7 @@ class Observation(models.Model):
         self.pam_value = round(self.pam_value, 3)
         super().save(*args, **kwargs)
 
+
 class Publication(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.TextField()
@@ -58,3 +59,11 @@ class Publication(models.Model):
 
     def __str__(self):
         return f"Publication '{self.title}' for project {self.project.name} ({self.year})"
+
+
+class UserCart(models.Model):
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    items = models.ManyToManyField(BioSample)
+
+    def __str__(self):
+        return f"UserCart of {self.owner.username}, {self.items} items"

@@ -1,6 +1,6 @@
 # Coral Future App
 
-The website is available at [coralfuture.org](https://coralfuture.org/).
+The website is available at [coralfuture.org](https://coralfuture.org/), run by [Voolstra lab](https://biologie.uni-konstanz.de/voolstra). The motivation is to build a global database of standardized thermal tolerance ED50 values as determined by CBASS to enable meta-analyses and -comparisons. 
 
 ## Get Started
 

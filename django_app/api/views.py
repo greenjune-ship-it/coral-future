@@ -1,10 +1,10 @@
 # api/views.py
-from rest_framework import status
-from rest_framework.authentication import SessionAuthentication, \
-    BasicAuthentication
+from rest_framework import generics, status
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+# Apps imports
 from projects.models import BioSample, Observation, UserCart
 from api.serializers import BioSampleSerializer, ObservationSerializer
 
@@ -22,7 +22,7 @@ class CheckAuthenticationApiView(APIView):
 
 class BioSamplesApiView(APIView):
     """
-    This endpoint allows authenticated users to retrieve a list of samples.
+    This endpoint allows users to retrieve a list of BioSamples.
     """
 
     def get(self, request):
@@ -33,13 +33,32 @@ class BioSamplesApiView(APIView):
 
 class ObservationApiView(APIView):
     """
-    This endpoint allows authenticated users to retrieve a list of samples.
+    This endpoint allows users to retrieve a list of Observations.
     """
 
     def get(self, request):
         observations = Observation.objects.all()
         serializer = ObservationSerializer(observations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ObservationsByBioSampleView(generics.GenericAPIView):
+    """
+    This endpoint allows user to retrieve Observations by list of BioSamples.
+    """
+    queryset = Observation.objects.all()
+    serializer_class = ObservationSerializer
+
+    def get(self, request, *args, **kwargs):
+        biosample_ids = request.query_params.get('biosample_ids', None)
+        if biosample_ids is not None:
+            biosample_ids = [int(id) for id in biosample_ids.split(',')]
+            observations = self.get_queryset().filter(
+                biosample_id__in=biosample_ids)
+            serializer = self.get_serializer(observations, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({"error": "No biosample_ids provided"}, status=400)
 
 
 class UserCartApiView(APIView):
@@ -80,7 +99,7 @@ class UserCartApiView(APIView):
 
         if added_biosamples:
             return Response({
-                                'message': f'Samples {added_biosamples} added to cart successfully'})
+                'message': f'Samples {added_biosamples} added to cart successfully'})
         else:
             return Response({'error': 'No valid samples found'},
                             status=status.HTTP_404_NOT_FOUND)

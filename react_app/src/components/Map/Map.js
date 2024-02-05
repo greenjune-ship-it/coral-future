@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import L from 'leaflet';
 import { MapContainer, TileLayer, LayersControl, useMap } from 'react-leaflet';
-import { Container, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
 import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext'

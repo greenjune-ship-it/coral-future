@@ -17,11 +17,9 @@ const CustomerMap = () => {
         <h1>BioSamples Explorer</h1>
         <Row>
           <Col md={3}>
-            {/* Pass handleApplyFilters function as a prop */}
             <InputSidebar />
           </Col>
           <Col md={9} style={{ height: '600px' }}>
-            {/* Pass filters state as a prop */}
             <Map />
           </Col>
         </Row>

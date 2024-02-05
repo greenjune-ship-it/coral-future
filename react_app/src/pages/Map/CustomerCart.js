@@ -7,7 +7,7 @@ const CustomerCart = () => {
 
   return (
     <UserCartContextProvider>
-      <Container className="my-5"> {/* Center the content */}
+      <Container className="my-5">
         <h1 className="text-center mb-4">Customer Cart</h1>
         {userCart.length > 0 ? (
           <Row>

@@ -1,7 +1,7 @@
 // External imports
 import React, { useState, useContext } from 'react';
 import RangeSlider from 'react-range-slider-input';
-import { Form, FormGroup, Button, Row, Col, Spinner } from 'react-bootstrap';
+import { Form, FormGroup, Button, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-range-slider-input/dist/style.css';
 // Internal imports

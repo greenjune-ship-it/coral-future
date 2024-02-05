@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     # Custom apps
     'api',
     'main',
-    # 'maps',
     'users',
     'projects'
 ]
@@ -60,8 +59,10 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://localhost:3000',
+    'http://localhost:3000/map',
     'https://coralfuture.org',
     'https://coralfuture.org:3000',
+    'https://coralfuture.org:3000/map',
 ]
 
 CORS_ORIGIN_WHITELIST = [

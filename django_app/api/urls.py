@@ -1,11 +1,16 @@
 # api/urls.py
-from django.urls import path
-from api.views import check_authentication, BioSamplesApiView, \
-    ObservationApiView, ObservationsByBioSampleView
+from django.urls import path, include
+from api.views import BioSamplesApiView, CheckAuthenticationApiView, \
+    ObservationApiView, UserCartApiView
 
 urlpatterns = [
-    path('auth/status', check_authentication, name='status-view'),
-    path('biosamples/', BioSamplesApiView.as_view(), name='biosamples-view'),
-    path('observations/', ObservationApiView.as_view(), name='observations-view'),
-    path('observations-by-biosamples/', ObservationsByBioSampleView.as_view(), name='observations-by-biosamples'),
+    path('auth/', include([
+        path('', include('rest_framework.urls')),
+        path('cart/', UserCartApiView.as_view()),
+        path('status/', CheckAuthenticationApiView.as_view()),
+    ])),
+    path('public/', include([
+        path('biosamples/', BioSamplesApiView.as_view()),
+        path('observations/', ObservationApiView.as_view())
+    ]))
 ]

@@ -1,37 +1,65 @@
+# projects/admin.py
 from django.contrib import admin
-from projects.models import Project, BioSample, Experiment, Observation, Publication
 
-
-class BioSampleInline(admin.TabularInline):
-    model = BioSample
-    extra = 1
+from .models import Project, Experiment, Colony, BioSample, Observation, \
+    Publication, UserCart
 
 
 class ExperimentInline(admin.TabularInline):
     model = Experiment
-    extra = 1
+    extra = 0
+
+
+class BioSampleInline(admin.TabularInline):
+    model = BioSample
+    extra = 0
 
 
 class ObservationInline(admin.TabularInline):
     model = Observation
-    extra = 1
+    extra = 0
 
 
 class PublicationInline(admin.TabularInline):
     model = Publication
-    extra = 1
+    extra = 0
 
 
+class UserCartInline(admin.TabularInline):
+    model = UserCart.items.through
+    extra = 0
+
+
+@admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    inlines = [BioSampleInline, ExperimentInline, PublicationInline]
+    list_display = ('name', 'registration_date', 'owner')
+    search_fields = ('name', 'owner__username')
+    inlines = [ExperimentInline, PublicationInline]
 
 
+@admin.register(Colony)
+class ColonyAdmin(admin.ModelAdmin):
+    list_display = ('species', 'latitude', 'longitude', 'country')
+    search_fields = ('species', 'country')
+    inlines = [BioSampleInline]
+
+
+@admin.register(BioSample)
 class BioSampleAdmin(admin.ModelAdmin):
+    list_display = ('colony',)
+    search_fields = ('colony__species', 'colony__country')
     inlines = [ObservationInline]
 
 
-admin.site.register(Project, ProjectAdmin)
-admin.site.register(BioSample, BioSampleAdmin)
-admin.site.register(Experiment)
-admin.site.register(Observation)
-admin.site.register(Publication)
+@admin.register(UserCart)
+class UserCartAdmin(admin.ModelAdmin):
+    list_display = ('owner',)
+    filter_horizontal = ('items',)
+    inlines = [UserCartInline]
+
+
+@admin.register(Observation)
+class ObservationAdmin(admin.ModelAdmin):
+    list_display = (
+    'biosample', 'condition', 'temperature', 'timepoint', 'pam_value')
+    list_filter = ('biosample__colony',)

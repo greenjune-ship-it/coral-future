@@ -7,52 +7,61 @@ class Project(models.Model):
     name = models.CharField(max_length=255)
     registration_date = models.DateField()
     description = models.TextField()
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE,
+                              related_name='projects')
 
     def __str__(self):
-        return self.name
-
-
-class BioSample(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    country = models.CharField(max_length=3)
-    species = models.CharField(max_length=255)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-    collection_date = models.DateField()
-
-    def __str__(self):
-        return f"{self.project.id}_{self.country}_{self.species}_{self.collection_date}_{self.latitude}_{self.longitude}"
+        return f"Project {self.id} called {self.name}, owned by {self.owner}"
 
 
 class Experiment(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE,
+                                related_name='experiments')
     experiment_date = models.DateField()
-    biosamples = models.ManyToManyField(BioSample)
 
     def __str__(self):
-        return f"Experiment in {self.id} for project {self.project.name}"
+        return f"Experiment {self.id} from Project {self.project.name}"
+
+
+class Colony(models.Model):
+    species = models.CharField(max_length=255)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    country = models.CharField(max_length=3)
+
+    def __str__(self):
+        return f"Colony {self.id} of {self.species} Species from {self.country} ({self.latitude}, {self.longitude})"
+
+
+class BioSample(models.Model):
+    colony = models.ForeignKey(Colony, on_delete=models.CASCADE,
+                               related_name='biosamples')
+
+    def __str__(self):
+        return f"BioSample {self.id} of Colony {self.colony.id}"
 
 
 class Observation(models.Model):
-    biosample = models.ForeignKey(BioSample, on_delete=models.CASCADE)
-    fragment = models.IntegerField()
+    biosample = models.ForeignKey(BioSample, on_delete=models.CASCADE,
+                                  related_name='observations')
     condition = models.CharField(max_length=255)
     temperature = models.IntegerField()
     timepoint = models.IntegerField()
-    pam_value = models.FloatField()  # Assuming a single PAM value for simplicity
+    pam_value = models.FloatField()
 
     def __str__(self):
-        return f"Observation for {self.biosample.species}, fragment {self.fragment}"
+        return f"Observation {self.id} of Biosample {self.biosample.id}"
 
     def save(self, *args, **kwargs):
-        # Round PAM value to three digits before saving
-        self.pam_value = round(self.pam_value, 3)
+        # Ensure pam_value is not None before rounding
+        if self.pam_value is not None:
+            self.pam_value = round(self.pam_value, 3)
         super().save(*args, **kwargs)
 
 
 class Publication(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE,
+                                related_name='publications')
     title = models.TextField()
     year = models.IntegerField()
     doi = models.CharField(max_length=255)
@@ -62,8 +71,9 @@ class Publication(models.Model):
 
 
 class UserCart(models.Model):
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    items = models.ManyToManyField(BioSample)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE,
+                              related_name='carts')
+    items = models.ManyToManyField(Colony)
 
     def __str__(self):
-        return f"UserCart of {self.owner.username}, {self.items} items"
+        return f"UserCart of {self.owner.username}, {self.items.count()} items"

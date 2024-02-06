@@ -4,7 +4,7 @@ from users.models import CustomUser
 
 
 class Project(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
     registration_date = models.DateField()
     description = models.TextField()
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE,
@@ -15,25 +15,29 @@ class Project(models.Model):
 
 
 class Experiment(models.Model):
+    name = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE,
                                 related_name='experiments')
-    experiment_date = models.DateField()
+    date = models.DateField()
 
     def __str__(self):
         return f"Experiment {self.id} from Project {self.project.name}"
 
 
 class Colony(models.Model):
-    species = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
+    species = models.CharField(max_length=100)
+    country = models.CharField(max_length=3)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    country = models.CharField(max_length=3)
 
     def __str__(self):
         return f"Colony {self.id} of {self.species} Species from {self.country} ({self.latitude}, {self.longitude})"
 
 
 class BioSample(models.Model):
+    name = models.CharField(max_length=100)
+    collection_date = models.DateField()
     colony = models.ForeignKey(Colony, on_delete=models.CASCADE,
                                related_name='biosamples')
 
@@ -43,11 +47,16 @@ class BioSample(models.Model):
 
 class Observation(models.Model):
     biosample = models.ForeignKey(BioSample, on_delete=models.CASCADE,
-                                  related_name='observations')
-    condition = models.CharField(max_length=255)
+                                  related_name='biosample_observations')
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE,
+                                  related_name='experiment_observations')
+    condition = models.CharField(max_length=100)
     temperature = models.IntegerField()
     timepoint = models.IntegerField()
     pam_value = models.FloatField()
+    publications = models.ManyToManyField('Publication',
+                                          related_name='publication_observations')
+
 
     def __str__(self):
         return f"Observation {self.id} of Biosample {self.biosample.id}"
@@ -60,14 +69,14 @@ class Observation(models.Model):
 
 
 class Publication(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE,
-                                related_name='publications')
     title = models.TextField()
     year = models.IntegerField()
-    doi = models.CharField(max_length=255)
+    doi = models.CharField(max_length=100)
+    observations = models.ManyToManyField(Observation,
+                                          related_name='observation_publications')
 
     def __str__(self):
-        return f"Publication '{self.title}' for project {self.project.name} ({self.year})"
+        return f"Publication {self.id}, {self.doi}"
 
 
 class UserCart(models.Model):

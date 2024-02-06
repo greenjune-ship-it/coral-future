@@ -20,11 +20,6 @@ class ObservationInline(admin.TabularInline):
     extra = 0
 
 
-class PublicationInline(admin.TabularInline):
-    model = Publication
-    extra = 0
-
-
 class UserCartInline(admin.TabularInline):
     model = UserCart.items.through
     extra = 0
@@ -34,7 +29,7 @@ class UserCartInline(admin.TabularInline):
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'registration_date', 'owner')
     search_fields = ('name', 'owner__username')
-    inlines = [ExperimentInline, PublicationInline]
+    inlines = [ExperimentInline]
 
 
 @admin.register(Colony)
@@ -51,15 +46,27 @@ class BioSampleAdmin(admin.ModelAdmin):
     inlines = [ObservationInline]
 
 
+@admin.register(Observation)
+class ObservationAdmin(admin.ModelAdmin):
+    list_display = (
+        'biosample', 'condition', 'temperature', 'timepoint', 'pam_value')
+    list_filter = ('biosample__colony',)
+
+
+@admin.register(Publication)
+class PublicationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'year', 'display_projects')
+
+    def display_projects(self, obj):
+        return ", ".join([project.name for project in
+                          obj.observations.all().values_list(
+                              'experiment__project', flat=True)])
+
+    display_projects.short_description = 'Associated Projects'
+
+
 @admin.register(UserCart)
 class UserCartAdmin(admin.ModelAdmin):
     list_display = ('owner',)
     filter_horizontal = ('items',)
     inlines = [UserCartInline]
-
-
-@admin.register(Observation)
-class ObservationAdmin(admin.ModelAdmin):
-    list_display = (
-    'biosample', 'condition', 'temperature', 'timepoint', 'pam_value')
-    list_filter = ('biosample__colony',)

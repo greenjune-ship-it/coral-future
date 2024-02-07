@@ -42,7 +42,7 @@ class Colony(models.Model):
     longitude = models.FloatField()
 
     def __str__(self):
-        return f"Colony {self.id} of {self.species} Species from {self.country} ({self.latitude}, {self.longitude})"
+        return f"Colony {self.id} {self.name} of {self.species} Species from {self.country} ({self.latitude}, {self.longitude})"
 
 
 class BioSample(models.Model):
@@ -55,7 +55,7 @@ class BioSample(models.Model):
                                related_name='biosamples')
 
     def __str__(self):
-        return f"BioSample {self.id} of Colony {self.colony.id}"
+        return f"BioSample {self.id} {self.name} of Colony {self.colony.id}"
 
 
 class Observation(models.Model):
@@ -74,7 +74,7 @@ class Observation(models.Model):
     pam_value = models.FloatField()
 
     def __str__(self):
-        return f"Observation {self.id} of Biosample {self.biosample.id}"
+        return f"Observation {self.id} of Biosample {self.biosample.id} {self.biosample.name}"
 
     def save(self, *args, **kwargs):
         # Ensure pam_value is not None before rounding

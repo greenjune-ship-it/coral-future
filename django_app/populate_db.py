@@ -10,14 +10,14 @@ import pandas as pd
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_app.settings')
 django.setup()
 
-# Configure the logging
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
-
 # Import your models after setting up Django
 from projects.models import BioSample, Colony, Experiment, Observation, \
     Project, Publication
 from users.models import CustomUser
+
+# Configure the logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def parse_and_create_instances(csv_path, owner_username):

@@ -102,7 +102,7 @@ class Publication(models.Model):
 class UserCart(models.Model):
     owner = models.OneToOneField(CustomUser, on_delete=models.CASCADE,
                                  related_name='cart')
-    items = models.ManyToManyField('Observation', related_name='carts')
+    items = models.ManyToManyField('Colony', related_name='carts')
 
     def __str__(self):
-        return f"UserCart of {self.owner.username}, {self.items.count()} observations"
+        return f"UserCart of {self.owner.username}, {self.items.count()} colonies"

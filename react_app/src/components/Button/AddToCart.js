@@ -37,7 +37,7 @@ const AddToCartButton = () => {
       setErrorOccurred(false);
       setAlertShowTime(Date.now());
     } catch (error) {
-      console.error('Error adding samples to cart:', error);
+      console.error('Error adding colonies to cart:', error);
       setErrorOccurred(true);
     }
   };

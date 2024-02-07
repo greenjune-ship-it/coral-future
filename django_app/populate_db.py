@@ -26,18 +26,14 @@ def parse_and_create_instances(csv_path, owner_username):
 
     owner = CustomUser.objects.get(username=owner_username)
 
-    for publication_key, publication_group = df.groupby(['Publication.title', 'Publication.year', 'Publication.doi']):
-        pass
-        # Publication.objects.get_or_create()
-        # logging.info(f"{publication}, created {created}")
-
     for project_key, project_group in df.groupby('Project.name'):
 
         project, created = Project.objects.get_or_create(
             name=project_key,
             registration_date=datetime.now().date(),
             description='Datasheet cbass_84.csv',
-            owner=owner)
+            owner=owner
+        )
         logging.info(f"{project}, created: {created}")
 
         for experiment_key, experiment_group in project_group.groupby(
@@ -69,7 +65,6 @@ def parse_and_create_instances(csv_path, owner_username):
                         colony=colony)
                     logging.info(f"{biosample}, created: {created}")
 
-
                     for _, row in biosample_group.iterrows():
                         observation, created = Observation.objects.get_or_create(
                             biosample=biosample,
@@ -87,6 +82,7 @@ def parse_and_create_instances(csv_path, owner_username):
                         )
 
                         observation.publications.add(publication)
+                        publication.projects.add(project)
 
                         logging.info(f"{publication}, created: {created}")
 

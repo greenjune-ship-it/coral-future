@@ -1,130 +1,136 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% include 'navbar.html' %}
+    {% include 'navbar.html' %}
 
-<style>
-    .project-details {
-        text-align: center;
-    }
+    <style>
+        .project-details {
+            text-align: center;
+        }
 
-    table {
-        margin: 20px auto; /* Add margin to the table for better spacing */
-        border-collapse: collapse;
-    }
+        table {
+            margin: 20px auto; /* Add margin to the table for better spacing */
+            border-collapse: collapse;
+        }
 
-    th, td {
-        padding: 15px;
-        text-align: left;
-        border: 1px solid #ddd; /* Add borders to cells for better visibility */
-    }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd; /* Add borders to cells for better visibility */
+        }
 
-    th {
-        background-color: #f2f2f2; /* Set a background color for the table header */
-    }
+        th {
+            background-color: #f2f2f2; /* Set a background color for the table header */
+        }
 
-    a {
-        color: #3498db;
-        text-decoration: none;
-    }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
 
-    a:hover {
-        text-decoration: underline;
-    }
-</style>
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 
-<div class="project-details">
-    <h2 style="padding: 10px;">{{ project.name }} Details</h2>
-    <p>Registration Date: {{ project.registration_date }}</p>
-    <p>Description: {{ project.description }}</p>
-    <p>Owner: {{ project.owner.username }}</p>
-    <!-- Add more details or include related data as needed -->
+    <div class="project-details">
+        <h2 style="padding: 10px;">{{ project.name }} Details</h2>
+        <p>Registration Date: {{ project.registration_date }}</p>
+        <p>Description: {{ project.description }}</p>
+        <p>Owner: {{ project.owner.username }}</p>
+        <!-- Add more details or include related data as needed -->
 
-    <!-- Experiments Table -->
-    <h3>Experiments</h3>
-    <table class="experiments-table">
-        <thead>
-        <tr>
-            <th>Experiment ID</th>
-            <th>Experiment Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for experiment in experiments %}
+        <!-- Experiments Table -->
+        <h3>Experiments</h3>
+        <table class="experiments-table">
+            <thead>
             <tr>
-                <td>{{ experiment.id }}</td>
-                <td>{{ experiment.experiment_date }}</td>
+                <th>Experiment Name</th>
+                <th>Experiment Date</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- BioSamples Table -->
-    <h3>BioSamples</h3>
-    <table class="biosamples-table">
-        <thead>
-        <tr>
-            <th>BioSample ID</th>
-            <th>Country</th>
-            <th>Species</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Collection Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for experiment in experiments %}
-            {% for biosample in experiment.biosamples.all %}
+            </thead>
+            <tbody>
+            {% for experiment in experiments %}
                 <tr>
-                    <td>{{ biosample.id }}</td>
-                    <td>{{ biosample.country }}</td>
-                    <td>{{ biosample.species }}</td>
-                    <td>{{ biosample.latitude }}</td>
-                    <td>{{ biosample.longitude }}</td>
-                    <td>{{ biosample.collection_date }}</td>
+                    <td>{{ experiment.name }}</td>
+                    <td>{{ experiment.date }}</td>
                 </tr>
             {% endfor %}
-        {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    <!-- Observations Table -->
-    <h3>Observations</h3>
-    <table class="observations-table">
-        <thead>
-        <tr>
-            <th>Experiment ID</th>
-            <th>BioSample ID</th>
-            <th>Country</th>
-            <th>Species</th>
-            <th>Fragment</th>
-            <th>Condition</th>
-            <th>Temperature</th>
-            <th>Timepoint</th>
-            <th>PAM</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {% for experiment in experiments %}
-            {% for biosample in experiment.biosamples.all %}
-                {% for observation in biosample.observation_set.all %}
-                    <tr>
-                        <td>{{ experiment.id }}</td>
-                        <td>{{ biosample.id }}</td>
-                        <td>{{ biosample.country }}</td>
-                        <td>{{ biosample.species }}</td>
-                        <td>{{ observation.fragment }}</td>
-                        <td>{{ observation.condition }}</td>
-                        <td>{{ observation.temperature }}</td>
-                        <td>{{ observation.timepoint }}</td>
-                        <td>{{ observation.pam_value }}</td>
-                    </tr>
-                {% endfor %}
+        <!-- Colonies Table -->
+        <h3>Colonies</h3>
+        <table class="colonies-table">
+            <thead>
+            <tr>
+                <th>Colony Name</th>
+                <th>Species</th>
+                <th>Country</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for colony in colonies %}
+                <tr>
+                    <td>{{ colony.name }}</td>
+                    <td>{{ colony.species }}</td>
+                    <td>{{ colony.country }}</td>
+                    <td>{{ colony.latitude }}</td>
+                    <td>{{ colony.longitude }}</td>
+                </tr>
             {% endfor %}
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+
+        <!-- BioSamples Table -->
+        <h3>BioSamples</h3>
+        <table class="biosamples-table">
+            <thead>
+            <tr>
+                <th>BioSample Name</th>
+                <th>Collection Date</th>
+                <th>Colony</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for biosample in biosamples %}
+                <tr>
+                    <td>{{ biosample.name }}</td>
+                    <td>{{ biosample.collection_date }}</td>
+                    <td>{{ biosample.colony }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Observations Table -->
+        <h3>Observations</h3>
+        <table class="observations-table">
+            <thead>
+            <tr>
+                <th>BioSample Name</th>
+                <th>Experiment Name</th>
+                <th>Condition</th>
+                <th>Temperature</th>
+                <th>Timepoint</th>
+                <th>PAM</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for observation in observations %}
+                <tr>
+                    <td>{{ observation.biosample.name }}</td>
+                    <td>{{ observation.experiment.name }}</td>
+                    <td>{{ observation.condition }}</td>
+                    <td>{{ observation.temperature }}</td>
+                    <td>{{ observation.timepoint }}</td>
+                    <td>{{ observation.pam_value }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}

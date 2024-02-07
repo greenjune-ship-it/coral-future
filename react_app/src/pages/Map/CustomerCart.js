@@ -14,7 +14,7 @@ const CustomerCart = () => {
             {userCart.map((sample) => (
               <Col key={sample.id} xs={12} md={6} lg={4} className="mb-4">
                 <div className="bg-light p-3 rounded">
-                  <h4>Sample ID: {sample.id}</h4>
+                  <h4>Colony ID: {sample.id}</h4>
                   <p>
                     Country: {sample.country}, {sample.species} ({sample.collection_date})
                   </p>

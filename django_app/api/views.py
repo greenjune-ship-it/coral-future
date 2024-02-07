@@ -5,8 +5,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 # Apps imports
-from projects.models import BioSample, Observation, UserCart
-from api.serializers import BioSampleSerializer, ObservationSerializer
+from projects.models import BioSample, Colony, Observation, UserCart
+from api.serializers import BioSampleSerializer, ColonySerializer, \
+    ObservationSerializer
 
 
 class CheckAuthenticationApiView(APIView):
@@ -31,7 +32,18 @@ class BioSamplesApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ObservationApiView(APIView):
+class ColoniesApiView(APIView):
+    """
+    This endpoint allows users to retrieve a list of Colonies.
+    """
+
+    def get(self, request):
+        colonies = Colony.objects.all()
+        serializer = ColonySerializer(colonies, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ObservationsApiView(APIView):
     """
     This endpoint allows users to retrieve a list of Observations.
     """
@@ -72,36 +84,36 @@ class UserCartApiView(APIView):
     def get(self, request):
         user_cart, created = UserCart.objects.get_or_create(owner=request.user)
         items = user_cart.items.all()
-        serializer = BioSampleSerializer(items, many=True)
+        serializer = ColonySerializer(items, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         """
-        Example: {"biosample_ids": [1,2]}
+        Example: {"colony_ids": [1,2]}
         """
-        # Extract sample IDs from request data (assuming they are provided as a list)
-        biosample_ids = request.data.get('biosample_ids', [])
+        # Extract colony IDs from request data (assuming they are provided as a list)
+        colony_ids = request.data.get('colony_ids', [])
 
-        # Initialize an empty list to store successfully added samples
-        added_biosamples = []
+        # Initialize an empty list to store successfully added colonies
+        added_colonies = []
 
-        for biosample_id in biosample_ids:
+        for colony_id in colony_ids:
             try:
-                # Retrieve the BioSamples object with the specified ID
-                biosample = BioSample.objects.get(id=biosample_id)
-                # Add the sample to the user's cart
+                # Retrieve the Colonies object with the specified ID
+                colony = Colony.objects.get(id=colony_id)
+                # Add the colony to the user's cart
                 user_cart, created = UserCart.objects.get_or_create(
                     owner=request.user)
-                user_cart.items.add(biosample)
-                added_biosamples.append(biosample_id)
-            except BioSample.DoesNotExist:
+                user_cart.items.add(colony)
+                added_colonies.append(colony_id)
+            except Colony.DoesNotExist:
                 pass  # Ignore samples that don't exist
 
-        if added_biosamples:
+        if added_colonies:
             return Response({
-                'message': f'Samples {added_biosamples} added to cart successfully'})
+                'message': f'Colonies {added_colonies} added to cart successfully'})
         else:
-            return Response({'error': 'No valid samples found'},
+            return Response({'error': 'No valid colonies found'},
                             status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request):

@@ -11,9 +11,9 @@ const BioSamplesFilterProvider = (props) => {
   useEffect(() => {
     const fetchData = async (backendUrl) => {
       try {
-        const response = await axios.get(`${backendUrl}/api/public/biosamples/`);
+        const response = await axios.get(`${backendUrl}/api/public/colonies/`);
         setAllBioSamples(response.data);
-        console.log('Retrieved BioSamples from database');
+        console.log('Retrieved Colonies from database');
       } catch (error) {
         console.error(error);
       }

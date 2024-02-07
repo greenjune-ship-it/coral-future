@@ -61,7 +61,7 @@ Populate the database (let's say my superuser is `adm_iakovyu1`:
 ```commandline
 sudo docker compose exec django-app python populate_db.py \
     --owner iakovyu1 \
-    --csv_path static/datasheets/example.csv
+    --csv_path static/datasheets/cbass_84.csv
 ```
 
 ## Database Backups

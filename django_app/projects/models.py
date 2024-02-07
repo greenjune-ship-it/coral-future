@@ -22,9 +22,9 @@ class Experiment(models.Model):
     """
     Experiment includes Observation(s).
     """
-    name = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE,
                                 related_name='experiments')
+    name = models.CharField(max_length=100)
     date = models.DateField()
 
     def __str__(self):

@@ -11,7 +11,7 @@ django.setup()
 
 # Import your models after setting up Django
 from users.models import CustomUser
-from management_scripts.create_objecs import create_biosample, create_colony, \
+from management_scripts.create_objects import create_biosample, create_colony, \
     create_experiment, create_observation, create_project, create_publication
 
 # Configure the logging

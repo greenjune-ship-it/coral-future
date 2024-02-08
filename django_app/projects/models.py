@@ -102,4 +102,4 @@ class UserCart(models.Model):
                                  related_name='cart')
 
     def __str__(self):
-        return f"UserCart of {self.owner.username}, {self.items.count()} colonies"
+        return f"UserCart of {self.owner.username}, {self.colonies.count()} colonies"

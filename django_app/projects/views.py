@@ -21,7 +21,7 @@ def project_detail(request, project_id):
     observations = Observation.objects.filter(experiment__in=experiments)
 
     # Retrieve all colonies for the project's biosamples
-    colonies = Colony.objects.filter(biosamples__observations__in=observations)
+    colonies = Colony.objects.filter(biosamples__observations__in=observations).distinct()
 
     context = {'project': project,
                'experiments': experiments,

@@ -32,9 +32,9 @@ def parse_csv(csv_path):
     return pd.read_csv(csv_path)
 
 
-def create_instances_from_df(df, owner):
+def create_instances_from_complete_df(df, owner):
     """
-    Create instances from DataFrame.
+    Create instances from complete DataFrame.
 
     Args:
         df (pd.DataFrame): DataFrame containing data.
@@ -66,17 +66,46 @@ def create_instances_from_df(df, owner):
                     logging.info(f"{biosample}, created: {created}")
 
                     for _, row in biosample_group.iterrows():
-                        print(row)
                         observation, created = create_observation(biosample,
                                                                   experiment,
                                                                   row)
                         logging.info(f"{observation}, created: {created}")
-
                         publication, created = create_publication(row, project)
                         logging.info(f"{publication}, created: {created}")
+                        publication.biosamples.add(biosample)
 
-                        # Create Many-to-Many relations
-                        observation.publications.add(publication)
+
+def create_instances_from_incomplete_df(df, owner, temperatures):
+    """
+    Create instances from incomplete DataFrame.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing data.
+        owner (CustomUser): Owner of the data.
+
+    Returns:
+        None
+    """
+    for project_key, project_group in df.groupby('Project.name'):
+        project, created = create_project(owner, project_key)
+        logging.info(f"{project}, created: {created}")
+
+        for experiment_key, experiment_group in project_group.groupby(
+                ['Experiment.name', 'Experiment.date']):
+            experiment, created = create_experiment(project, experiment_key)
+            logging.info(f"{experiment}, created: {created}")
+
+            for colony_key, colony_group in experiment_group.groupby(
+                    ['Colony.name', 'Colony.species', 'Colony.country',
+                     'Colony.latitude', 'Colony.longitude'
+                     ]):
+                colony, created = create_colony(colony_key)
+                logging.info(f"{colony}, created: {created}")
+
+                # Difference part, generate artificially BioSamples
+                for temperature in temperatures:
+                    print(colony_key)
+                    print(colony_group)
 
 
 def main():
@@ -86,6 +115,8 @@ def main():
                         help='Path to the input CSV file')
     parser.add_argument('--owner', type=str, required=True,
                         help='Username of the owner for the datasheet')
+    parser.add_argument('--no-pam', action='store_const', const=True,
+                        help='Flag to indicate no PAM values are provided')
 
     args = parser.parse_args()
 
@@ -95,8 +126,14 @@ def main():
     # Get owner
     owner = CustomUser.objects.get(username=args.owner)
 
+    # Temperatures
+    temperatures = [30, 33, 36, 39]
+
     # Call the function to create instances
-    create_instances_from_df(df, owner)
+    if args.no_pam is True:
+        create_instances_from_incomplete_df(df, owner, temperatures)
+    else:
+        create_instances_from_complete_df(df, owner)
 
 
 if __name__ == "__main__":

@@ -56,12 +56,23 @@ Create superuser:
 sudo docker compose exec django-app python manage.py createsuperuser
 ```
 
-Populate the database (let's say my superuser is `adm_iakovyu1`:
+Populate the database (let's say my superuser is `iakovyu1`.
+
+For complete datasets:
 
 ```commandline
 sudo docker compose exec django-app python populate_db.py \
     --owner iakovyu1 \
     --csv_path static/datasheets/cbass_84.csv
+```
+
+For incomplete datasets, use `--no-pam` argument:
+
+```commandline
+sudo docker compose exec django-app python populate_db.py \
+    --owner iakovyu1 \
+    --csv_path static/datasheets/redsea_gradient_study.csv \
+    --no-pam
 ```
 
 ## Database Backups

@@ -6,48 +6,40 @@ from projects.models import Project, Experiment, Colony, BioSample, Observation,
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'registration_date')
-    filter_horizontal = ('members',)
+    list_display = ('name', 'registration_date', 'owner')
+    search_fields = ('name', 'owner__username')
 
 
 @admin.register(Experiment)
 class ExperimentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'project', 'date')
-    list_filter = ('project',)
+    list_display = ('name', 'project', 'date')
+    search_fields = ('name', 'project__name')
 
 
 @admin.register(Colony)
 class ColonyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'species', 'country', 'latitude', 'longitude')
-    list_filter = ('species', 'country')
+    list_display = ('name', 'species', 'country', 'latitude', 'longitude')
+    search_fields = ('name', 'species', 'country')
 
 
 @admin.register(BioSample)
 class BioSampleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'collection_date', 'colony')
-    list_filter = ('colony__species', 'colony__country')
+    list_display = ('name', 'collection_date', 'colony')
+    search_fields = ('name', 'colony__name')
 
 
 @admin.register(Observation)
 class ObservationAdmin(admin.ModelAdmin):
-    list_display = (
-    'id', 'biosample', 'experiment', 'condition', 'temperature', 'timepoint',
-    'pam_value')
-    list_filter = (
-    'experiment__project', 'biosample__colony__species', 'condition')
+    list_display = ('experiment', 'biosample', 'condition', 'temperature', 'timepoint', 'pam_value')
+    search_fields = ('experiment__name', 'biosample__name')
 
 
 @admin.register(Publication)
 class PublicationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'year', 'doi')
-    filter_horizontal = ('observations', 'projects')
+    list_display = ('title', 'year', 'doi')
+    search_fields = ('title', 'doi')
 
 
 @admin.register(UserCart)
 class UserCartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'owner', 'get_items_count')
-
-    def get_items_count(self, obj):
-        return obj.items.count()
-
-    get_items_count.short_description = 'Items Count'
+    list_display = ('owner',)

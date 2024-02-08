@@ -61,9 +61,9 @@
             <td>{{ project.registration_date }}</td>
             <td>{{ project.description }}</td>
             <td>
-                {% if project.project_publications.all|length > 1 %}
+                {% if project.publications.exists %}
                     <ul>
-                        {% for publication in project.project_publications.all %}
+                        {% for publication in project.publications.all %}
                             <li>
                                 {{ publication.title }}
                                 <br>
@@ -73,14 +73,6 @@
                             </li>
                         {% endfor %}
                     </ul>
-                {% elif project.project_publications.all|length == 1 %}
-                    {% for publication in project.project_publications.all %}
-                        {{ publication.title }}
-                        <br>
-                        <a href="{{ publication.doi }}" target="_blank">
-                            {{ publication.doi }}
-                        </a>
-                    {% endfor %}
                 {% else %}
                     No publications available
                 {% endif %}

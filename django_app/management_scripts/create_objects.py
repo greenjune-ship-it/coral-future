@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 from projects.models import BioSample, Colony, Experiment, Observation, \

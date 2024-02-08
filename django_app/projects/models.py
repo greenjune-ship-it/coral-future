@@ -11,11 +11,10 @@ class Project(models.Model):
     registration_date = models.DateField()
     description = models.TextField()
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE,
-                      related_name='owner_projects')
-    members = models.ManyToManyField(CustomUser, related_name='members_projects')
+                              related_name='projects')
 
     def __str__(self):
-        return f"Project {self.id} called {self.name}"
+        return f"Project {self.name}"
 
 
 class Experiment(models.Model):
@@ -28,7 +27,7 @@ class Experiment(models.Model):
     date = models.DateField()
 
     def __str__(self):
-        return f"Experiment {self.id} from Project {self.project.name}"
+        return f"Experiment {self.name} from {self.project.name}"
 
 
 class Colony(models.Model):
@@ -40,9 +39,10 @@ class Colony(models.Model):
     country = models.CharField(max_length=3)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    carts = models.ManyToManyField('UserCart', related_name='colonies')
 
     def __str__(self):
-        return f"Colony {self.id} {self.name} of {self.species} Species from {self.country} ({self.latitude}, {self.longitude})"
+        return f"Colony {self.name} of {self.species} from {self.country} ({self.latitude}, {self.longitude})"
 
 
 class BioSample(models.Model):
@@ -53,6 +53,8 @@ class BioSample(models.Model):
     collection_date = models.DateField()
     colony = models.ForeignKey(Colony, on_delete=models.CASCADE,
                                related_name='biosamples')
+    publications = models.ManyToManyField('Publication',
+                                         related_name='biosamples')
 
     def __str__(self):
         return f"BioSample {self.id} {self.name} of Colony {self.colony.id}"
@@ -60,14 +62,12 @@ class BioSample(models.Model):
 
 class Observation(models.Model):
     """
-    Observation includes Publication(s).
+    Observation belongs to Experiment.
     """
-    biosample = models.ForeignKey(BioSample, on_delete=models.CASCADE,
-                                  related_name='biosample_observations')
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE,
-                                   related_name='experiment_observations')
-    publications = models.ManyToManyField('Publication',
-                                          related_name='publication_observations')
+                                   related_name='observations')
+    biosample = models.ForeignKey(BioSample, on_delete=models.CASCADE,
+                                  related_name='observations')
     condition = models.CharField(max_length=100)
     temperature = models.IntegerField()
     timepoint = models.IntegerField()
@@ -90,10 +90,8 @@ class Publication(models.Model):
     title = models.TextField()
     year = models.IntegerField()
     doi = models.CharField(max_length=100)
-    observations = models.ManyToManyField(Observation,
-                                          related_name='observation_publications')
     projects = models.ManyToManyField(Project,
-                                      related_name='project_publications')
+                                      related_name='publications')
 
     def __str__(self):
         return f"Publication {self.id}, {self.doi}"
@@ -102,7 +100,6 @@ class Publication(models.Model):
 class UserCart(models.Model):
     owner = models.OneToOneField(CustomUser, on_delete=models.CASCADE,
                                  related_name='cart')
-    items = models.ManyToManyField('Colony', related_name='carts')
 
     def __str__(self):
         return f"UserCart of {self.owner.username}, {self.items.count()} colonies"

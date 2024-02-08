@@ -84,33 +84,13 @@
             </tbody>
         </table>
 
-        <!-- BioSamples Table -->
-        <h3>BioSamples</h3>
-        <table class="biosamples-table">
-            <thead>
-            <tr>
-                <th>BioSample Name</th>
-                <th>Collection Date</th>
-                <th>Colony</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for biosample in biosamples %}
-                <tr>
-                    <td>{{ biosample.name }}</td>
-                    <td>{{ biosample.collection_date }}</td>
-                    <td>{{ biosample.colony }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
         <!-- Observations Table -->
         <h3>Observations</h3>
         <table class="observations-table">
             <thead>
             <tr>
                 <th>BioSample Name</th>
+                <th>BioSample Collection Date</th>
                 <th>Experiment Name</th>
                 <th>Condition</th>
                 <th>Temperature</th>
@@ -122,6 +102,7 @@
             {% for observation in observations %}
                 <tr>
                     <td>{{ observation.biosample.name }}</td>
+                    <td>{{ observation.biosample.collection_date }}</td>
                     <td>{{ observation.experiment.name }}</td>
                     <td>{{ observation.condition }}</td>
                     <td>{{ observation.temperature }}</td>

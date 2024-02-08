@@ -21,15 +21,13 @@ def create_experiment(project, experiment_key):
 
 
 def create_colony(colony_key):
-    ed50 = colony_key[5] if not pd.isnull(colony_key[5]) else None
-
     return Colony.objects.get_or_create(
         name=colony_key[0],
         species=colony_key[1],
         country=colony_key[2],
         latitude=colony_key[3],
         longitude=colony_key[4],
-        ed50_value=ed50
+        ed50_value=colony_key[5] if not pd.isnull(colony_key[5]) else None
     )
 
 

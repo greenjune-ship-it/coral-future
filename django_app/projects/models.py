@@ -3,6 +3,18 @@ from django.db import models
 from users.models import CustomUser
 
 
+class Publication(models.Model):
+    """
+    Publication includes Observation(s) and belongs to Project(s).
+    """
+    title = models.TextField()
+    year = models.IntegerField()
+    doi = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Publication {self.id}, {self.doi}"
+
+
 class Project(models.Model):
     """
     Project includes Experiment(s).
@@ -12,6 +24,8 @@ class Project(models.Model):
     description = models.TextField()
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE,
                               related_name='projects')
+    publications = models.ManyToManyField(Publication,
+                                          related_name='projects')
 
     def __str__(self):
         return f"Project {self.name}"
@@ -39,6 +53,7 @@ class Colony(models.Model):
     country = models.CharField(max_length=3)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    ed50_value = models.FloatField(null=True, blank=True)
     carts = models.ManyToManyField('UserCart', related_name='colonies')
 
     def __str__(self):
@@ -54,7 +69,7 @@ class BioSample(models.Model):
     colony = models.ForeignKey(Colony, on_delete=models.CASCADE,
                                related_name='biosamples')
     publications = models.ManyToManyField('Publication',
-                                         related_name='biosamples')
+                                          related_name='biosamples')
 
     def __str__(self):
         return f"BioSample {self.id} {self.name} of Colony {self.colony.id}"
@@ -71,7 +86,7 @@ class Observation(models.Model):
     condition = models.CharField(max_length=100)
     temperature = models.IntegerField()
     timepoint = models.IntegerField()
-    pam_value = models.FloatField()
+    pam_value = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return f"Observation {self.id} of Biosample {self.biosample.id} {self.biosample.name}"
@@ -81,20 +96,6 @@ class Observation(models.Model):
         if self.pam_value is not None:
             self.pam_value = round(self.pam_value, 3)
         super().save(*args, **kwargs)
-
-
-class Publication(models.Model):
-    """
-    Publication includes Observation(s) and belongs to Project(s).
-    """
-    title = models.TextField()
-    year = models.IntegerField()
-    doi = models.CharField(max_length=100)
-    projects = models.ManyToManyField(Project,
-                                      related_name='publications')
-
-    def __str__(self):
-        return f"Publication {self.id}, {self.doi}"
 
 
 class UserCart(models.Model):

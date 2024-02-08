@@ -10,113 +10,75 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_app.settings')
 django.setup()
 
 # Import your models after setting up Django
+from management_scripts.create_objects import (
+    create_biosample, create_colony, create_experiment, create_observation,
+    create_project, create_publication
+)
 from users.models import CustomUser
-from management_scripts.create_objects import create_biosample, create_colony, \
-    create_experiment, create_observation, create_project, create_publication
+from projects.models import BioSample, Observation
 
 # Configure the logging
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def parse_csv(csv_path):
-    """
-    Parse the CSV file into a pandas DataFrame.
-
-    Args:
-        csv_path (str): Path to the CSV file.
-
-    Returns:
-        pd.DataFrame: DataFrame containing CSV data.
-    """
     return pd.read_csv(csv_path)
 
 
-def create_instances_from_complete_df(df, owner):
-    """
-    Create instances from complete DataFrame.
+def create_instances(df, owner, use_pam):
+    for _, row in df.iterrows():
+        project, created = create_project(owner, row['Project.name'])
+        logging.info(f"Project: {project}, created: {created}")
 
-    Args:
-        df (pd.DataFrame): DataFrame containing data.
-        owner (CustomUser): Owner of the data.
+        experiment, created = create_experiment(project, (row['Experiment.name'], row['Experiment.date']))
+        logging.info(f"Experiment: {experiment}, created: {created}")
 
-    Returns:
-        None
-    """
-    for project_key, project_group in df.groupby('Project.name'):
-        project, created = create_project(owner, project_key)
-        logging.info(f"{project}, created: {created}")
+        colony, created = create_colony((row['Colony.name'], row['Colony.species'], row['Colony.country'],
+                                         row['Colony.latitude'], row['Colony.longitude'], row['Colony.ed50_value']))
+        logging.info(f"Colony: {colony}, created: {created}")
 
-        for experiment_key, experiment_group in project_group.groupby(
-                ['Experiment.name', 'Experiment.date']):
-            experiment, created = create_experiment(project, experiment_key)
-            logging.info(f"{experiment}, created: {created}")
+        if use_pam:
+            biosample, created = create_biosample(colony, (row['BioSample.name'], row['BioSample.collection_date']))
+            logging.info(f"Biosample: {biosample}, created: {created}")
 
-            for colony_key, colony_group in experiment_group.groupby(
-                    ['Colony.name', 'Colony.species', 'Colony.country',
-                     'Colony.latitude', 'Colony.longitude'
-                     ]):
-                colony, created = create_colony(colony_key)
-                logging.info(f"{colony}, created: {created}")
+            observation, created = create_observation(experiment, biosample, row)
+            logging.info(f"Observation: {observation}, created: {created}")
 
-                for biosample_key, biosample_group in colony_group.groupby(
-                        ['BioSample.name', 'BioSample.collection_date']):
-                    biosample, created = create_biosample(colony,
-                                                          biosample_key)
-                    logging.info(f"{biosample}, created: {created}")
+            publication, created = create_publication(row)
+            logging.info(f"Publication: {publication}, created: {created}")
 
-                    for _, row in biosample_group.iterrows():
-                        observation, created = create_observation(biosample,
-                                                                  experiment,
-                                                                  row)
-                        logging.info(f"{observation}, created: {created}")
-                        publication, created = create_publication(row, project)
-                        logging.info(f"{publication}, created: {created}")
-                        publication.biosamples.add(biosample)
+            publication.biosamples.add(biosample)
+            project.publications.add(publication)
+        else:
+            for temp in [30, 33, 36, 39]:
+                biosample, created = BioSample.objects.get_or_create(
+                    name=f"{colony.name}-{temp}",
+                    collection_date=experiment.date,
+                    colony=colony
+                )
+                logging.info(f"Biosample: {biosample}, created: {created}")
 
+                observation, created = Observation.objects.get_or_create(
+                    experiment=experiment,
+                    biosample=biosample,
+                    condition=row['Observation.condition'],
+                    temperature=temp,
+                    timepoint=row['Observation.timepoint'],
+                )
+                logging.info(f"Observation: {observation}, created: {created}")
 
-def create_instances_from_incomplete_df(df, owner, temperatures):
-    """
-    Create instances from incomplete DataFrame.
+                publication, created = create_publication(row)
+                logging.info(f"Publication: {publication}, created: {created}")
 
-    Args:
-        df (pd.DataFrame): DataFrame containing data.
-        owner (CustomUser): Owner of the data.
-
-    Returns:
-        None
-    """
-    for project_key, project_group in df.groupby('Project.name'):
-        project, created = create_project(owner, project_key)
-        logging.info(f"{project}, created: {created}")
-
-        for experiment_key, experiment_group in project_group.groupby(
-                ['Experiment.name', 'Experiment.date']):
-            experiment, created = create_experiment(project, experiment_key)
-            logging.info(f"{experiment}, created: {created}")
-
-            for colony_key, colony_group in experiment_group.groupby(
-                    ['Colony.name', 'Colony.species', 'Colony.country',
-                     'Colony.latitude', 'Colony.longitude'
-                     ]):
-                colony, created = create_colony(colony_key)
-                logging.info(f"{colony}, created: {created}")
-
-                # Difference part, generate artificially BioSamples
-                for temperature in temperatures:
-                    print(colony_key)
-                    print(colony_group)
+                publication.biosamples.add(biosample)
+                project.publications.add(publication)
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description='Parse CSV and create instances in Django models.')
-    parser.add_argument('--csv_path', type=str, required=True,
-                        help='Path to the input CSV file')
-    parser.add_argument('--owner', type=str, required=True,
-                        help='Username of the owner for the datasheet')
-    parser.add_argument('--no-pam', action='store_const', const=True,
-                        help='Flag to indicate no PAM values are provided')
+    parser = argparse.ArgumentParser(description='Parse CSV and create instances in Django models.')
+    parser.add_argument('--csv_path', type=str, required=True, help='Path to the input CSV file')
+    parser.add_argument('--owner', type=str, required=True, help='Username of the owner for the datasheet')
+    parser.add_argument('--no-pam', action='store_true', help='Flag to indicate no PAM values are provided')
 
     args = parser.parse_args()
 
@@ -126,14 +88,8 @@ def main():
     # Get owner
     owner = CustomUser.objects.get(username=args.owner)
 
-    # Temperatures
-    temperatures = [30, 33, 36, 39]
-
     # Call the function to create instances
-    if args.no_pam is True:
-        create_instances_from_incomplete_df(df, owner, temperatures)
-    else:
-        create_instances_from_complete_df(df, owner)
+    create_instances(df, owner, not args.no_pam)
 
 
 if __name__ == "__main__":

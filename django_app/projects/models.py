@@ -10,6 +10,8 @@ class Publication(models.Model):
     title = models.TextField()
     year = models.IntegerField()
     doi = models.CharField(max_length=100)
+    biosamples = models.ManyToManyField('BioSample',
+                                          related_name='publications')
 
     def __str__(self):
         return f"Publication {self.id}, {self.doi}"
@@ -68,8 +70,6 @@ class BioSample(models.Model):
     collection_date = models.DateField()
     colony = models.ForeignKey(Colony, on_delete=models.CASCADE,
                                related_name='biosamples')
-    publications = models.ManyToManyField('Publication',
-                                          related_name='biosamples')
 
     def __str__(self):
         return f"BioSample {self.id} {self.name} of Colony {self.colony.id}"

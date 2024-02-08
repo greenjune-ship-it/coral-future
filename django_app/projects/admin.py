@@ -1,7 +1,7 @@
 # projects/admin.py
 from django.contrib import admin
-from projects.models import Project, Experiment, Colony, BioSample, Observation, \
-    Publication, UserCart
+from projects.models import Project, Experiment, Colony, BioSample, \
+    Observation, Publication, UserCart
 
 
 @admin.register(Project)
@@ -30,7 +30,9 @@ class BioSampleAdmin(admin.ModelAdmin):
 
 @admin.register(Observation)
 class ObservationAdmin(admin.ModelAdmin):
-    list_display = ('experiment', 'biosample', 'condition', 'temperature', 'timepoint', 'pam_value')
+    list_display = (
+        'experiment', 'biosample', 'condition', 'temperature', 'timepoint',
+        'pam_value')
     search_fields = ('experiment__name', 'biosample__name')
 
 

@@ -3,38 +3,10 @@
 {% block content %}
     {% include 'navbar.html' %}
 
-    <style>
-        .project-details {
-            text-align: center;
-        }
-
-        table {
-            margin: 20px auto; /* Add margin to the table for better spacing */
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd; /* Add borders to cells for better visibility */
-        }
-
-        th {
-            background-color: #f2f2f2; /* Set a background color for the table header */
-        }
-
-        a {
-            color: #3498db;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
 
     <div class="project-details">
-        <h2 style="padding: 10px;">{{ project.name }} Details</h2>
+        <h2>{{ project.name }} Details</h2>
         <p>Registration Date: {{ project.registration_date }}</p>
         <p>Description: {{ project.description }}</p>
         <p>Owner: {{ project.owner.username }}</p>
@@ -44,18 +16,18 @@
         <h3>Experiments</h3>
         <table class="experiments-table">
             <thead>
-            <tr>
-                <th>Experiment Name</th>
-                <th>Experiment Date</th>
-            </tr>
+                <tr>
+                    <th>Experiment Name</th>
+                    <th>Experiment Date</th>
+                </tr>
             </thead>
             <tbody>
-            {% for experiment in experiments %}
-                <tr>
-                    <td>{{ experiment.name }}</td>
-                    <td>{{ experiment.date }}</td>
-                </tr>
-            {% endfor %}
+                {% for experiment in experiments %}
+                    <tr>
+                        <td>{{ experiment.name }}</td>
+                        <td>{{ experiment.date }}</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
 
@@ -63,26 +35,26 @@
         <h3>Colonies</h3>
         <table class="colonies-table">
             <thead>
-            <tr>
-                <th>Colony Name</th>
-                <th>Species</th>
-                <th>Country</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>Colony ED50</th>
-            </tr>
+                <tr>
+                    <th>Colony Name</th>
+                    <th>Species</th>
+                    <th>Country</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Colony ED50</th>
+                </tr>
             </thead>
             <tbody>
-            {% for colony in colonies %}
-                <tr>
-                    <td>{{ colony.name }}</td>
-                    <td>{{ colony.species }}</td>
-                    <td>{{ colony.country }}</td>
-                    <td>{{ colony.latitude }}</td>
-                    <td>{{ colony.longitude }}</td>
-                    <td>{{ colony.ed50_value }}</td>
-                </tr>
-            {% endfor %}
+                {% for colony in colonies %}
+                    <tr>
+                        <td>{{ colony.name }}</td>
+                        <td>{{ colony.species }}</td>
+                        <td>{{ colony.country }}</td>
+                        <td>{{ colony.latitude }}</td>
+                        <td>{{ colony.longitude }}</td>
+                        <td>{{ colony.ed50_value }}</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
 
@@ -90,30 +62,39 @@
         <h3>Observations</h3>
         <table class="observations-table">
             <thead>
-            <tr>
-                <th>BioSample Name</th>
-                <th>BioSample Collection Date</th>
-                <th>Experiment Name</th>
-                <th>Condition</th>
-                <th>Temperature</th>
-                <th>Timepoint</th>
-                <th>PAM</th>
-            </tr>
+                <tr>
+                    <th>BioSample Name</th>
+                    <th>BioSample Collection Date</th>
+                    <th>Experiment Name</th>
+                    <th>Condition</th>
+                    <th>Temperature</th>
+                    <th>Timepoint</th>
+                    <th>PAM</th>
+                    <th>Related projects</th>
+                </tr>
             </thead>
             <tbody>
-            {% for observation in observations %}
-                <tr>
-                    <td>{{ observation.biosample.name }}</td>
-                    <td>{{ observation.biosample.collection_date }}</td>
-                    <td>{{ observation.experiment.name }}</td>
-                    <td>{{ observation.condition }}</td>
-                    <td>{{ observation.temperature }}</td>
-                    <td>{{ observation.timepoint }}</td>
-                    <td>{{ observation.pam_value }}</td>
-                </tr>
-            {% endfor %}
+                {% for observation in observations %}
+                    <tr>
+                        <td>{{ observation.biosample.name }}</td>
+                        <td>{{ observation.biosample.collection_date }}</td>
+                        <td>{{ observation.experiment.name }}</td>
+                        <td>{{ observation.condition }}</td>
+                        <td>{{ observation.temperature }}</td>
+                        <td>{{ observation.timepoint }}</td>
+                        <td>{{ observation.pam_value }}</td>
+                        <td>
+                            <ul>
+                                {% for p in observation.biosample.projects.all %}
+                                    {% if p.name != project.name %}
+                                        <li>{{ p.name }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
-
 {% endblock %}

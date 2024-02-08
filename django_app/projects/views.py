@@ -1,6 +1,6 @@
 # projects/views.py
 from django.shortcuts import render, get_object_or_404
-from projects.models import BioSample, Colony, Experiment, Observation, Project
+from projects.models import BioSample, Colony, Experiment, Observation, Project, Publication
 
 
 def project_list(request):
@@ -9,8 +9,10 @@ def project_list(request):
                   {'projects': projects})
 
 
-def project_detail(request, project_id):
+from django.shortcuts import render
+from .models import Project, Observation
 
+def project_detail(request, project_id):
     # Get the project object
     project = Project.objects.get(id=project_id)
 
@@ -23,9 +25,13 @@ def project_detail(request, project_id):
     # Retrieve all colonies for the project's biosamples
     colonies = Colony.objects.filter(biosamples__observations__in=observations).distinct()
 
-    context = {'project': project,
-               'experiments': experiments,
-               'observations': observations,
-               'colonies': colonies}
+    context = {
+        'project': project,
+        'colonies': colonies,
+        'experiments': experiments,
+        'observations': observations,
+    }
 
     return render(request, 'projects/project_detail.html', context)
+
+

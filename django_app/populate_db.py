@@ -49,6 +49,7 @@ def create_instances(df, owner, use_pam):
 
             publication.biosamples.add(biosample)
             project.publications.add(publication)
+            project.biosamples.add(biosample)
         else:
             for temp in [30, 33, 36, 39]:
                 biosample, created = BioSample.objects.get_or_create(
@@ -72,6 +73,7 @@ def create_instances(df, owner, use_pam):
 
                 publication.biosamples.add(biosample)
                 project.publications.add(publication)
+                project.biosamples.add(biosample)
 
 
 def main():

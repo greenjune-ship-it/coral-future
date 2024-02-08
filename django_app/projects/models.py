@@ -70,6 +70,7 @@ class BioSample(models.Model):
     collection_date = models.DateField()
     colony = models.ForeignKey(Colony, on_delete=models.CASCADE,
                                related_name='biosamples')
+    projects = models.ManyToManyField('Project', related_name='biosamples')
 
     def __str__(self):
         return f"BioSample {self.id} {self.name} of Colony {self.colony.id}"

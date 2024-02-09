@@ -1,5 +1,5 @@
+from projects.models import BioSample, Colony, Observation, Project
 from rest_framework import serializers
-from projects.models import BioSample, Colony, Observation
 
 
 class BioSampleSerializer(serializers.ModelSerializer):
@@ -18,3 +18,9 @@ class ObservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Observation
         fields = '__all__'
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ['id', 'name', 'description']

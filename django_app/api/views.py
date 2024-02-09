@@ -1,13 +1,13 @@
 # api/views.py
+from api.serializers import BioSampleSerializer, ColonySerializer, \
+    ObservationSerializer, ProjectSerializer
+# Apps imports
+from projects.models import BioSample, Colony, Observation, Project, UserCart
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-# Apps imports
-from projects.models import BioSample, Colony, Observation, UserCart
-from api.serializers import BioSampleSerializer, ColonySerializer, \
-    ObservationSerializer
 
 
 class CheckAuthenticationApiView(APIView):
@@ -19,6 +19,17 @@ class CheckAuthenticationApiView(APIView):
         return Response({
             'authenticated': request.user.is_authenticated,
             'username': request.user.username})
+
+
+class ProjectsApiView(APIView):
+    """
+    This endpoint allows users to retrieve a list of available Projects.
+    """
+
+    def get(self, request):
+        projects = Project.objects.all()
+        serializer = ProjectSerializer(projects, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class BioSamplesApiView(APIView):

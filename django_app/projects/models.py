@@ -11,7 +11,7 @@ class Publication(models.Model):
     year = models.IntegerField()
     doi = models.CharField(max_length=100)
     biosamples = models.ManyToManyField('BioSample',
-                                          related_name='publications')
+                                        related_name='publications')
 
     def __str__(self):
         return f"Publication {self.id}, {self.doi}"
@@ -57,6 +57,12 @@ class Colony(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     ed50_value = models.FloatField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        # Ensure ed50_value is not None before rounding
+        if self.ed50_value is not None:
+            self.ed50_value = round(self.ed50_value, 2)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Colony {self.name} of {self.species} from {self.country} ({self.latitude}, {self.longitude})"

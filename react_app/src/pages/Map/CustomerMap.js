@@ -14,7 +14,7 @@ const CustomerMap = () => {
   return (
     <BioSamplesFilterProvider>
       <Container className="text-center mt-4">
-        <h1>BioSamples Explorer</h1>
+        <h1>Colonies Explorer</h1>
         <Row>
           <Col md={3}>
             <InputSidebar />

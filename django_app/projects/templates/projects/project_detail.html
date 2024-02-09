@@ -3,7 +3,35 @@
 {% block content %}
     {% include 'navbar.html' %}
 
-    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <style>
+        .project-details {
+            text-align: center;
+        }
+
+        table {
+            margin: 20px auto; /* Add margin to the table for better spacing */
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd; /* Add borders to cells for better visibility */
+        }
+
+        th {
+            background-color: #f2f2f2; /* Set a background color for the table header */
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 
     <div class="project-details">
         <h2>{{ project.name }} Details</h2>

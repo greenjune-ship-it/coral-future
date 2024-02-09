@@ -63,7 +63,7 @@ const Map = () => {
             />
           </BaseLayer>
         </LayersControl>
-        <Markers biosamples={filteredBioSamples} />
+        <Markers colonies={filteredBioSamples} />
         <style>
           {`
             .leaflet-control-layers-base label {

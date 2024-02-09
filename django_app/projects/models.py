@@ -28,6 +28,7 @@ class Project(models.Model):
                               related_name='projects')
     publications = models.ManyToManyField(Publication,
                                           related_name='projects')
+    biosamples = models.ManyToManyField('BioSample', related_name='projects')
 
     def __str__(self):
         return f"Project {self.name}"
@@ -56,7 +57,6 @@ class Colony(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     ed50_value = models.FloatField(null=True, blank=True)
-    carts = models.ManyToManyField('UserCart', related_name='colonies')
 
     def __str__(self):
         return f"Colony {self.name} of {self.species} from {self.country} ({self.latitude}, {self.longitude})"
@@ -70,7 +70,6 @@ class BioSample(models.Model):
     collection_date = models.DateField()
     colony = models.ForeignKey(Colony, on_delete=models.CASCADE,
                                related_name='biosamples')
-    projects = models.ManyToManyField('Project', related_name='biosamples')
 
     def __str__(self):
         return f"BioSample {self.id} {self.name} of Colony {self.colony.id}"
@@ -102,6 +101,7 @@ class Observation(models.Model):
 class UserCart(models.Model):
     owner = models.OneToOneField(CustomUser, on_delete=models.CASCADE,
                                  related_name='cart')
+    items = models.ManyToManyField('Colony', related_name='carts')
 
     def __str__(self):
         return f"UserCart of {self.owner.username}, {self.colonies.count()} colonies"

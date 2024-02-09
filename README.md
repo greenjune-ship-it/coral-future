@@ -31,29 +31,23 @@ CONTACT_EMAIL_ADDRESS=''
 
 ### Deploy
 
-From backup:
-
-```commandline
-bash deploy.sh
-```
-
 Up the project from scratch:
 
 ```commandline
-sudo docker compose up -d
+docker compose up -d
 
 ```
 
 Collect static files:
 
 ```commandline
-sudo docker compose exec django-app python manage.py collectstatic --noinput
+docker compose exec django-app python manage.py collectstatic --noinput
 ```
 
 Create superuser:
 
 ```commandline
-sudo docker compose exec django-app python manage.py createsuperuser
+docker compose exec django-app python manage.py createsuperuser
 ```
 
 Populate the database (let's say my superuser is `iakovyu1`.
@@ -61,7 +55,7 @@ Populate the database (let's say my superuser is `iakovyu1`.
 For complete datasets:
 
 ```commandline
-sudo docker compose exec django-app python populate_db.py \
+docker compose exec django-app python populate_db.py \
     --owner iakovyu1 \
     --csv_path static/datasheets/cbass_84.csv
 ```
@@ -69,7 +63,7 @@ sudo docker compose exec django-app python populate_db.py \
 For incomplete datasets, use `--no-pam` argument:
 
 ```commandline
-sudo docker compose exec django-app python populate_db.py \
+docker compose exec django-app python populate_db.py \
     --owner iakovyu1 \
     --csv_path static/datasheets/redsea_gradient_study.csv \
     --no-pam

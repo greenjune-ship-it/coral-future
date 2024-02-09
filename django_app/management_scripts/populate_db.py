@@ -1,16 +1,18 @@
 import argparse
 import logging
 import os
+import sys
 
 import django
 import pandas as pd
 
 # Set the Django settings module
+sys.path.append('/usr/src/app')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_app.settings')
 django.setup()
 
 # Import your models after setting up Django
-from management_scripts.create_objects import (
+from utils.create_objects import (
     create_biosample, create_colony, create_experiment, create_observation,
     create_project, create_publication
 )

@@ -1,14 +1,16 @@
 import logging
 import os
+import sys
 
 import django
 
 # Set the Django settings module
+sys.path.append('/usr/src/app')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_app.settings')
 django.setup()
 
 # Import your models after setting up Django
-from users.models import CustomUser
+from projects.models import BioSample, Project
 
 # Configure the logging
 logging.basicConfig(level=logging.INFO,
@@ -36,8 +38,23 @@ ICN = [
 
 
 def main():
-    pass
+    original_project = Project.objects.get(name='Voolstra et al. 2021')
+    related_project = Project.objects.get(name='Evensen et al. 2022')
+    original_publication = original_project.publications.first()
+    related_publication = related_project.publications.first()
 
+    biosamples = BioSample.objects.filter(name__in=AF + ICN)
+
+    related_project.biosamples.add(*biosamples)
+    logging.info(f'Link BioSamples from {original_project.name} to {related_project.name}')
+
+    related_publication.biosamples.add(*biosamples)
+    logging.info(f'Link BioSamples from {original_publication} to {related_publication}')
+
+    # Cross-link if publications
+    original_project.publications.add(related_publication)
+    related_project.publications.add(original_publication)
+    logging.info('Publications cross-link')
 
 if __name__ == "__main__":
     main()

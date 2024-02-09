@@ -17,7 +17,11 @@ function filterColonies(filters, colonies) {
   }
 
   if (filters.project && filters.project !== '') {
-    filteredColonies = filteredColonies.filter(colony => colony.project === filters.project);
+    // Filter colonies based on related projects
+    filteredColonies = filteredColonies.filter(colony => {
+      // Check if any of the colony's projects include the specified project name
+      return colony.projects.includes(filters.project);
+    });
   }
 
   return filteredColonies;

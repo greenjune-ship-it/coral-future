@@ -29,7 +29,8 @@ def parse_csv(csv_path):
 
 def create_instances(df, owner, use_pam):
     for _, row in df.iterrows():
-        project, created = create_project(owner, row['Project.name'])
+
+        project, created = create_project(owner, row['Project.name'], description='Datasheet cbass_84.csv' if use_pam else 'Datasheet redsea_gradient_study.csv')
         logging.info(f"Project: {project}, created: {created}")
 
         experiment, created = create_experiment(project, (row['Experiment.name'], row['Experiment.date']))

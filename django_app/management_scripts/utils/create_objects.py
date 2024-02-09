@@ -5,11 +5,11 @@ from projects.models import BioSample, Colony, Experiment, Observation, \
     Project, Publication
 
 
-def create_project(owner, project_key):
+def create_project(owner, project_key, description):
     return Project.objects.get_or_create(
         name=project_key,
         registration_date=datetime.now().date(),
-        description='Datasheet cbass_84.csv',
+        description=description,
         owner=owner)
 
 

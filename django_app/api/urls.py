@@ -1,7 +1,7 @@
 # api/urls.py
 from django.urls import path, include
 from api.views import CheckAuthenticationApiView, UserCartApiView
-from api.views import BioSamplesApiView, ColoniesApiView, ObservationsApiView
+from api.views import BioSamplesApiView, ColoniesApiView, ObservationsApiView, ProjectsApiView
 
 urlpatterns = [
     path('auth/', include([
@@ -12,6 +12,7 @@ urlpatterns = [
     path('public/', include([
         path('biosamples/', BioSamplesApiView.as_view()),
         path('colonies/', ColoniesApiView.as_view()),
-        path('observations/', ObservationsApiView.as_view())
+        path('observations/', ObservationsApiView.as_view()),
+        path('projects/', ProjectsApiView.as_view())
     ]))
 ]

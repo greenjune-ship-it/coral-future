@@ -6,22 +6,25 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-range-slider-input/dist/style.css';
 // Internal imports
 // Contexts
-import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext';
+import { SidebarFilterContext } from 'contexts/SidebarFilterContext';
 // Components
 import AddToCartButton from 'components/Button/AddToCart';
 
 const InputSidebar = () => {
 
   const [selectedSpecies, setSelectedSpecies] = useState('');
+  const [selectedProject, setSelectedProject] = useState('');
   const [selectedTemperatures, setSelectedTemperatures] = useState([30, 39]);
   const [selectedYears, setSelectedYears] = useState([2005, 2015]);
-  // Get all BioSamples from Context and define list of species
-  const { allBioSamples, setFilters } = useContext(BioSamplesFilterContext);
-  const speciesList = [...new Set(allBioSamples.map(allBioSamples => allBioSamples.species))].sort()
-  
+  // Get all Colonies and Projects from Context and define list of species
+  const { allColonies, allProjects, setFilters } = useContext(SidebarFilterContext);
+  const speciesList = [...new Set(allColonies.map(allColonies => allColonies.species))].sort()
+  const projectList = [...new Set(allProjects.map(allProjects => allProjects.name))].sort()
+
   const handleApplyFilters = () => {
     const newFilters = {
       species: selectedSpecies,
+      project: selectedProject,
       temperatures: selectedTemperatures,
       years: selectedYears
     };
@@ -33,6 +36,11 @@ const InputSidebar = () => {
   const handleSpeciesChange = (e) => {
     setSelectedSpecies(e.target.value);
     console.log('Selected species:', e.target.value);
+  };
+
+  const handleProjectChange = (e) => {
+    setSelectedProject(e.target.value);
+    console.log('Selected project:', e.target.value);
   };
 
   const handleTemperatureChange = (values) => {
@@ -57,6 +65,20 @@ const InputSidebar = () => {
                 <option value="">All species</option>
                 {speciesList.map((species, index) => (
                   <option key={index} value={species}>{species}</option>
+                ))}
+              </Form.Control>
+            </FormGroup>
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Col>
+            <FormGroup className="mb-2">
+              <Form.Label>Project</Form.Label>
+              <Form.Control as="select" value={selectedProject} onChange={handleProjectChange}>
+                <option value="">All projects</option>
+                {projectList.map((project, index) => (
+                  <option key={index} value={project}>{project}</option>
                 ))}
               </Form.Control>
             </FormGroup>

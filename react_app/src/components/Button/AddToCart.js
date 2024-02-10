@@ -3,18 +3,33 @@ import { Button, FormGroup, Alert, Row, Col } from 'react-bootstrap';
 // Internal imports
 // Contexts
 import { AuthContext } from 'contexts/AuthContext';
-import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext';
+import { SidebarFilterContext } from 'contexts/SidebarFilterContext';
 import { UserCartContext } from 'contexts/UserCartContext';
 
 const AddToCartButton = () => {
 
   const { authData } = useContext(AuthContext);
-  const { filteredBioSamples } = useContext(BioSamplesFilterContext);
+  const { filteredColonies } = useContext(SidebarFilterContext);
   const { addToUserCart } = useContext(UserCartContext);
 
   const [alertShow, setAlertShow] = useState(false);
   const [alertShowTime, setAlertShowTime] = useState(0);
   const [errorOccurred, setErrorOccurred] = useState(false);
+
+  const handleAddToCart = async () => {
+    setAlertShow(true);
+    try {
+      const backendUrl = process.env.REACT_APP_BACKEND_URL;
+      const coloniesIds = filteredColonies.map(colony => colony.id);
+      // Put data in Django DB
+      await addToUserCart(coloniesIds, backendUrl);
+      setErrorOccurred(false);
+      setAlertShowTime(Date.now());
+    } catch (error) {
+      console.error('Error adding colonies to cart:', error);
+      setErrorOccurred(true);
+    }
+  };
 
   useEffect(() => {
     // Disappearing alert only for success
@@ -24,23 +39,7 @@ const AddToCartButton = () => {
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [alertShow, alertShowTime]);
-
-
-  const handleAddToCart = async () => {
-    setAlertShow(true);
-    try {
-      const backendUrl = process.env.REACT_APP_BACKEND_URL;
-      const biosampleIds = filteredBioSamples.map(sample => sample.id);
-      // Put data in Django DB
-      await addToUserCart(biosampleIds, backendUrl);
-      setErrorOccurred(false);
-      setAlertShowTime(Date.now());
-    } catch (error) {
-      console.error('Error adding colonies to cart:', error);
-      setErrorOccurred(true);
-    }
-  };
+  }, [alertShow, alertShowTime, authData.authenticated, errorOccurred]);
 
   return (
     <div>

@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     # Installed pip packages
     'bootstrap5',
     'corsheaders',
+    'django_extensions',
     'leaflet',
     'rest_framework',
     # Custom apps

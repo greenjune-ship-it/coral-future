@@ -31,32 +31,45 @@ CONTACT_EMAIL_ADDRESS=''
 
 ### Deploy
 
-Up the project from scratch:
+#### Up the project from scratch
 
 ```commandline
 docker compose up -d
 
 ```
 
-Collect static files:
-
-```commandline
-docker compose exec django-app python manage.py collectstatic --noinput
-```
-
-Create superuser:
+#### Create superuser
 
 ```commandline
 docker compose exec django-app python manage.py createsuperuser
 ```
 
-Populate the database (let's say my superuser is `iakovyu1`.
+You can also prepare your `user_data.json` and populate your database automatically:
+
+```commandline
+[
+    {"username": "user1", "password": "password123", "first_name": "John", "last_name": "Doe", "email": "John_Doe@domain.com"},
+    {"username": "user2", "password": "password456", "first_name": "Jane", "last_name": "Smith", "email: "Jane_Smith@domain.com"},
+    {"username": "admin", "password": "adminpassword", "first_name": "Admin", "last_name": "User", "email": "Admin_User@domain.com"}
+]
+
+```
+And then run custom django-admin command:
+
+```commandline
+docker compose exec django-app python manage.py create_users path/to/user_data.json
+```
+Don't forget to replace the path to your `user_data.json` file.
+
+#### Populate the database 
+
+Let's say my superuser is `adm_iakovyu1`.
 
 For complete datasets:
 
 ```commandline
 docker compose exec django-app python populate_db.py \
-    --owner iakovyu1 \
+    --owner adm_iakovyu1 \
     --csv_path static/datasheets/cbass_84.csv
 ```
 
@@ -64,7 +77,7 @@ For incomplete datasets, use `--no-pam` argument:
 
 ```commandline
 docker compose exec django-app python populate_db.py \
-    --owner iakovyu1 \
+    --owner adm_iakovyu1 \
     --csv_path static/datasheets/redsea_gradient_study.csv \
     --no-pam
 ```

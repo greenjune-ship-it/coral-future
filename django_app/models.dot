@@ -1,6 +1,6 @@
 digraph model_graph {
   // Dotfile by Django-Extensions graph_models
-  // Created: 2024-02-08 14:33
+  // Created: 2024-02-10 02:33
   // Cli Options: -a -o models.dot
 
   fontname = "Roboto"
@@ -856,11 +856,11 @@ digraph model_graph {
   projects_models_Project -> projects_models_Publication
   [label=" publications (projects)"] [arrowhead=dot arrowtail=dot, dir=both];
 
+  projects_models_Project -> projects_models_BioSample
+  [label=" biosamples (projects)"] [arrowhead=dot arrowtail=dot, dir=both];
+
   projects_models_Experiment -> projects_models_Project
   [label=" project (experiments)"] [arrowhead=none, arrowtail=dot, dir=both];
-
-  projects_models_Colony -> projects_models_UserCart
-  [label=" carts (colonies)"] [arrowhead=dot arrowtail=dot, dir=both];
 
   projects_models_BioSample -> projects_models_Colony
   [label=" colony (biosamples)"] [arrowhead=none, arrowtail=dot, dir=both];
@@ -873,6 +873,9 @@ digraph model_graph {
 
   projects_models_UserCart -> users_models_CustomUser
   [label=" owner (cart)"] [arrowhead=none, arrowtail=none, dir=both];
+
+  projects_models_UserCart -> projects_models_Colony
+  [label=" items (carts)"] [arrowhead=dot arrowtail=dot, dir=both];
 
 
 }

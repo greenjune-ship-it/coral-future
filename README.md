@@ -63,21 +63,23 @@ Don't forget to replace the path to your `user_data.json` file.
 
 #### Populate the database 
 
-Let's say my superuser is `adm_iakovyu1`.
+Let's say my owner is `user1`.
 
 For complete datasets:
 
 ```commandline
-docker compose exec django-app python populate_db.py \
-    --owner adm_iakovyu1 \
+docker compose exec django-app python manage.py \
+  populate_db \
+    --owner user1
     --csv_path static/datasheets/cbass_84.csv
 ```
 
 For incomplete datasets, use `--no-pam` argument:
 
 ```commandline
-docker compose exec django-app python populate_db.py \
-    --owner adm_iakovyu1 \
+docker compose exec django-app python manage.py \
+  populate_db \
+    --owner user1 \
     --csv_path static/datasheets/redsea_gradient_study.csv \
     --no-pam
 ```
@@ -93,11 +95,5 @@ sudo docker compose exec database pg_dump -U $DB_USER --format=custom > backup.p
 Restore a database backup:
 
 ```commandline
-# Copy backup file first
-sudo docker cp backup.pgdump coral-future-database-1:/tmp
-# Enter container
-sudo docker compose exec database bash
-cd /tmp
-# Restore
 pg_restore --clean --dbname $DB_NAME -U $DB_USER backup.pgdump
 ```

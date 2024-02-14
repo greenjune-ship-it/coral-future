@@ -1,6 +1,6 @@
 // External imports
 import React, { useState, useContext } from 'react';
-import { Slider } from '@mui/material';
+import Slider from '@mui/material';
 import RangeSlider from 'react-range-slider-input';
 import { Form, FormGroup, Button, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -106,6 +106,7 @@ const InputSidebar = () => {
                 valueLabelDisplay="auto"
                 min={minEd50}
                 max={maxEd50}
+                step={0.01}
                 marks={[
                   {
                     value: minEd50,

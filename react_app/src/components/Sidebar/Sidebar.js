@@ -1,5 +1,6 @@
 // External imports
 import React, { useState, useContext } from 'react';
+import { Slider } from '@mui/material';
 import RangeSlider from 'react-range-slider-input';
 import { Form, FormGroup, Button, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,23 +11,33 @@ import { SidebarFilterContext } from 'contexts/SidebarFilterContext';
 // Components
 import AddToCartButton from 'components/Button/AddToCart';
 
+
 const InputSidebar = () => {
 
   const [selectedSpecies, setSelectedSpecies] = useState('');
   const [selectedProject, setSelectedProject] = useState('');
-  const [selectedTemperatures, setSelectedTemperatures] = useState([30, 39]);
-  const [selectedYears, setSelectedYears] = useState([2005, 2015]);
+  const [selectedDates, setSelectedDates] = useState([]);
   // Get all Colonies and Projects from Context and define list of species
-  const { allColonies, allProjects, setFilters } = useContext(SidebarFilterContext);
-  const speciesList = [...new Set(allColonies.map(allColonies => allColonies.species))].sort()
-  const projectList = [...new Set(allProjects.map(allProjects => allProjects.name))].sort()
+  const { allColonies, allBioSamples, allProjects, setFilters } = useContext(SidebarFilterContext);
+  const speciesList = [...new Set(allColonies.map(allColonies => allColonies.species))].sort();
+  const projectList = [...new Set(allProjects.map(allProjects => allProjects.name))].sort();
+  const collectionDateList = [...new Set(allBioSamples.map(biosample => biosample.collection_date))]
+    .map(dateString => new Date(dateString))
+    .sort((a, b) => a - b);
+
+  // For Slider borders
+  const ed50Values = allColonies.map(colony => colony.ed50_value);
+  const maxEd50 = Math.max(...ed50Values);
+  const minEd50 = Math.min(...ed50Values);
+
+  const [selectedTemperatures, setSelectedTemperatures] = useState([minEd50, maxEd50]);
 
   const handleApplyFilters = () => {
     const newFilters = {
       species: selectedSpecies,
       project: selectedProject,
       temperatures: selectedTemperatures,
-      years: selectedYears
+      years: selectedDates
     };
     // Log filters before applying changes
     console.log('Selected filters:', newFilters);
@@ -43,14 +54,14 @@ const InputSidebar = () => {
     console.log('Selected project:', e.target.value);
   };
 
-  const handleTemperatureChange = (values) => {
-    setSelectedTemperatures(values);
-    console.log('Selected temperatures:', values);
+  const handleTemperatureChange = (event, newValues) => {
+    setSelectedTemperatures(newValues);
+    console.log('Selected temperatures:', newValues);
   };
 
-  const handleYearChange = (values) => {
-    setSelectedYears(values);
-    console.log('Selected years:', values);
+  const handleDatesChange = (values) => {
+    setSelectedDates(values);
+    console.log('Selected dates:', values);
   };
 
   return (
@@ -88,12 +99,23 @@ const InputSidebar = () => {
         <Row className="mb-3">
           <Col>
             <FormGroup className="mb-2">
-              <Form.Label>Temperature</Form.Label>
-              <RangeSlider
-                min={0}
-                max={100}
-                defaultValue={selectedTemperatures}
-                onInput={handleTemperatureChange}
+              <Form.Label>ED50 Values</Form.Label>
+              <Slider
+                value={selectedTemperatures}
+                onChange={handleTemperatureChange}
+                valueLabelDisplay="auto"
+                min={minEd50}
+                max={maxEd50}
+                marks={[
+                  {
+                    value: minEd50,
+                    label: `${minEd50}°C`
+                  },
+                  {
+                    value: maxEd50,
+                    label: `${maxEd50}°C`
+                  }
+                ]}
               />
             </FormGroup>
           </Col>
@@ -102,12 +124,12 @@ const InputSidebar = () => {
         <Row className="mb-3">
           <Col>
             <FormGroup className="mb-2">
-              <Form.Label>Year</Form.Label>
+              <Form.Label>BioSample Collection Date</Form.Label>
               <RangeSlider
-                min={2000}
-                max={2022}
-                defaultValue={selectedYears}
-                onInput={handleYearChange}
+                min={collectionDateList[0]}
+                max={collectionDateList[collectionDateList.length - 1]}
+                defaultValue={selectedTemperatures}
+                onInput={handleDatesChange}
               />
             </FormGroup>
           </Col>

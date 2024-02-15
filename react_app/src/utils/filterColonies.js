@@ -1,16 +1,15 @@
 function filterColonies(filters, colonies) {
   // Make a copy of colonies array
   let filteredColonies = colonies.slice();
-  console.log('AAAAAAAAAAAAAAAA')
 
-  // Case 1: No species and no project - return all colonies
+  // No species and no project - return all colonies
   if (!filters.species && !filters.project) {
-    return colonies;
+    filteredColonies = colonies;
   }
 
-  // Case 2: Both species and project filters are empty - return all colonies
+  // Both species and project filters are empty - return all colonies
   if (filters.species === '' && filters.project === '') {
-    return colonies;
+    filteredColonies = colonies;
   }
 
   if (filters.species && filters.species !== '') {
@@ -25,13 +24,11 @@ function filterColonies(filters, colonies) {
     });
   }
 
-  console.log(filters.temperatures)
-  if (filters.temperatures) {
+  if (filters.temperatures && !filters.temperatures.includes(Infinity) && !filters.temperatures.includes(-Infinity)) {
     // Filter colonies based on temperature
     filteredColonies = filteredColonies.filter(colony => {
       // Check if the colony's temperature is within the specified range
-      console.log(colony.ed50_value >= filters.temperatures.min && colony.ed50_value <= filters.temperaturess.max)
-      return colony.ed50_value >= filters.temperatures.min && colony.ed50_value <= filters.temperaturess.max;
+      return colony.ed50_value >= filters.temperatures[0] && colony.ed50_value <= filters.temperatures[1];
     });
   }
 

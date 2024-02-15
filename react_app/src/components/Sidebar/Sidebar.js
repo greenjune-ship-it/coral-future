@@ -1,8 +1,7 @@
 // External imports
 import React, { useState, useContext } from 'react';
-import Slider from '@mui/material';
-import RangeSlider from 'react-range-slider-input';
-import { Form, FormGroup, Button, Row, Col } from 'react-bootstrap';
+import { Button, ButtonGroup, Container, Form, FormGroup, Row, Col } from 'react-bootstrap';
+import { Box, Slider, Typography } from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-range-slider-input/dist/style.css';
 // Internal imports
@@ -42,6 +41,14 @@ const InputSidebar = () => {
     // Log filters before applying changes
     console.log('Selected filters:', newFilters);
     setFilters(newFilters);
+  };
+
+  const handleResetFilters = () => {
+    setSelectedSpecies('');
+    setSelectedProject('');
+    setSelectedTemperatures([minEd50, maxEd50]);
+    setSelectedDates([]);
+    setFilters({}); // Reset filters
   };
 
   const handleSpeciesChange = (e) => {
@@ -100,49 +107,65 @@ const InputSidebar = () => {
           <Col>
             <FormGroup className="mb-2">
               <Form.Label>ED50 Values</Form.Label>
-              <Slider
-                value={selectedTemperatures}
-                onChange={handleTemperatureChange}
-                valueLabelDisplay="auto"
-                min={minEd50}
-                max={maxEd50}
-                step={0.01}
-                marks={[
-                  {
-                    value: minEd50,
-                    label: `${minEd50}°C`
-                  },
-                  {
-                    value: maxEd50,
-                    label: `${maxEd50}°C`
-                  }
-                ]}
-              />
+              <Container>
+                <Slider
+                  value={selectedTemperatures}
+                  onChange={handleTemperatureChange}
+                  valueLabelDisplay="auto"
+                  min={minEd50}
+                  max={maxEd50}
+                  step={0.01}
+                  sx={{
+                    '& .MuiSlider-thumb': {
+                      color: '#007bff', // Change thumb color
+                    },
+                    '& .MuiSlider-track': {
+                      height: 8,
+                      backgroundColor: '#007bff', // Change track color
+                    },
+                    '& .MuiSlider-rail': {
+                      height: 6,
+                      backgroundColor: '#ddd', // Change rail color
+                    },
+                    '& .MuiSlider-mark': {
+                      backgroundColor: '#ddd', // Change rail color
+                    },
+                    '& .MuiSlider-markLabel': {
+                      color: '#007bff', // Change mark label color
+                    },
+                  }}
+                />
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography
+                    variant="body2"
+                    onClick={() => setSelectedTemperatures([minEd50, selectedTemperatures[1]])}
+                    sx={{ cursor: 'pointer' }}
+                  >
+                    {minEd50}°C
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    onClick={() => setSelectedTemperatures([selectedTemperatures[0], maxEd50])}
+                    sx={{ cursor: 'pointer' }}
+                  >
+                    {maxEd50}°C
+                  </Typography>
+                </Box>
+              </Container>
             </FormGroup>
           </Col>
         </Row>
 
         <Row className="mb-3">
-          <Col>
-            <FormGroup className="mb-2">
-              <Form.Label>BioSample Collection Date</Form.Label>
-              <RangeSlider
-                min={collectionDateList[0]}
-                max={collectionDateList[collectionDateList.length - 1]}
-                defaultValue={selectedTemperatures}
-                onInput={handleDatesChange}
-              />
-            </FormGroup>
+          <Col xs={9} className="pe-0">
+            <Button variant="primary" onClick={handleApplyFilters} style={{ width: '100%'}}>
+              Apply Filters
+            </Button>
           </Col>
-        </Row>
-
-        <Row className="mb-3">
-          <Col>
-            <FormGroup className="mb-2">
-              <Button variant="primary" onClick={handleApplyFilters} style={{ width: '100%' }} >
-                Apply Filters
-              </Button>
-            </FormGroup>
+          <Col xs={3} className="ps-1">
+            <Button variant="primary" onClick={handleResetFilters} style={{ width: '100%'}}>
+              <i className="bi bi-trash3"></i>
+            </Button>
           </Col>
         </Row>
 

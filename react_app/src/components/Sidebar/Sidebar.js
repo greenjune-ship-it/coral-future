@@ -82,7 +82,7 @@ const InputSidebar = () => {
   };
 
   return (
-    <div className="sidebar" style={{ backgroundColor: '#f4f4f4', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', borderRadius: '8px', height: '600px' }}>
+    <div className="sidebar" style={{ backgroundColor: '#f4f4f4', padding: '20px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', borderRadius: '8px', height: '700px' }}>
       <h2 style={{ marginBottom: '20px' }}>Filters</h2>
       <Form>
         <Row className="mb-3">

@@ -69,11 +69,13 @@ const InputSidebar = () => {
     console.log('Selected project:', e.target.value);
   };
 
+  // Event handler for ED50 slider
   const handleEd50TemperatureChange = (event, newValues) => {
     setSelectedEd50Temperatures(newValues);
     console.log('Selected ED50 temperatures:', newValues);
   };
 
+  // Event handler for Thermal Tolerance slider
   const handleThermalToleranceTemperatureChange = (event, newValues) => {
     setSelectedThermalToleranceTemperatures(newValues);
     console.log('Selected thermal tolerance temperatures:', newValues);
@@ -176,6 +178,7 @@ const InputSidebar = () => {
                   min={minThermalTolerance}
                   max={maxThermalTolerance}
                   step={0.01}
+                  marks={[{ value: 7.5, label: '7.5°C' }]}
                   sx={{
                     '& .MuiSlider-thumb': {
                       color: '#007bff', // Change thumb color

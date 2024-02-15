@@ -19,6 +19,7 @@ const Markers = ({ colonies }) => {
                 <p>Species: {colony.species}</p>
                 <p>Coordinates: {colony.latitude} {colony.longitude}</p>
                 <p>ED50: {colony.ed50_value}</p>
+                <p>Thermal Tolerance {colony.thermal_tolerance}</p>
               </div>
             </Popup>
           </Marker>

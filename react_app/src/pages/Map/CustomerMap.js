@@ -19,7 +19,7 @@ const CustomerMap = () => {
           <Col md={3}>
             <InputSidebar />
           </Col>
-          <Col md={9} style={{ height: '600px' }}>
+          <Col md={9} style={{ height: '700px' }}>
             <Map />
           </Col>
         </Row>

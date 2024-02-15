@@ -1,6 +1,6 @@
 // External imports
 import React, { useState, useContext } from 'react';
-import { Button, ButtonGroup, Container, Form, FormGroup, Row, Col } from 'react-bootstrap';
+import { Button, Container, Form, FormGroup, Row, Col } from 'react-bootstrap';
 import { Box, Slider, Typography } from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-range-slider-input/dist/style.css';

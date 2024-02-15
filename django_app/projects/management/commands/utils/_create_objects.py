@@ -6,9 +6,15 @@ from projects.models import BioSample, Colony, Experiment, Observation, \
 
 
 def create_project(owner, project_key, description):
+    if project_key == 'Voolstra et al. 2021':
+        registration_date = '2023-12-31'.date()
+    elif project_key == 'Evensen et al. 2022':
+        registration_date = '2024-02-01'.date
+    else:
+        registration_date= datetime.now().date()
     return Project.objects.get_or_create(
         name=project_key,
-        registration_date=datetime.now().date(),
+        registration_date=registration_date,
         description=description,
         owner=owner)
 

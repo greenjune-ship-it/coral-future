@@ -70,6 +70,7 @@
                     <th>Latitude</th>
                     <th>Longitude</th>
                     <th>Colony ED50</th>
+                    <th>Colony Thermal Tolerance</th>
                 </tr>
             </thead>
             <tbody>
@@ -81,6 +82,7 @@
                         <td>{{ colony.latitude }}</td>
                         <td>{{ colony.longitude }}</td>
                         <td>{{ colony.ed50_value }}</td>
+                        <td>{{ colony.thermal_tolerance }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

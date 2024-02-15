@@ -24,18 +24,25 @@ const InputSidebar = () => {
     .map(dateString => new Date(dateString))
     .sort((a, b) => a - b);
 
-  // For Slider borders
+  // For Slider ED50 borders
   const ed50Values = allColonies.map(colony => colony.ed50_value);
   const maxEd50 = Math.max(...ed50Values);
   const minEd50 = Math.min(...ed50Values);
 
-  const [selectedTemperatures, setSelectedTemperatures] = useState([minEd50, maxEd50]);
+  // For Slider Thermal Tolerance borders
+  const thermalToleranceValues = allColonies.map(colony => colony.thermal_tolerance);
+  const maxThermalTolerance = Math.max(...thermalToleranceValues);
+  const minThermalTolerance = Math.min(...thermalToleranceValues);
+
+  const [selectedEd50Temperatures, setSelectedEd50Temperatures] = useState([minEd50, maxEd50]);
+  const [selectedThermalToleranceTemperatures, setSelectedThermalToleranceTemperatures] = useState([minThermalTolerance, maxThermalTolerance]);
 
   const handleApplyFilters = () => {
     const newFilters = {
       species: selectedSpecies,
       project: selectedProject,
-      temperatures: selectedTemperatures,
+      ed50Temperatures: selectedEd50Temperatures,
+      thermalToleranceTemperatures: selectedThermalToleranceTemperatures,
       years: selectedDates
     };
     // Log filters before applying changes
@@ -46,7 +53,8 @@ const InputSidebar = () => {
   const handleResetFilters = () => {
     setSelectedSpecies('');
     setSelectedProject('');
-    setSelectedTemperatures([minEd50, maxEd50]);
+    setSelectedEd50Temperatures([minEd50, maxEd50]);
+    setSelectedThermalToleranceTemperatures([minThermalTolerance, maxThermalTolerance]);
     setSelectedDates([]);
     setFilters({}); // Reset filters
   };
@@ -61,14 +69,14 @@ const InputSidebar = () => {
     console.log('Selected project:', e.target.value);
   };
 
-  const handleTemperatureChange = (event, newValues) => {
-    setSelectedTemperatures(newValues);
-    console.log('Selected temperatures:', newValues);
+  const handleEd50TemperatureChange = (event, newValues) => {
+    setSelectedEd50Temperatures(newValues);
+    console.log('Selected ED50 temperatures:', newValues);
   };
 
-  const handleDatesChange = (values) => {
-    setSelectedDates(values);
-    console.log('Selected dates:', values);
+  const handleThermalToleranceTemperatureChange = (event, newValues) => {
+    setSelectedThermalToleranceTemperatures(newValues);
+    console.log('Selected thermal tolerance temperatures:', newValues);
   };
 
   return (
@@ -109,8 +117,8 @@ const InputSidebar = () => {
               <Form.Label>ED50 Values</Form.Label>
               <Container>
                 <Slider
-                  value={selectedTemperatures}
-                  onChange={handleTemperatureChange}
+                  value={selectedEd50Temperatures}
+                  onChange={handleEd50TemperatureChange}
                   valueLabelDisplay="auto"
                   min={minEd50}
                   max={maxEd50}
@@ -138,14 +146,14 @@ const InputSidebar = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Typography
                     variant="body2"
-                    onClick={() => setSelectedTemperatures([minEd50, selectedTemperatures[1]])}
+                    onClick={() => setSelectedEd50Temperatures([minEd50, selectedEd50Temperatures[1]])}
                     sx={{ cursor: 'pointer' }}
                   >
                     {minEd50}°C
                   </Typography>
                   <Typography
                     variant="body2"
-                    onClick={() => setSelectedTemperatures([selectedTemperatures[0], maxEd50])}
+                    onClick={() => setSelectedEd50Temperatures([selectedEd50Temperatures[0], maxEd50])}
                     sx={{ cursor: 'pointer' }}
                   >
                     {maxEd50}°C
@@ -157,13 +165,66 @@ const InputSidebar = () => {
         </Row>
 
         <Row className="mb-3">
+          <Col>
+            <FormGroup className="mb-2">
+              <Form.Label>Thermal Tolerance</Form.Label>
+              <Container>
+                <Slider
+                  value={selectedThermalToleranceTemperatures}
+                  onChange={handleThermalToleranceTemperatureChange}
+                  valueLabelDisplay="auto"
+                  min={minThermalTolerance}
+                  max={maxThermalTolerance}
+                  step={0.01}
+                  sx={{
+                    '& .MuiSlider-thumb': {
+                      color: '#007bff', // Change thumb color
+                    },
+                    '& .MuiSlider-track': {
+                      height: 8,
+                      backgroundColor: '#007bff', // Change track color
+                    },
+                    '& .MuiSlider-rail': {
+                      height: 6,
+                      backgroundColor: '#ddd', // Change rail color
+                    },
+                    '& .MuiSlider-mark': {
+                      backgroundColor: '#ddd', // Change rail color
+                    },
+                    '& .MuiSlider-markLabel': {
+                      color: '#007bff', // Change mark label color
+                    },
+                  }}
+                />
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography
+                    variant="body2"
+                    onClick={() => setSelectedThermalToleranceTemperatures([minThermalTolerance, selectedThermalToleranceTemperatures[1]])}
+                    sx={{ cursor: 'pointer' }}
+                  >
+                    {minThermalTolerance}°C
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    onClick={() => setSelectedThermalToleranceTemperatures([selectedThermalToleranceTemperatures[0], maxThermalTolerance])}
+                    sx={{ cursor: 'pointer' }}
+                  >
+                    {maxThermalTolerance}°C
+                  </Typography>
+                </Box>
+              </Container>
+            </FormGroup>
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
           <Col xs={9} className="pe-0">
-            <Button variant="primary" onClick={handleApplyFilters} style={{ width: '100%'}}>
+            <Button variant="primary" onClick={handleApplyFilters} style={{ width: '100%' }}>
               Apply Filters
             </Button>
           </Col>
           <Col xs={3} className="ps-1">
-            <Button variant="primary" onClick={handleResetFilters} style={{ width: '100%'}}>
+            <Button variant="primary" onClick={handleResetFilters} style={{ width: '100%' }}>
               <i className="bi bi-trash3"></i>
             </Button>
           </Col>

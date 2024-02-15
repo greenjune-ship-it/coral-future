@@ -24,11 +24,19 @@ function filterColonies(filters, colonies) {
     });
   }
 
-  if (filters.temperatures && !filters.temperatures.includes(Infinity) && !filters.temperatures.includes(-Infinity)) {
-    // Filter colonies based on temperature
+  if (filters.ed50Temperatures && !filters.ed50Temperatures.includes(Infinity) && !filters.ed50Temperatures.includes(-Infinity)) {
+    // Filter colonies based on ED50 temperature
     filteredColonies = filteredColonies.filter(colony => {
-      // Check if the colony's temperature is within the specified range
-      return colony.ed50_value >= filters.temperatures[0] && colony.ed50_value <= filters.temperatures[1];
+      // Check if the colony's ED50 temperature is within the specified range
+      return colony.ed50_value >= filters.ed50Temperatures[0] && colony.ed50_value <= filters.ed50Temperatures[1];
+    });
+  }
+
+  if (filters.thermalToleranceTemperatures && !filters.thermalToleranceTemperatures.includes(Infinity) && !filters.thermalToleranceTemperatures.includes(-Infinity)) {
+    // Filter colonies based on Thermal Tolerance temperature
+    filteredColonies = filteredColonies.filter(colony => {
+      // Check if the colony's Thermal Tolerance temperature is within the specified range
+      return colony.thermal_tolerance >= filters.thermalToleranceTemperatures[0] && colony.thermal_tolerance <= filters.thermalToleranceTemperatures[1];
     });
   }
 

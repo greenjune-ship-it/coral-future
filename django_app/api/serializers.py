@@ -20,7 +20,7 @@ class ColonySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Colony
-        fields = ['id', 'name', 'species', 'country', 'latitude', 'longitude', 'ed50_value', 'projects']
+        fields = ['id', 'name', 'species', 'country', 'latitude', 'longitude', 'ed50_value', 'thermal_tolerance', 'projects']
 
 class ObservationSerializer(serializers.ModelSerializer):
     class Meta:

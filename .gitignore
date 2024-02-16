@@ -10,4 +10,6 @@ pg_dump.sql
 backup.pgdump
 
 .~*
+
+django_app/user_data.json
 /django_app/users/management/commands/user_data.json

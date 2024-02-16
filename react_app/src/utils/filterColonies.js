@@ -2,14 +2,14 @@ function filterColonies(filters, colonies) {
   // Make a copy of colonies array
   let filteredColonies = colonies.slice();
 
-  // Case 1: No species and no project - return all colonies
+  // No species and no project - return all colonies
   if (!filters.species && !filters.project) {
-    return colonies;
+    filteredColonies = colonies;
   }
 
-  // Case 2: Both species and project filters are empty - return all colonies
+  // Both species and project filters are empty - return all colonies
   if (filters.species === '' && filters.project === '') {
-    return colonies;
+    filteredColonies = colonies;
   }
 
   if (filters.species && filters.species !== '') {
@@ -21,6 +21,22 @@ function filterColonies(filters, colonies) {
     filteredColonies = filteredColonies.filter(colony => {
       // Check if any of the colony's projects include the specified project name
       return colony.projects.includes(filters.project);
+    });
+  }
+
+  if (filters.ed50Temperatures && !filters.ed50Temperatures.includes(Infinity) && !filters.ed50Temperatures.includes(-Infinity)) {
+    // Filter colonies based on ED50 temperature
+    filteredColonies = filteredColonies.filter(colony => {
+      // Check if the colony's ED50 temperature is within the specified range
+      return colony.ed50_value >= filters.ed50Temperatures[0] && colony.ed50_value <= filters.ed50Temperatures[1];
+    });
+  }
+
+  if (filters.thermalToleranceTemperatures && !filters.thermalToleranceTemperatures.includes(Infinity) && !filters.thermalToleranceTemperatures.includes(-Infinity)) {
+    // Filter colonies based on Thermal Tolerance temperature
+    filteredColonies = filteredColonies.filter(colony => {
+      // Check if the colony's Thermal Tolerance temperature is within the specified range
+      return colony.thermal_tolerance >= filters.thermalToleranceTemperatures[0] && colony.thermal_tolerance <= filters.thermalToleranceTemperatures[1];
     });
   }
 

@@ -57,11 +57,18 @@ class Colony(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     ed50_value = models.FloatField(null=True, blank=True)
+    thermal_tolerance = models.FloatField(null=True, blank=True)
+    # Internal attribute
+    _sst_clim_mmm = models.FloatField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # Ensure ed50_value is not None before rounding
         if self.ed50_value is not None:
             self.ed50_value = round(self.ed50_value, 2)
+        if self._sst_clim_mmm is not None:
+            self._sst_clim_mmm = round(self._sst_clim_mmm, 2)
+        if self.ed50_value is not None and self._sst_clim_mmm is not None:
+            self.thermal_tolerance = round(self.ed50_value - self._sst_clim_mmm, 2)
         super().save(*args, **kwargs)
 
     def __str__(self):

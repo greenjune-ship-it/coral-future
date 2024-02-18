@@ -1,25 +1,37 @@
 # projects/views.py
 from django.shortcuts import render, get_object_or_404
-from projects.models import Project, Experiment, BioSample, Observation
+from projects.models import BioSample, Colony, Experiment, Observation, Project, Publication
 
 
-# @login_required
 def project_list(request):
-    projects = Project.objects.all()
+    projects = Project.objects.prefetch_related('publications')
     return render(request, 'projects/project_list.html',
                   {'projects': projects})
 
 
-# @login_required
+from django.shortcuts import render
+from .models import Project, Observation
+
 def project_detail(request, project_id):
-    project = get_object_or_404(Project, pk=project_id)
+    # Get the project object
+    project = Project.objects.get(id=project_id)
 
-    experiments = Experiment.objects.filter(project=project)
-    biosamples = BioSample.objects.filter(project=project)
-    observations = Observation.objects.filter(biosample__project=project)
+    # Retrieve all experiments for the project
+    experiments = project.experiments.all()
 
-    context = {'project': project,
-               'experiments': experiments,
-               'biosamples': biosamples,
-               'observations': observations}
+    # Retrieve all observations for the project's experiments
+    observations = Observation.objects.filter(experiment__in=experiments)
+
+    # Retrieve all colonies for the project's biosamples
+    colonies = Colony.objects.filter(biosamples__observations__in=observations).distinct()
+
+    context = {
+        'project': project,
+        'colonies': colonies,
+        'experiments': experiments,
+        'observations': observations,
+    }
+
     return render(request, 'projects/project_detail.html', context)
+
+

@@ -7,11 +7,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import AuthContextProvider from 'contexts/AuthContext'
 import UserCartContextProvider from 'contexts/UserCartContext';
 // Pages
-import Map from 'components/Map/Map';
+import CustomerCart from 'pages/Cart/CustomerCart';
+import CustomerMap from 'pages/Map/CustomerMap';
 // Components
 import NavigationBar from 'components/Navbar/Navbar';
-import CustomerCart from 'pages/Map/CustomerCart';
-import CustomerMap from 'pages/Map/CustomerMap';
+
 
 const App = () => {
 

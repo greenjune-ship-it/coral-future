@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
 // Contexts
-import BioSamplesFilterProvider from 'contexts/BioSamplesFilterContext';
+import SidebarFilterProvider from 'contexts/SidebarFilterContext';
 // Components
 import InputSidebar from 'components/Sidebar/Sidebar';
 import Map from 'components/Map/Map'
@@ -12,19 +12,19 @@ import Map from 'components/Map/Map'
 const CustomerMap = () => {
 
   return (
-    <BioSamplesFilterProvider>
+    <SidebarFilterProvider>
       <Container className="text-center mt-4">
-        <h1>BioSamples Explorer</h1>
+        <h1>Colonies Explorer</h1>
         <Row>
           <Col md={3}>
             <InputSidebar />
           </Col>
-          <Col md={9} style={{ height: '600px' }}>
+          <Col md={9} style={{ height: '700px' }}>
             <Map />
           </Col>
         </Row>
       </Container>
-    </BioSamplesFilterProvider>
+    </SidebarFilterProvider>
   )
 };
 

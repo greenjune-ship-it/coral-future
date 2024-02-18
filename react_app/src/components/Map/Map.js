@@ -5,9 +5,9 @@ import { MapContainer, TileLayer, LayersControl, useMap } from 'react-leaflet';
 import { Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Internal imports
-import { BioSamplesFilterContext } from 'contexts/BioSamplesFilterContext'
+import { SidebarFilterContext } from 'contexts/SidebarFilterContext'
 import Markers from 'components/Markers/Markers';
-import filterBioSamples from 'utils/filterBioSamples';
+import filterColonies from 'utils/filterColonies';
 
 
 // To adjust map center and zoom to selection
@@ -24,31 +24,31 @@ const ChangeView = ({ markers }) => {
 
 const Map = () => {
   const { BaseLayer } = LayersControl;
-  const { allBioSamples, filters, filteredBioSamples, setFilteredBioSamples } = useContext(BioSamplesFilterContext);
+  const { allColonies, filters, filteredColonies, setFilteredColonies } = useContext(SidebarFilterContext);
   const [mapCenter, setMapCenter] = useState(null);
   
   useEffect(() => {
-    if (allBioSamples && allBioSamples.length > 0) {
-      let dataToSet = allBioSamples;
+    if (allColonies && allColonies.length > 0) {
+      let dataToSet = allColonies;
 
       // Only apply the filter if filters are set
       if (filters && Object.keys(filters).length > 0) {
-        dataToSet = filterBioSamples(filters, allBioSamples);
+        dataToSet = filterColonies(filters, allColonies);
       }
       // Recalculate map center based on selection
       const avgLat = dataToSet.reduce((sum, marker) => sum + marker.latitude, 0) / dataToSet.length;
       const avgLng = dataToSet.reduce((sum, marker) => sum + marker.longitude, 0) / dataToSet.length;
 
       setMapCenter([avgLat, avgLng]);
-      setFilteredBioSamples(dataToSet);
+      setFilteredColonies(dataToSet);
     }
-  }, [filters, allBioSamples]);
+  }, [filters, allColonies, setFilteredColonies]);
 
 
   return (
     mapCenter ? (
       <MapContainer center={mapCenter} zoom={3} style={{ height: '100%', minHeight: '100%', width: '100%' }}>
-        <ChangeView markers={filteredBioSamples} />
+        <ChangeView markers={filteredColonies} />
         <LayersControl position="topright">
         <BaseLayer checked name="OpenStreetMap">
             <TileLayer
@@ -63,7 +63,7 @@ const Map = () => {
             />
           </BaseLayer>
         </LayersControl>
-        <Markers biosamples={filteredBioSamples} />
+        <Markers colonies={filteredColonies} />
         <style>
           {`
             .leaflet-control-layers-base label {

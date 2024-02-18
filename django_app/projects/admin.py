@@ -1,37 +1,47 @@
+# projects/admin.py
 from django.contrib import admin
-from projects.models import Project, BioSample, Experiment, Observation, Publication
+from projects.models import Project, Experiment, Colony, BioSample, \
+    Observation, Publication, UserCart
 
 
-class BioSampleInline(admin.TabularInline):
-    model = BioSample
-    extra = 1
-
-
-class ExperimentInline(admin.TabularInline):
-    model = Experiment
-    extra = 1
-
-
-class ObservationInline(admin.TabularInline):
-    model = Observation
-    extra = 1
-
-
-class PublicationInline(admin.TabularInline):
-    model = Publication
-    extra = 1
-
-
+@admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    inlines = [BioSampleInline, ExperimentInline, PublicationInline]
+    list_display = ('name', 'registration_date', 'owner')
+    search_fields = ('name', 'owner__username')
 
 
+@admin.register(Experiment)
+class ExperimentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'project', 'date')
+    search_fields = ('name', 'project__name')
+
+
+@admin.register(Colony)
+class ColonyAdmin(admin.ModelAdmin):
+    list_display = ('name', 'species', 'country', 'latitude', 'longitude')
+    search_fields = ('name', 'species', 'country')
+
+
+@admin.register(BioSample)
 class BioSampleAdmin(admin.ModelAdmin):
-    inlines = [ObservationInline]
+    list_display = ('name', 'collection_date', 'colony')
+    search_fields = ('name', 'colony__name')
 
 
-admin.site.register(Project, ProjectAdmin)
-admin.site.register(BioSample, BioSampleAdmin)
-admin.site.register(Experiment)
-admin.site.register(Observation)
-admin.site.register(Publication)
+@admin.register(Observation)
+class ObservationAdmin(admin.ModelAdmin):
+    list_display = (
+        'experiment', 'biosample', 'condition', 'temperature', 'timepoint',
+        'pam_value')
+    search_fields = ('experiment__name', 'biosample__name')
+
+
+@admin.register(Publication)
+class PublicationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'year', 'doi')
+    search_fields = ('title', 'doi')
+
+
+@admin.register(UserCart)
+class UserCartAdmin(admin.ModelAdmin):
+    list_display = ('owner',)

@@ -1,18 +1,12 @@
 #!/bin/bash
 
-source .env
-
 docker compose up -d
 
-docker compose pause django-app
+docker compose exec django-app python manage.py create_users user_data.json
 
-docker compose cp backup.pgdump database:backup.pgdump
+docker compose exec django-app python manage.py populate_db --owner voolsch1 --csv_path static/datasheets/cbass_84.csv
+docker compose exec django-app python manage.py populate_db --owner voolsch1 --csv_path static/datasheets/redsea_gradient_study.csv --no-pam
 
-echo "Drop the database and restore from backup"
+docker compose exec django-app python manage.py link_biosamples
 
-docker compose exec database \
-  pg_restore --clean --dbname $DB_NAME -U $DB_USER backup.pgdump
-
-echo "Done!"
-
-docker compose unpause django-app
+docker compose exec django-app python manage.py assign_mmm

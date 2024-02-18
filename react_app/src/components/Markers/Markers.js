@@ -6,17 +6,20 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 
-const Markers = ({ biosamples }) => {
+const Markers = ({ colonies }) => {
   return (
     <LayerGroup>
       <MarkerClusterGroup>
-        {biosamples && Array.isArray(biosamples) && biosamples.map(biosample => (
-          <Marker key={biosample.id} position={[biosample.latitude, biosample.longitude]}>
+        {colonies && Array.isArray(colonies) && colonies.map(colony => (
+          <Marker key={colony.id} position={[colony.latitude, colony.longitude]}>
             <Popup>
               <div>
-                <p>ID: {biosample.id}</p>
-                <p>Species: {biosample.species}</p>
-                <p>Collection Date: {biosample.collection_date}</p>
+                <p>ID: {colony.id}</p>
+                <p>Name: {colony.name}</p>
+                <p>Species: {colony.species}</p>
+                <p>Coordinates: {colony.latitude} {colony.longitude}</p>
+                <p>ED50: {colony.ed50_value}</p>
+                <p>Thermal Tolerance {colony.thermal_tolerance}</p>
               </div>
             </Popup>
           </Marker>

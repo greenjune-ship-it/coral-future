@@ -11,19 +11,19 @@ const CustomerCart = () => {
         <h1 className="text-center mb-4">Customer Cart</h1>
         {userCart.length > 0 ? (
           <Row>
-            {userCart.map((sample) => (
-              <Col key={sample.id} xs={12} md={6} lg={4} className="mb-4">
+            {userCart.map((colony) => (
+              <Col key={colony.id} xs={12} md={6} lg={4} className="mb-4">
                 <div className="bg-light p-3 rounded">
-                  <h4>Sample ID: {sample.id}</h4>
+                  <h4>Colony ID: {colony.id}</h4>
                   <p>
-                    Country: {sample.country}, {sample.species} ({sample.collection_date})
+                    Country: {colony.country}, {colony.species}
                   </p>
                 </div>
               </Col>
             ))}
           </Row>
         ) : (
-          <p className="text-center">No BioSamples in Cart</p>
+          <p className="text-center">No colonies in Cart</p>
         )}
       </Container>
     </UserCartContextProvider>

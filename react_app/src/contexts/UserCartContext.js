@@ -23,7 +23,7 @@ const UserCartContextProvider = (props) => {
   const addToUserCart = async (biosampleIds, backendUrl) => {
     const response = await axios.post(
       `${backendUrl}/api/auth/cart/`,
-      { biosample_ids: biosampleIds },
+      { colony_ids: biosampleIds },
       {
         withCredentials: true,
         headers: {

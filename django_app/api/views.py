@@ -93,41 +93,77 @@ class UserCartApiView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user_cart, created = UserCart.objects.get_or_create(owner=request.user)
+        user_cart, _ = UserCart.objects.get_or_create(owner=request.user)
         items = user_cart.items.all()
         serializer = ColonySerializer(items, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    def put(self, request):
         """
+        Replace entire cart with new data.
         Example: {"colony_ids": [1,2]}
         """
-        # Extract colony IDs from request data (assuming they are provided as a list)
+        user_cart, _ = UserCart.objects.get_or_create(owner=request.user)
         colony_ids = request.data.get('colony_ids', [])
 
-        # Initialize an empty list to store successfully added colonies
+        user_cart.items.clear()  # Clear existing items
+
+        for colony_id in colony_ids:
+            try:
+                colony = Colony.objects.get(id=colony_id)
+                user_cart.items.add(colony)
+            except Colony.DoesNotExist:
+                pass
+
+        return Response(
+            {'message': 'Cart replaced with new data successfully'})
+
+    def delete(self, request):
+        """
+        Remove all colonies from cart.
+        """
+        user_cart, _ = UserCart.objects.get_or_create(owner=request.user)
+        user_cart.items.clear()
+        return Response(
+            {'message': 'All colonies removed from cart successfully'})
+
+    def patch(self, request):
+        """
+        Remove selected colonies from cart.
+        Example: {"colony_ids": [1,2]}
+        """
+        user_cart, _ = UserCart.objects.get_or_create(owner=request.user)
+        colony_ids = request.data.get('colony_ids', [])
+
+        if colony_ids:
+            user_cart.items.remove(*colony_ids)
+            return Response({
+                                'message': f'Colonies {colony_ids} removed from cart successfully'})
+        else:
+            return Response({'error': 'No colony IDs provided'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request):
+        """
+        Add selected colonies to cart.
+        Example: {"colony_ids": [1,2]}
+        """
+        colony_ids = request.data.get('colony_ids', [])
         added_colonies = []
 
         for colony_id in colony_ids:
             try:
-                # Retrieve the Colonies object with the specified ID
                 colony = Colony.objects.get(id=colony_id)
-                # Add the colony to the user's cart
-                user_cart, created = UserCart.objects.get_or_create(
+                user_cart, _ = UserCart.objects.get_or_create(
                     owner=request.user)
                 user_cart.items.add(colony)
                 added_colonies.append(colony_id)
             except Colony.DoesNotExist:
-                pass  # Ignore samples that don't exist
+                pass
 
         if added_colonies:
             return Response({
-                'message': f'Colonies {added_colonies} added to cart successfully'})
+                                'message': f'Colonies {added_colonies} added to cart successfully'})
         else:
             return Response({'error': 'No valid colonies found'},
                             status=status.HTTP_404_NOT_FOUND)
-
-    def delete(self, request):
-        user_cart, created = UserCart.objects.get_or_create(owner=request.user)
-        user_cart.items.clear()
-        return Response({'message': 'Cart cleaned successfully'})

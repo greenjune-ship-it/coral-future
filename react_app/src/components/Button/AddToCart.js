@@ -61,17 +61,17 @@ const AddToCartButton = () => {
         <Col>
           {authData.authenticated && !errorOccurred && alertShow && (
             // If respond to add data is good send success if bad, display variant error
-            <Alert variant='success'>
+            <Alert variant="success">
               Item added to cart!
             </Alert>
           )}
           {authData.authenticated && errorOccurred && alertShow && (
-            <Alert variant='danger'>
+            <Alert variant="danger">
               An error occurred while adding to cart
             </Alert>
           )}
           {!authData.authenticated && errorOccurred && alertShow && (
-            <Alert variant='warning'>
+            <Alert variant="warning">
               Login to add data to cart
             </Alert>
           )}

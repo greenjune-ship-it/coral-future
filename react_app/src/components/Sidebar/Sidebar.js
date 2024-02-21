@@ -20,9 +20,6 @@ const InputSidebar = () => {
   const { allColonies, allBioSamples, allProjects, setFilters } = useContext(SidebarFilterContext);
   const speciesList = [...new Set(allColonies.map(allColonies => allColonies.species))].sort();
   const projectList = [...new Set(allProjects.map(allProjects => allProjects.name))].sort();
-  const collectionDateList = [...new Set(allBioSamples.map(biosample => biosample.collection_date))]
-    .map(dateString => new Date(dateString))
-    .sort((a, b) => a - b);
 
   // For Slider ED50 borders
   const ed50Values = allColonies.map(colony => colony.ed50_value);

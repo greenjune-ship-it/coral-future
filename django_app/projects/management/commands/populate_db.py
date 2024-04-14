@@ -7,9 +7,8 @@ from users.models import CustomUser
 from projects.models import BioSample, Observation
 
 from projects.management.commands.utils._create_objects import (
-    create_biosample, create_colony, create_experiment, create_observation,
-    create_project, create_publication
-)
+    create_biosample, create_colony, create_thermaltolerance, create_experiment,
+    create_observation, create_project, create_publication)
 
 
 class Command(BaseCommand):
@@ -56,9 +55,13 @@ class Command(BaseCommand):
                                              row['Colony.species'],
                                              row['Colony.country'],
                                              row['Colony.latitude'],
-                                             row['Colony.longitude'],
-                                             row['Colony.ed50_value']))
+                                             row['Colony.longitude']))
             sys.stdout.write(f"Colony: {colony}, created: {created}\n")
+
+            thermal_tolerance, created = create_thermaltolerance(
+                colony=colony,
+                ed50_value=row['Colony.ed50_value'] if not pd.isnull(row['Colony.ed50_value']) else None
+            )
 
             if use_pam:
                 biosample, created = create_biosample(colony, (
@@ -78,6 +81,7 @@ class Command(BaseCommand):
                 publication.biosamples.add(biosample)
                 project.publications.add(publication)
                 project.biosamples.add(biosample)
+                thermal_tolerance.observations.add(observation)
             else:
                 for temp in [30, 33, 36, 39]:
                     biosample, created = BioSample.objects.get_or_create(
@@ -105,3 +109,4 @@ class Command(BaseCommand):
                     publication.biosamples.add(biosample)
                     project.publications.add(publication)
                     project.biosamples.add(biosample)
+                    thermal_tolerance.observations.add(observation)

@@ -105,8 +105,8 @@ class ThermalTolerance(models.Model):
                                related_name='thermal_tolerances')
     observations = models.ManyToManyField(Observation,
                                           related_name='thermal_tolerances')
-    abs_thermal_tolerance = models.FloatField()
-    rel_thermal_tolerance = models.FloatField()
+    abs_thermal_tolerance = models.FloatField(null=True, blank=True)
+    rel_thermal_tolerance = models.FloatField(null=True, blank=True)
     # Internal attribute
     _sst_clim_mmm = models.FloatField(null=True, blank=True)
 

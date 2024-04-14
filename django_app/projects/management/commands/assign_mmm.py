@@ -57,11 +57,13 @@ class Command(BaseCommand):
 
             # Assign MMM to each Colony object
             for colony in colonies:
-                colony._sst_clim_mmm = sst_clim_mmm
-                if (
-                        colony.latitude == 29.500000 or colony.latitude == 29.501771) and (
-                        colony.longitude == 34.933330 or colony.longitude == 34.917925):
-                    colony._sst_clim_mmm = 27.01
-                colony.save()
+                for thermal_tolerance in colony.thermal_tolerances:
+                    thermal_tolerance._sst_clim_mmm = sst_clim_mmm
+                    if (
+                            colony.latitude == 29.500000 or colony.latitude == 29.501771) and (
+                            colony.longitude == 34.933330 or colony.longitude == 34.917925):
+                        thermal_tolerance._sst_clim_mmm = 27.01
+                    thermal_tolerance.save()
 
-                self.stdout.write(f'MMM are assigned to colony: {colony.name}')
+                    self.stdout.write(
+                        f'MMM are assigned to colony: {colony.name}')

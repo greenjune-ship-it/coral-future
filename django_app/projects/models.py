@@ -99,11 +99,12 @@ class Observation(models.Model):
 
 class ThermalTolerance(models.Model):
     """
-    ColonyThermalTolerance includes ED50 values for Colonies under specific conditions or timepoints.
+    Represents Thermal Tolerance for a Colony under specific Condition and Timepoint.
     """
     colony = models.ForeignKey(Colony, on_delete=models.CASCADE,
                                related_name='thermal_tolerances')
-    observations = models.ManyToManyField(Observation, related_name='thermal_tolerances')
+    observations = models.ManyToManyField(Observation,
+                                          related_name='thermal_tolerances')
     abs_thermal_tolerance = models.FloatField()
     rel_thermal_tolerance = models.FloatField()
     # Internal attribute
@@ -113,7 +114,7 @@ class ThermalTolerance(models.Model):
     def condition(self):
         if self.observations.exists():
             observations_conditions = [observation.condition for observation in
-                                       self.observations]
+                                       self.observations.all()]
             if all(item == observations_conditions[0] for item in
                    observations_conditions):
                 return observations_conditions[0]
@@ -124,7 +125,7 @@ class ThermalTolerance(models.Model):
     def timepoint(self):
         if self.observations.exists():
             observations_timepoints = [observation.timepoint for observation in
-                                       self.observations]
+                                       self.observations.all()]
             if all(item == observations_timepoints[0] for item in
                    observations_timepoints):
                 return observations_timepoints[0]
@@ -144,7 +145,7 @@ class ThermalTolerance(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"ColonyThermalTolerance for Colony {self.colony.name}"
+        return f"Thermal Tolerance for Colony {self.colony.name} under {self.condition}, {self.timepoint}"
 
 
 class UserCart(models.Model):

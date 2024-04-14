@@ -56,20 +56,6 @@ class Colony(models.Model):
     country = models.CharField(max_length=3)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    ed50_value = models.FloatField(null=True, blank=True)
-    thermal_tolerance = models.FloatField(null=True, blank=True)
-    # Internal attribute
-    _sst_clim_mmm = models.FloatField(null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        # Ensure ed50_value is not None before rounding
-        if self.ed50_value is not None:
-            self.ed50_value = round(self.ed50_value, 2)
-        if self._sst_clim_mmm is not None:
-            self._sst_clim_mmm = round(self._sst_clim_mmm, 2)
-        if self.ed50_value is not None and self._sst_clim_mmm is not None:
-            self.thermal_tolerance = round(self.ed50_value - self._sst_clim_mmm, 2)
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Colony {self.name} of {self.species} from {self.country} ({self.latitude}, {self.longitude})"
@@ -109,6 +95,56 @@ class Observation(models.Model):
         if self.pam_value is not None:
             self.pam_value = round(self.pam_value, 3)
         super().save(*args, **kwargs)
+
+
+class ThermalTolerance(models.Model):
+    """
+    ColonyThermalTolerance includes ED50 values for Colonies under specific conditions or timepoints.
+    """
+    colony = models.ForeignKey(Colony, on_delete=models.CASCADE,
+                               related_name='thermal_tolerances')
+    observations = models.ManyToManyField(Observation, related_name='thermal_tolerances')
+    abs_thermal_tolerance = models.FloatField()
+    rel_thermal_tolerance = models.FloatField()
+    # Internal attribute
+    _sst_clim_mmm = models.FloatField(null=True, blank=True)
+
+    @property
+    def condition(self):
+        if self.observations.exists():
+            observations_conditions = [observation.condition for observation in
+                                       self.observations]
+            if all(item == observations_conditions[0] for item in
+                   observations_conditions):
+                return observations_conditions[0]
+            else:
+                return None
+
+    @property
+    def timepoint(self):
+        if self.observations.exists():
+            observations_timepoints = [observation.timepoint for observation in
+                                       self.observations]
+            if all(item == observations_timepoints[0] for item in
+                   observations_timepoints):
+                return observations_timepoints[0]
+            else:
+                return None
+
+    def save(self, *args, **kwargs):
+        # Ensure abs_thermal_tolerance is not None before rounding
+        if self.abs_thermal_tolerance is not None:
+            self.abs_thermal_tolerance = round(self.abs_thermal_tolerance, 2)
+        if self._sst_clim_mmm is not None:
+            self._sst_clim_mmm = round(self._sst_clim_mmm, 2)
+        if self.abs_thermal_tolerance is not None and self._sst_clim_mmm is not None:
+            self.rel_thermal_tolerance = round(
+                self.abs_thermal_tolerance - self._sst_clim_mmm,
+                2)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"ColonyThermalTolerance for Colony {self.colony.name}"
 
 
 class UserCart(models.Model):

@@ -1,4 +1,5 @@
-from projects.models import BioSample, Colony, Observation, Project
+from projects.models import BioSample, Colony, ThermalTolerance,\
+    Observation, Project
 from rest_framework import serializers
 
 
@@ -8,8 +9,16 @@ class BioSampleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ThermalToleranceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ThermalTolerance
+        fields = ['abs_thermal_tolerance', 'rel_thermal_tolerance',
+                  'condition', 'timepoint']
+
+
 class ColonySerializer(serializers.ModelSerializer):
     projects = serializers.SerializerMethodField()
+    thermal_tolerances = serializers.SerializerMethodField()
 
     def get_projects(self, obj):
         # Get the related projects for the colony's biosamples
@@ -18,9 +27,17 @@ class ColonySerializer(serializers.ModelSerializer):
         # Assuming you want to serialize projects' names
         return [project.name for project in projects]
 
+    def get_thermal_tolerances(self, obj):
+        # Get all thermal tolerances associated with the colony
+        thermal_tolerances = ThermalTolerance.objects.filter(colony=obj)
+        # Serialize the thermal tolerance objects
+        serializer = ThermalToleranceSerializer(thermal_tolerances, many=True)
+        return serializer.data
+
     class Meta:
         model = Colony
-        fields = ['id', 'name', 'species', 'country', 'latitude', 'longitude', 'ed50_value', 'thermal_tolerance', 'projects']
+        fields = ['id', 'name', 'species', 'country', 'latitude', 'longitude', 'thermal_tolerances', 'projects']
+
 
 class ObservationSerializer(serializers.ModelSerializer):
     class Meta:

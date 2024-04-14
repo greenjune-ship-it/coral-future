@@ -15,7 +15,7 @@ def check_unique_ed50_values(df):
         None
     """
     for colony, group in df.groupby(
-            ['Colony.name', 'Observation.condition', 'Observation.timepoint']):
+            ['Colony.name', 'Colony.species', 'Observation.condition', 'Observation.timepoint']):
         unique_values = group['Colony.ed50_value'].nunique()
         if unique_values != 1:
             raise ValueError(

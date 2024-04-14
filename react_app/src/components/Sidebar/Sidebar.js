@@ -24,18 +24,25 @@ const InputSidebar = () => {
     .map(dateString => new Date(dateString))
     .sort((a, b) => a - b);
 
-  // For Slider ED50 borders
-  const ed50Values = allColonies.map(colony => colony.ed50_value);
-  const maxEd50 = Math.max(...ed50Values);
-  const minEd50 = Math.min(...ed50Values);
+  // For Slider Abs. Thermal Tolerance ED50
+  const absThermalTolerances = allColonies
+    .map((colony) => colony.thermal_tolerances.map((tt) => tt.abs_thermal_tolerance)) // Extract abs_thermal_tolerance values
+    .flat() // Flatten the array of arrays
+    .filter((value) => !isNaN(value)); // Filter out NaN values
+  const maxAbsTT = Math.max(...absThermalTolerances);
+  const minAbsTT = Math.min(...absThermalTolerances);
 
-  // For Slider Thermal Tolerance borders
-  const thermalToleranceValues = allColonies.map(colony => colony.thermal_tolerance);
-  const maxThermalTolerance = Math.max(...thermalToleranceValues);
-  const minThermalTolerance = Math.min(...thermalToleranceValues);
+  // Rel. Thermal Tolerance ED50 - MMM
+  const relThermalTolerances = allColonies
+    .map((colony) => colony.thermal_tolerances.map((tt) => tt.rel_thermal_tolerance)) // Extract rel_thermal_tolerance values
+    .flat() // Flatten the array of arrays
+    .filter((value) => !isNaN(value)); // Filter out NaN values
+  
+  const maxRelTT = Math.max(...relThermalTolerances);
+  const minRelTT = Math.min(...relThermalTolerances);
 
-  const [selectedEd50Temperatures, setSelectedEd50Temperatures] = useState([minEd50, maxEd50]);
-  const [selectedThermalToleranceTemperatures, setSelectedThermalToleranceTemperatures] = useState([minThermalTolerance, maxThermalTolerance]);
+  const [selectedEd50Temperatures, setSelectedEd50Temperatures] = useState([minAbsTT, maxAbsTT]);
+  const [selectedThermalToleranceTemperatures, setSelectedThermalToleranceTemperatures] = useState([minRelTT, maxRelTT]);
 
   const handleApplyFilters = () => {
     const newFilters = {
@@ -53,8 +60,8 @@ const InputSidebar = () => {
   const handleResetFilters = () => {
     setSelectedSpecies('');
     setSelectedProject('');
-    setSelectedEd50Temperatures([minEd50, maxEd50]);
-    setSelectedThermalToleranceTemperatures([minThermalTolerance, maxThermalTolerance]);
+    setSelectedEd50Temperatures([minAbsTT, maxAbsTT]);
+    setSelectedThermalToleranceTemperatures([minRelTT, maxRelTT]);
     setSelectedDates([]);
     setFilters({}); // Reset filters
   };
@@ -69,16 +76,16 @@ const InputSidebar = () => {
     console.log('Selected project:', e.target.value);
   };
 
-  // Event handler for ED50 slider
+  // Event handler for Abs. Thermal Tolerance ED50 slider
   const handleEd50TemperatureChange = (event, newValues) => {
     setSelectedEd50Temperatures(newValues);
-    console.log('Selected ED50 temperatures:', newValues);
+    console.log('Selected Abs. TT temperatures:', newValues);
   };
 
-  // Event handler for Thermal Tolerance slider
+  // Event handler for Rel. Thermal Tolerance ED50 - MMM slider
   const handleThermalToleranceTemperatureChange = (event, newValues) => {
     setSelectedThermalToleranceTemperatures(newValues);
-    console.log('Selected thermal tolerance temperatures:', newValues);
+    console.log('Selected Rel. TT temperatures:', newValues);
   };
 
   return (
@@ -122,8 +129,8 @@ const InputSidebar = () => {
                   value={selectedEd50Temperatures}
                   onChange={handleEd50TemperatureChange}
                   valueLabelDisplay="auto"
-                  min={minEd50}
-                  max={maxEd50}
+                  min={minAbsTT}
+                  max={maxAbsTT}
                   step={0.01}
                   sx={{
                     '& .MuiSlider-thumb': {
@@ -148,17 +155,17 @@ const InputSidebar = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Typography
                     variant="body2"
-                    onClick={() => setSelectedEd50Temperatures([minEd50, selectedEd50Temperatures[1]])}
+                    onClick={() => setSelectedEd50Temperatures([minAbsTT, selectedEd50Temperatures[1]])}
                     sx={{ cursor: 'pointer' }}
                   >
-                    {minEd50}°C
+                    {minAbsTT}°C
                   </Typography>
                   <Typography
                     variant="body2"
-                    onClick={() => setSelectedEd50Temperatures([selectedEd50Temperatures[0], maxEd50])}
+                    onClick={() => setSelectedEd50Temperatures([selectedEd50Temperatures[0], maxAbsTT])}
                     sx={{ cursor: 'pointer' }}
                   >
-                    {maxEd50}°C
+                    {maxAbsTT}°C
                   </Typography>
                 </Box>
               </Container>
@@ -175,8 +182,8 @@ const InputSidebar = () => {
                   value={selectedThermalToleranceTemperatures}
                   onChange={handleThermalToleranceTemperatureChange}
                   valueLabelDisplay="auto"
-                  min={minThermalTolerance}
-                  max={maxThermalTolerance}
+                  min={minRelTT}
+                  max={maxRelTT}
                   step={0.01}
                   marks={[{ value: 7.5, label: '7.5°C' }]}
                   sx={{
@@ -202,17 +209,17 @@ const InputSidebar = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Typography
                     variant="body2"
-                    onClick={() => setSelectedThermalToleranceTemperatures([minThermalTolerance, selectedThermalToleranceTemperatures[1]])}
+                    onClick={() => setSelectedThermalToleranceTemperatures([minRelTT, selectedThermalToleranceTemperatures[1]])}
                     sx={{ cursor: 'pointer' }}
                   >
-                    {minThermalTolerance}°C
+                    {minRelTT}°C
                   </Typography>
                   <Typography
                     variant="body2"
-                    onClick={() => setSelectedThermalToleranceTemperatures([selectedThermalToleranceTemperatures[0], maxThermalTolerance])}
+                    onClick={() => setSelectedThermalToleranceTemperatures([selectedThermalToleranceTemperatures[0], maxRelTT])}
                     sx={{ cursor: 'pointer' }}
                   >
-                    {maxThermalTolerance}°C
+                    {maxRelTT}°C
                   </Typography>
                 </Box>
               </Container>

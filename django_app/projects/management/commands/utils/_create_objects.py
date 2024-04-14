@@ -1,4 +1,3 @@
-import pandas as pd
 from datetime import datetime
 
 from projects.models import BioSample, Colony, ThermalTolerance, \
@@ -10,6 +9,8 @@ def create_project(owner, project_key, description):
         registration_date = datetime.strptime('2023-12-31', '%Y-%m-%d').date()
     elif project_key == 'Evensen et al. 2022':
         registration_date = datetime.strptime('2024-02-01', '%Y-%m-%d').date()
+    elif project_key == '2022 Fiji Jareis':
+        registration_date = datetime.strptime('2024-04-14', '%Y-%m-%d').date()
     else:
         registration_date = datetime.now().date()
     return Project.objects.get_or_create(

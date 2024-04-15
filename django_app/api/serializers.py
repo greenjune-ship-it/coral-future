@@ -1,6 +1,7 @@
-from projects.models import BioSample, Colony, ThermalTolerance,\
-    Observation, Project
 from rest_framework import serializers
+
+from projects.models import BioSample, Colony, ThermalTolerance, \
+    Observation, Project
 
 
 class BioSampleSerializer(serializers.ModelSerializer):
@@ -10,9 +11,12 @@ class BioSampleSerializer(serializers.ModelSerializer):
 
 
 class ThermalToleranceSerializer(serializers.ModelSerializer):
+    colony_name = serializers.CharField(source='colony.name', read_only=True)
+
     class Meta:
         model = ThermalTolerance
-        fields = ['abs_thermal_tolerance', 'rel_thermal_tolerance',
+        fields = ['colony_name', 'abs_thermal_tolerance',
+                  'rel_thermal_tolerance',
                   'condition', 'timepoint']
 
 
@@ -36,7 +40,8 @@ class ColonySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Colony
-        fields = ['id', 'name', 'species', 'country', 'latitude', 'longitude', 'thermal_tolerances', 'projects']
+        fields = ['id', 'name', 'species', 'country', 'latitude', 'longitude',
+                  'thermal_tolerances', 'projects']
 
 
 class ObservationSerializer(serializers.ModelSerializer):

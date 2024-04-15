@@ -1,5 +1,6 @@
 // External imports
-import React, { useState, useContext } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button, Container, Form, FormGroup, Row, Col } from 'react-bootstrap';
 import { Box, Slider, Typography } from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,25 +25,34 @@ const InputSidebar = () => {
     .map(dateString => new Date(dateString))
     .sort((a, b) => a - b);
 
-  // For Slider Abs. Thermal Tolerance ED50
-  const absThermalTolerances = allColonies
-    .map((colony) => colony.thermal_tolerances.map((tt) => tt.abs_thermal_tolerance)) // Extract abs_thermal_tolerance values
-    .flat() // Flatten the array of arrays
-    .filter((value) => !isNaN(value)); // Filter out NaN values
-  const maxAbsTT = Math.max(...absThermalTolerances);
-  const minAbsTT = Math.min(...absThermalTolerances);
+  const [maxAbsTT, setMaxAbsTT] = useState(null);
+  const [minAbsTT, setMinAbsTT] = useState(null);
+  const [maxRelTT, setMaxRelTT] = useState(null);
+  const [minRelTT, setMinRelTT] = useState(null);
 
-  // Rel. Thermal Tolerance ED50 - MMM
-  const relThermalTolerances = allColonies
-    .map((colony) => colony.thermal_tolerances.map((tt) => tt.rel_thermal_tolerance)) // Extract rel_thermal_tolerance values
-    .flat() // Flatten the array of arrays
-    .filter((value) => !isNaN(value)); // Filter out NaN values
-  
-  const maxRelTT = Math.max(...relThermalTolerances);
-  const minRelTT = Math.min(...relThermalTolerances);
+  useEffect(() => {
+    fetchMaxMinData(process.env.REACT_APP_BACKEND_URL); // Call the fetch function
+  }, []);
 
-  const [selectedEd50Temperatures, setSelectedEd50Temperatures] = useState([minAbsTT, maxAbsTT]);
-  const [selectedThermalToleranceTemperatures, setSelectedThermalToleranceTemperatures] = useState([minRelTT, maxRelTT]);
+  const fetchMaxMinData = async (backendUrl) => {
+    try {
+      const response = await axios.get(`${backendUrl}/api/public/thermal-tolerances/max-min/`);
+      const data = response.data;
+      setMaxAbsTT(data.max_abs_thermal_tolerance);
+      setMinAbsTT(data.min_abs_thermal_tolerance);
+      setMaxRelTT(data.max_rel_thermal_tolerance);
+      setMinRelTT(data.min_rel_thermal_tolerance);
+      // Once the data is fetched, set the selected values
+      setSelectedEd50Temperatures([data.min_abs_thermal_tolerance, data.max_abs_thermal_tolerance]);
+      setSelectedThermalToleranceTemperatures([data.min_rel_thermal_tolerance, data.max_rel_thermal_tolerance]);
+    } catch (error) {
+      console.error('Error fetching max min data:', error);
+    }
+  };
+
+  // Initialize selected values as null
+  const [selectedEd50Temperatures, setSelectedEd50Temperatures] = useState([null, null]);
+  const [selectedThermalToleranceTemperatures, setSelectedThermalToleranceTemperatures] = useState([null, null]);
 
   const handleApplyFilters = () => {
     const newFilters = {

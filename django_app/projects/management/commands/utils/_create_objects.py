@@ -1,8 +1,7 @@
-import pandas as pd
 from datetime import datetime
 
-from projects.models import BioSample, Colony, Experiment, Observation, \
-    Project, Publication
+from projects.models import BioSample, Colony, ThermalTolerance, \
+    Experiment, Observation, Project, Publication
 
 
 def create_project(owner, project_key, description):
@@ -10,8 +9,10 @@ def create_project(owner, project_key, description):
         registration_date = datetime.strptime('2023-12-31', '%Y-%m-%d').date()
     elif project_key == 'Evensen et al. 2022':
         registration_date = datetime.strptime('2024-02-01', '%Y-%m-%d').date()
+    elif project_key == '2022 Fiji Jareis':
+        registration_date = datetime.strptime('2024-04-14', '%Y-%m-%d').date()
     else:
-        registration_date= datetime.now().date()
+        registration_date = datetime.now().date()
     return Project.objects.get_or_create(
         name=project_key,
         registration_date=registration_date,
@@ -32,9 +33,13 @@ def create_colony(colony_key):
         species=colony_key[1],
         country=colony_key[2],
         latitude=colony_key[3],
-        longitude=colony_key[4],
-        ed50_value=colony_key[5] if not pd.isnull(colony_key[5]) else None
-    )
+        longitude=colony_key[4])
+
+
+def create_thermaltolerance(colony, ed50_value):
+    return ThermalTolerance.objects.get_or_create(
+        colony=colony,
+        abs_thermal_tolerance=ed50_value)
 
 
 def create_biosample(colony, biosample_key):

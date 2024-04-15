@@ -1,13 +1,17 @@
 # api/views.py
-from api.serializers import BioSampleSerializer, ColonySerializer, \
-    ObservationSerializer, ProjectSerializer
-# Apps imports
-from projects.models import BioSample, Colony, Observation, Project, UserCart
+from django.db.models import Max, Min
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from api.serializers import BioSampleSerializer, \
+    ColonySerializer, ThermalToleranceSerializer, \
+    ObservationSerializer, ProjectSerializer
+# Apps imports
+from projects.models import BioSample, Observation, Colony, \
+    ThermalTolerance, Project, UserCart
 
 
 class CheckAuthenticationApiView(APIView):
@@ -52,6 +56,47 @@ class ColoniesApiView(APIView):
         colonies = Colony.objects.all()
         serializer = ColonySerializer(colonies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ThermalToleranceApiView(APIView):
+    """
+    This endpoint allows users to retriev a list of ThermalTolerance objects.
+    """
+
+    def get(self, request):
+        thermal_tolerances = ThermalTolerance.objects.all()
+        serializer = ThermalToleranceSerializer(thermal_tolerances, many=True)
+        return Response(serializer.data)
+
+
+class ThermalToleranceMinMaxView(APIView):
+    def get(self, request):
+        max_abs_thermal_tolerance = ThermalTolerance.objects.exclude(
+            abs_thermal_tolerance__isnull=True).aggregate(
+            Max('abs_thermal_tolerance'))['abs_thermal_tolerance__max']
+
+        min_abs_thermal_tolerance = ThermalTolerance.objects.exclude(
+            abs_thermal_tolerance__isnull=True).aggregate(
+            Min('abs_thermal_tolerance'))['abs_thermal_tolerance__min']
+
+        max_rel_thermal_tolerance = ThermalTolerance.objects.exclude(
+            rel_thermal_tolerance__isnull=True).aggregate(
+            Max('rel_thermal_tolerance'))['rel_thermal_tolerance__max']
+
+        min_rel_thermal_tolerance = ThermalTolerance.objects.exclude(
+            rel_thermal_tolerance__isnull=True).aggregate(
+            Min('rel_thermal_tolerance'))['rel_thermal_tolerance__min']
+
+        # Construct the response data
+        response_data = {
+            'max_abs_thermal_tolerance': max_abs_thermal_tolerance,
+            'min_abs_thermal_tolerance': min_abs_thermal_tolerance,
+            'max_rel_thermal_tolerance': max_rel_thermal_tolerance,
+            'min_rel_thermal_tolerance': min_rel_thermal_tolerance
+        }
+
+        # Return the response
+        return Response(response_data)
 
 
 class ObservationsApiView(APIView):

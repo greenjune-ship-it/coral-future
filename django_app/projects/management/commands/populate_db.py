@@ -1,3 +1,4 @@
+import os
 import sys
 import pandas as pd
 
@@ -7,9 +8,10 @@ from users.models import CustomUser
 from projects.models import BioSample, Observation
 
 from projects.management.commands.utils._create_objects import (
-    create_biosample, create_colony, create_experiment, create_observation,
-    create_project, create_publication
-)
+    create_biosample, create_colony, create_thermaltolerance, create_experiment,
+    create_observation, create_project, create_publication)
+
+from projects.management.commands.utils._validate_datasheet import validate_datasheet
 
 
 class Command(BaseCommand):
@@ -40,12 +42,15 @@ class Command(BaseCommand):
             sys.stdout.write(f"CSV file not found at '{csv_path}'.\n")
             return
 
-        self.create_instances(df, owner, use_pam)
+        validate_datasheet(df)
+        self.create_instances(df, owner, csv_path, use_pam)
 
-    def create_instances(self, df, owner, use_pam):
+    def create_instances(self, df, owner, csv_path, use_pam):
         for _, row in df.iterrows():
-            project, created = create_project(owner, row['Project.name'],
-                                              description='Datasheet cbass_84.csv' if use_pam else 'Datasheet redsea_gradient_study.csv')
+            project, created = create_project(
+                owner, row['Project.name'],
+                description=f'Datasheet {os.path.basename(csv_path)}')
+
             sys.stdout.write(f"Project: {project}, created: {created}\n")
 
             experiment, created = create_experiment(project, (
@@ -56,9 +61,14 @@ class Command(BaseCommand):
                                              row['Colony.species'],
                                              row['Colony.country'],
                                              row['Colony.latitude'],
-                                             row['Colony.longitude'],
-                                             row['Colony.ed50_value']))
+                                             row['Colony.longitude']))
             sys.stdout.write(f"Colony: {colony}, created: {created}\n")
+
+            thermal_tolerance, created = create_thermaltolerance(
+                colony=colony,
+                ed50_value=row['Colony.ed50_value'] if not pd.isnull(
+                    row['Colony.ed50_value']) else None
+            )
 
             if use_pam:
                 biosample, created = create_biosample(colony, (
@@ -78,6 +88,7 @@ class Command(BaseCommand):
                 publication.biosamples.add(biosample)
                 project.publications.add(publication)
                 project.biosamples.add(biosample)
+                thermal_tolerance.observations.add(observation)
             else:
                 for temp in [30, 33, 36, 39]:
                     biosample, created = BioSample.objects.get_or_create(
@@ -105,3 +116,4 @@ class Command(BaseCommand):
                     publication.biosamples.add(biosample)
                     project.publications.add(publication)
                     project.biosamples.add(biosample)
+                    thermal_tolerance.observations.add(observation)
